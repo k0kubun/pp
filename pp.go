@@ -1,5 +1,13 @@
 package pp
 
+import (
+	"fmt"
+)
+
 func Print(object interface{}) {
-	print("test\n")
+	fmt.Print(format(object))
+}
+
+func format(object interface{}) *formatter {
+	return &formatter{object}
 }
