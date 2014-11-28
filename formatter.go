@@ -1,9 +1,13 @@
 package pp
 
+func format(object interface{}) *formatter {
+	return &formatter{object}
+}
+
 type formatter struct {
 	object interface{}
 }
 
 func (f *formatter) String() string {
-	return "test\n"
+	return color("test\n", "red")
 }

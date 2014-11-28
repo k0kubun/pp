@@ -1,6 +1,6 @@
 # pp
 
-Colorful pretty printer for Go language
+Colored pretty printer for Go language
 
 ## Usage
 
