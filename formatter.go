@@ -6,23 +6,24 @@ import (
 )
 
 var (
-	colorByType = map[string]string{
-		"bool":       "Cyan",
-		"int":        "Blue",
-		"int8":       "Blue",
-		"int16":      "Blue",
-		"int32":      "Blue",
-		"int64":      "Blue",
-		"uint":       "Blue",
-		"uint8":      "Blue",
-		"uint16":     "Blue",
-		"uint32":     "Blue",
-		"uint64":     "Blue",
-		"uintptr":    "Blue",
-		"float32":    "Magenta",
-		"float64":    "Magenta",
-		"complex64":  "Blue",
-		"complex128": "Blue",
+	funcByType = map[string]func(interface{}) string{
+		"bool":       colorFormatter("Cyan"),
+		"int":        colorFormatter("Blue"),
+		"int8":       colorFormatter("Blue"),
+		"int16":      colorFormatter("Blue"),
+		"int32":      colorFormatter("Blue"),
+		"int64":      colorFormatter("Blue"),
+		"uint":       colorFormatter("Blue"),
+		"uint8":      colorFormatter("Blue"),
+		"uint16":     colorFormatter("Blue"),
+		"uint32":     colorFormatter("Blue"),
+		"uint64":     colorFormatter("Blue"),
+		"uintptr":    colorFormatter("Blue"),
+		"float32":    colorFormatter("Magenta"),
+		"float64":    colorFormatter("Magenta"),
+		"complex64":  colorFormatter("Blue"),
+		"complex128": colorFormatter("Blue"),
+		"string":     formatString,
 	}
 )
 
@@ -41,19 +42,20 @@ func (f *formatter) String() string {
 func (f *formatter) Format(s fmt.State, c rune) {
 	v := reflect.ValueOf(f.object)
 
-	if color, ok := colorByType[v.Kind().String()]; ok {
-		fmt.Fprint(s, colorize(f.raw(), color))
-		return
-	}
-
-	switch v.Kind() {
-	case reflect.String:
-		fmt.Fprint(s, boldRed("\"")+red(v.String())+boldRed("\""))
-	default:
-		fmt.Fprint(s, f.raw())
+	if fc, ok := funcByType[v.Kind().String()]; ok {
+		fmt.Fprint(s, fc(f.object))
+	} else {
+		fmt.Fprint(s, fmt.Sprintf("%#v", f.object))
 	}
 }
 
-func (f *formatter) raw() string{
-	return fmt.Sprintf("%#v", f.object)
+func colorFormatter(color string) func(interface{}) string {
+	return func(object interface{}) string {
+		raw := fmt.Sprintf("%#v", object)
+		return colorize(raw, color)
+	}
+}
+
+func formatString(object interface{}) string {
+	return boldRed("\"") + red(fmt.Sprintf("%s", object)) + boldRed("\"")
 }
