@@ -5,6 +5,17 @@ import (
 	"reflect"
 )
 
+var (
+	colorByType = map[string]string{
+		"bool":  "Cyan",
+		"int":   "Blue",
+		"int8":  "Blue",
+		"int16": "Blue",
+		"int32": "Blue",
+		"int64": "Blue",
+	}
+)
+
 func format(object interface{}) *formatter {
 	return &formatter{object}
 }
@@ -20,10 +31,11 @@ func (f *formatter) String() string {
 func (f *formatter) Format(s fmt.State, c rune) {
 	v := reflect.ValueOf(f.object)
 
-	switch v.Kind() {
-	case reflect.Bool:
-		fmt.Fprint(s, boldCyan(fmt.Sprintf("%#v", v.Bool())))
-	default:
-		fmt.Fprint(s, fmt.Sprintf("%#v", f.object))
+	if color, ok := colorByType[v.Kind().String()]; ok {
+		raw := fmt.Sprintf("%#v", f.object)
+		fmt.Fprint(s, colorize(raw, color))
+		return
 	}
+
+	fmt.Fprint(s, fmt.Sprintf("%#v", f.object))
 }

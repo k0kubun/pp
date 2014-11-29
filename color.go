@@ -14,11 +14,14 @@ var (
 		"magenta": 35,
 		"cyan":    36,
 	}
+
+	boldCyan = colorizer("Cyan")
+	boldBlue = colorizer("Blue")
 )
 
-var (
-	boldCyan = colorizer("Cyan")
-)
+func colorize(text, color string) string {
+	return colorizer(color)(text)
+}
 
 func colorizer(color string) func(string) string {
 	if code, ok := codeByColor[color]; ok {
