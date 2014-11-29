@@ -24,6 +24,7 @@ var (
 		"complex64":  colorFormatter("Blue"),
 		"complex128": colorFormatter("Blue"),
 		"string":     formatString,
+		"map":        formatMap,
 	}
 )
 
@@ -36,7 +37,7 @@ type formatter struct {
 }
 
 func (f *formatter) String() string {
-	return fmt.Sprint(f.object)
+	return fmt.Sprint(f)
 }
 
 func (f *formatter) Format(s fmt.State, c rune) {
@@ -58,4 +59,19 @@ func colorFormatter(color string) func(reflect.Value) string {
 
 func formatString(v reflect.Value) string {
 	return boldRed("\"") + red(v.String()) + boldRed("\"")
+}
+
+func formatMap(v reflect.Value) string {
+	result := "{\n"
+	keys := v.MapKeys()
+	for i := 0; i < v.Len(); i++ {
+		key := keys[i]
+		result += "  "
+		result += format(key.Interface()).String()
+		result += ": "
+		result += format(v.MapIndex(key).Interface()).String()
+		result += ",\n"
+	}
+	result += "}"
+	return result
 }
