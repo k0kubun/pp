@@ -16,12 +16,20 @@ var (
 	}
 )
 
-func color(text, color string) string {
+var (
+	boldCyan = colorizer("Cyan")
+)
+
+func colorizer(color string) func(string) string {
 	if code, ok := codeByColor[color]; ok {
-		return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
+		return func(text string) string {
+			return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
+		}
 	} else if code, ok := codeByColor[strings.ToLower(color)]; ok {
-		return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
+		return func(text string) string {
+			return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
+		}
 	} else {
-		return text
+		panic("undefined colorizer: " + color)
 	}
 }
