@@ -7,20 +7,22 @@ import (
 
 var (
 	colorByType = map[string]string{
-		"bool":    "Cyan",
-		"int":     "Blue",
-		"int8":    "Blue",
-		"int16":   "Blue",
-		"int32":   "Blue",
-		"int64":   "Blue",
-		"uint":    "Blue",
-		"uint8":   "Blue",
-		"uint16":  "Blue",
-		"uint32":  "Blue",
-		"uint64":  "Blue",
-		"uintptr": "Blue",
-		"float32": "Magenta",
-		"float64": "Magenta",
+		"bool":       "Cyan",
+		"int":        "Blue",
+		"int8":       "Blue",
+		"int16":      "Blue",
+		"int32":      "Blue",
+		"int64":      "Blue",
+		"uint":       "Blue",
+		"uint8":      "Blue",
+		"uint16":     "Blue",
+		"uint32":     "Blue",
+		"uint64":     "Blue",
+		"uintptr":    "Blue",
+		"float32":    "Magenta",
+		"float64":    "Magenta",
+		"complex64":  "Blue",
+		"complex128": "Blue",
 	}
 )
 
