@@ -29,6 +29,7 @@ var testCases = []testCase{
 	{float64(3.14), boldMagenta("3.14")},
 	{complex64(complex(3, -4)), boldBlue("(3-4i)")},
 	{complex128(complex(5, 6)), boldBlue("(5+6i)")},
+	{"string", boldRed("\"")+red("string")+boldRed("\"")},
 }
 
 func TestFormat(t *testing.T) {

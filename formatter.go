@@ -42,10 +42,18 @@ func (f *formatter) Format(s fmt.State, c rune) {
 	v := reflect.ValueOf(f.object)
 
 	if color, ok := colorByType[v.Kind().String()]; ok {
-		raw := fmt.Sprintf("%#v", f.object)
-		fmt.Fprint(s, colorize(raw, color))
+		fmt.Fprint(s, colorize(f.raw(), color))
 		return
 	}
 
-	fmt.Fprint(s, fmt.Sprintf("%#v", f.object))
+	switch v.Kind() {
+	case reflect.String:
+		fmt.Fprint(s, boldRed("\"")+red(v.String())+boldRed("\""))
+	default:
+		fmt.Fprint(s, f.raw())
+	}
+}
+
+func (f *formatter) raw() string{
+	return fmt.Sprintf("%#v", f.object)
 }
