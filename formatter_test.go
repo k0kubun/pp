@@ -2,6 +2,7 @@ package pp
 
 import (
 	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -13,6 +14,7 @@ type testCase struct {
 var testCases = []testCase{
 	{true, boldCyan("true")},
 	{false, boldCyan("false")},
+	{1, boldBlue("1")},
 	{int(4), boldBlue("4")},
 	{int8(8), boldBlue("8")},
 	{int16(16), boldBlue("16")},
@@ -24,13 +26,17 @@ var testCases = []testCase{
 	{uint32(32), boldBlue("0x20")},
 	{uint64(64), boldBlue("0x40")},
 	{uintptr(128), boldBlue("0x80")},
+	{1.41, boldMagenta("1.41")},
+	{float32(2.23), boldMagenta("2.23")},
+	{float64(3.14), boldMagenta("3.14")},
 }
 
 func TestFormat(t *testing.T) {
 	for _, test := range testCases {
 		actual := fmt.Sprintf("%s", format(test.object))
 		if test.expect != actual {
-			t.Errorf("\nTestCase: %# v\nExpect: %# v\nActual: %s\n", test.object, test.expect, actual)
+			v := reflect.ValueOf(test.object)
+			t.Errorf("\nTestCase: %# v\nType: %s\nExpect: %# v\nActual: %s\n", test.object, v.Kind(), test.expect, actual)
 		} else {
 			t.Logf("%#v => %s\n", test.object, actual)
 		}

@@ -15,8 +15,9 @@ var (
 		"cyan":    36,
 	}
 
-	boldCyan = colorizer("Cyan")
-	boldBlue = colorizer("Blue")
+	boldCyan    = colorizer("Cyan")
+	boldBlue    = colorizer("Blue")
+	boldMagenta = colorizer("Magenta")
 )
 
 func colorize(text, color string) string {

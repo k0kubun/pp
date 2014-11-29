@@ -19,6 +19,8 @@ var (
 		"uint32":  "Blue",
 		"uint64":  "Blue",
 		"uintptr": "Blue",
+		"float32": "Magenta",
+		"float64": "Magenta",
 	}
 )
 
