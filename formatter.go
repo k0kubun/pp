@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	funcByType = map[string]func(interface{}) string{
+	funcByType = map[string]func(reflect.Value) string{
 		"bool":       colorFormatter("Cyan"),
 		"int":        colorFormatter("Blue"),
 		"int8":       colorFormatter("Blue"),
@@ -43,19 +43,19 @@ func (f *formatter) Format(s fmt.State, c rune) {
 	v := reflect.ValueOf(f.object)
 
 	if fc, ok := funcByType[v.Kind().String()]; ok {
-		fmt.Fprint(s, fc(f.object))
+		fmt.Fprint(s, fc(v))
 	} else {
 		fmt.Fprint(s, fmt.Sprintf("%#v", f.object))
 	}
 }
 
-func colorFormatter(color string) func(interface{}) string {
-	return func(object interface{}) string {
-		raw := fmt.Sprintf("%#v", object)
+func colorFormatter(color string) func(reflect.Value) string {
+	return func(v reflect.Value) string {
+		raw := fmt.Sprintf("%#v", v.Interface())
 		return colorize(raw, color)
 	}
 }
 
-func formatString(object interface{}) string {
-	return boldRed("\"") + red(fmt.Sprintf("%s", object)) + boldRed("\"")
+func formatString(v reflect.Value) string {
+	return boldRed("\"") + red(v.String()) + boldRed("\"")
 }
