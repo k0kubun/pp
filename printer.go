@@ -57,6 +57,10 @@ func (p *printer) print(text string) {
 	fmt.Fprint(p.Buffer, text)
 }
 
+func (p *printer) println(text string) {
+	p.print(text+"\n")
+}
+
 func (p *printer) colorPrint(text, color string) {
 	p.print(palette.Colorize(text, color))
 }
@@ -72,16 +76,14 @@ func (p *printer) printString() {
 }
 
 func (p *printer) printMap() {
-	result := "{\n"
+	p.println("{")
 	keys := p.value.MapKeys()
+
 	for i := 0; i < p.value.Len(); i++ {
-		key := keys[i]
-		result += "  "
-		result += format(key.Interface())
-		result += ": "
-		result += format(p.value.MapIndex(key).Interface())
-		result += ",\n"
+		key := keys[i].Interface()
+		value := p.value.MapIndex(keys[i]).Interface()
+		fmt.Fprintf(p.tw, "\t%s:\t%s,\n", format(key), format(value))
 	}
-	result += "}"
-	p.print(result)
+	p.tw.Flush()
+	p.println("}")
 }
