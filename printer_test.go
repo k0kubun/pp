@@ -14,8 +14,8 @@ type testCase struct {
 
 var (
 	testCases = []testCase{
-		//{true, boldCyan("true")},
-		//{false, boldCyan("false")},
+		{true, boldCyan("true")},
+		{false, boldCyan("false")},
 		//{int(4), boldBlue("4")},
 		//{int8(8), boldBlue("8")},
 		//{int16(16), boldBlue("16")},
@@ -35,14 +35,12 @@ var (
 	}
 
 	checkCases = []interface{}{
-    true,
-    false,
-    int(4),
-    int8(8),
-    int16(16),
-    int32(32),
-    int64(64),
-    "string",
+		int(4),
+		int8(8),
+		int16(16),
+		int32(32),
+		int64(64),
+		"string",
 		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
 	}
