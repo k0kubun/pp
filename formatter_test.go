@@ -31,12 +31,12 @@ var (
 		{float64(3.14), boldMagenta("3.14")},
 		{complex64(complex(3, -4)), boldBlue("(3-4i)")},
 		{complex128(complex(5, 6)), boldBlue("(5+6i)")},
-		{"string", boldRed("\"") + red("string") + boldRed("\"")},
+		{"string", boldRed(`"`) + red("string") + boldRed(`"`)},
 	}
 
 	checkCases = []interface{}{
-		map[string]int{"hello": 23, "world": 34},
-		map[string]map[string]string{"s1": map[string]string{"v1": "m1"}, "s2": map[string]string{"v2": "m2"}},
+		map[string]int{"hell": 23, "world": 34},
+		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
 	}
 )
 

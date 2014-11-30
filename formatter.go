@@ -58,7 +58,7 @@ func colorFormatter(color string) func(reflect.Value) string {
 }
 
 func formatString(v reflect.Value) string {
-	return boldRed("\"") + red(v.String()) + boldRed("\"")
+	return boldRed(`"`) + red(v.String()) + boldRed(`"`)
 }
 
 func formatMap(v reflect.Value) string {
