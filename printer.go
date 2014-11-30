@@ -45,6 +45,8 @@ func (p *printer) String() string {
 		p.colorPrint(p.raw(), "Magenta")
 	case reflect.String:
 		p.printString()
+	case reflect.Map:
+		p.printMap()
 	default:
 		p.print(p.raw())
 	}
@@ -67,4 +69,19 @@ func (p *printer) printString() {
 	p.colorPrint(`"`, "Red")
 	p.colorPrint(p.value.String(), "red")
 	p.colorPrint(`"`, "Red")
+}
+
+func (p *printer) printMap() {
+	result := "{\n"
+	keys := p.value.MapKeys()
+	for i := 0; i < p.value.Len(); i++ {
+		key := keys[i]
+		result += "  "
+		result += format(key.Interface())
+		result += ": "
+		result += format(p.value.MapIndex(key).Interface())
+		result += ",\n"
+	}
+	result += "}"
+	p.print(result)
 }
