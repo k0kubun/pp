@@ -13,6 +13,12 @@ type testCase struct {
 	expect string
 }
 
+type Foo struct {
+	Bar   int
+	Hoge  string
+	Hello map[string]string
+}
+
 var (
 	testCases = []testCase{
 		{true, BoldCyan("true")},
@@ -38,6 +44,7 @@ var (
 	checkCases = []interface{}{
 		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
+		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}},
 	}
 )
 

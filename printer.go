@@ -3,7 +3,7 @@ package pp
 import (
 	"bytes"
 	"fmt"
-	"github.com/k0kubun/palette"
+	. "github.com/k0kubun/palette"
 	"reflect"
 	"strings"
 	"text/tabwriter"
@@ -51,14 +51,18 @@ func (p *printer) String() string {
 		p.printString()
 	case reflect.Map:
 		p.printMap()
+	case reflect.Struct:
+		p.printStruct()
 	default:
 		p.print(p.raw())
 	}
+
+	p.tw.Flush()
 	return p.Buffer.String()
 }
 
 func (p *printer) print(text string) {
-	fmt.Fprint(p.Buffer, text)
+	fmt.Fprint(p.tw, text)
 }
 
 func (p *printer) println(text string) {
@@ -69,8 +73,13 @@ func (p *printer) indentPrint(text string) {
 	p.print(p.indent() + text)
 }
 
+func (p *printer) indentPrintf(format string, args ...interface{}) {
+	text := fmt.Sprintf(format, args...)
+	p.indentPrint(text)
+}
+
 func (p *printer) colorPrint(text, color string) {
-	p.print(palette.Colorize(text, color))
+	p.print(Colorize(text, color))
 }
 
 func (p *printer) printString() {
@@ -86,10 +95,21 @@ func (p *printer) printMap() {
 		for i := 0; i < p.value.Len(); i++ {
 			key := keys[i].Interface()
 			value := p.value.MapIndex(keys[i]).Interface()
-
-			fmt.Fprintf(p.tw, "%s%s:\t%s,\n", p.indent(), p.format(key), p.format(value))
+			p.indentPrintf("%s:\t%s,\n", p.format(key), p.format(value))
 		}
-		p.tw.Flush()
+	})
+	p.indentPrint("}")
+}
+
+func (p *printer) printStruct() {
+	t := p.value.Type()
+	p.println(Green(t.String())+"{")
+	p.indented(func() {
+		for i := 0; i < p.value.NumField(); i++ {
+			field := Yellow(t.Field(i).Name)
+			value := p.value.Field(i).Interface()
+			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+		}
 	})
 	p.indentPrint("}")
 }
