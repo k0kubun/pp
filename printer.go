@@ -1,6 +1,7 @@
 package pp
 
 import (
+	"strings"
 	"bytes"
 	"fmt"
 	"github.com/k0kubun/palette"
@@ -65,10 +66,6 @@ func (p *printer) colorPrint(text, color string) {
 	p.print(palette.Colorize(text, color))
 }
 
-func (p *printer) raw() string {
-	return fmt.Sprintf("%#v", p.value.Interface())
-}
-
 func (p *printer) printString() {
 	p.colorPrint(`"`, "Red")
 	p.colorPrint(p.value.String(), "red")
@@ -77,13 +74,26 @@ func (p *printer) printString() {
 
 func (p *printer) printMap() {
 	p.println("{")
-	keys := p.value.MapKeys()
+	p.indented(func(){
+		keys := p.value.MapKeys()
+		for i := 0; i < p.value.Len(); i++ {
+			key := keys[i].Interface()
+			value := p.value.MapIndex(keys[i]).Interface()
+			indent := strings.Repeat("\t", p.depth)
 
-	for i := 0; i < p.value.Len(); i++ {
-		key := keys[i].Interface()
-		value := p.value.MapIndex(keys[i]).Interface()
-		fmt.Fprintf(p.tw, "\t%s:\t%s,\n", format(key), format(value))
-	}
-	p.tw.Flush()
+			fmt.Fprintf(p.tw, "%s%s:\t%s,\n", indent, format(key), format(value))
+		}
+		p.tw.Flush()
+	})
 	p.println("}")
+}
+
+func (p *printer) indented(proc func()) {
+	p.depth++
+	proc()
+	p.depth--
+}
+
+func (p *printer) raw() string {
+	return fmt.Sprintf("%#v", p.value.Interface())
 }
