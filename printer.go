@@ -3,6 +3,7 @@ package pp
 import (
 	"bytes"
 	"fmt"
+	"github.com/k0kubun/palette"
 	"reflect"
 	"text/tabwriter"
 )
@@ -37,9 +38,11 @@ func (p *printer) String() string {
 	case reflect.Bool:
 		p.colorPrint(p.raw(), "Cyan")
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
-	reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
-	reflect.Uintptr, reflect.Complex64, reflect.Complex128:
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
+		reflect.Uintptr, reflect.Complex64, reflect.Complex128:
 		p.colorPrint(p.raw(), "Blue")
+	case reflect.Float32, reflect.Float64:
+		p.colorPrint(p.raw(), "Magenta")
 	case reflect.String:
 		p.printString()
 	default:
@@ -53,7 +56,7 @@ func (p *printer) print(text string) {
 }
 
 func (p *printer) colorPrint(text, color string) {
-	p.print(colorize(text, color))
+	p.print(palette.Colorize(text, color))
 }
 
 func (p *printer) raw() string {

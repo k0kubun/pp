@@ -2,6 +2,7 @@ package pp
 
 import (
 	"fmt"
+	. "github.com/k0kubun/palette"
 	"reflect"
 	"strings"
 	"testing"
@@ -14,23 +15,23 @@ type testCase struct {
 
 var (
 	testCases = []testCase{
-		{true, boldCyan("true")},
-		{false, boldCyan("false")},
-		{int(4), boldBlue("4")},
-		{int8(8), boldBlue("8")},
-		{int16(16), boldBlue("16")},
-		{int32(32), boldBlue("32")},
-		{int64(64), boldBlue("64")},
-		{uint(4), boldBlue("0x4")},
-		{uint8(8), boldBlue("0x8")},
-		{uint16(16), boldBlue("0x10")},
-		{uint32(32), boldBlue("0x20")},
-		{uint64(64), boldBlue("0x40")},
-		{uintptr(128), boldBlue("0x80")},
+		{true, BoldCyan("true")},
+		{false, BoldCyan("false")},
+		{int(4), BoldBlue("4")},
+		{int8(8), BoldBlue("8")},
+		{int16(16), BoldBlue("16")},
+		{int32(32), BoldBlue("32")},
+		{int64(64), BoldBlue("64")},
+		{uint(4), BoldBlue("0x4")},
+		{uint8(8), BoldBlue("0x8")},
+		{uint16(16), BoldBlue("0x10")},
+		{uint32(32), BoldBlue("0x20")},
+		{uint64(64), BoldBlue("0x40")},
+		{uintptr(128), BoldBlue("0x80")},
 		//{float32(2.23), boldMagenta("2.23")},
 		//{float64(3.14), boldMagenta("3.14")},
-		{complex64(complex(3, -4)), boldBlue("(3-4i)")},
-		{complex128(complex(5, 6)), boldBlue("(5+6i)")},
+		{complex64(complex(3, -4)), BoldBlue("(3-4i)")},
+		{complex128(complex(5, 6)), BoldBlue("(5+6i)")},
 		//{"string", boldRed(`"`) + red("string") + boldRed(`"`)},
 	}
 
