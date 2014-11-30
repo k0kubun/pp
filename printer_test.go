@@ -28,15 +28,14 @@ var (
 		{uint32(32), BoldBlue("0x20")},
 		{uint64(64), BoldBlue("0x40")},
 		{uintptr(128), BoldBlue("0x80")},
-		//{float32(2.23), boldMagenta("2.23")},
-		//{float64(3.14), boldMagenta("3.14")},
+		{float32(2.23), BoldMagenta("2.23")},
+		{float64(3.14), BoldMagenta("3.14")},
 		{complex64(complex(3, -4)), BoldBlue("(3-4i)")},
 		{complex128(complex(5, 6)), BoldBlue("(5+6i)")},
-		//{"string", boldRed(`"`) + red("string") + boldRed(`"`)},
+		{"string", BoldRed(`"`) + Red("string") + BoldRed(`"`)},
 	}
 
 	checkCases = []interface{}{
-		"string",
 		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
 	}
