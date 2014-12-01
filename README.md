@@ -15,10 +15,6 @@ func main() {
 }
 ```
 
-### TODO
-
-- support private field of struct
-
 ## License
 
 MIT License

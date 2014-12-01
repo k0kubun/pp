@@ -118,9 +118,8 @@ func (p *printer) printMap() {
 	p.indented(func() {
 		keys := p.value.MapKeys()
 		for i := 0; i < p.value.Len(); i++ {
-			key := keys[i].Interface()
-			value := p.value.MapIndex(keys[i]).Interface()
-			p.indentPrintf("%s:\t%s,\n", p.format(key), p.format(value))
+			value := p.value.MapIndex(keys[i])
+			p.indentPrintf("%s:\t%s,\n", p.format(keys[i]), p.format(value))
 		}
 	})
 	p.indentPrint("}")
@@ -131,7 +130,7 @@ func (p *printer) printStruct() {
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
 			field := Yellow(p.value.Type().Field(i).Name)
-			value := p.value.Field(i).Interface()
+			value := p.value.Field(i)
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 		}
 	})
@@ -147,8 +146,7 @@ func (p *printer) printSlice() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.Len(); i++ {
-			value := p.value.Index(i).Interface()
-			p.indentPrintf("%s,\n", p.format(value))
+			p.indentPrintf("%s,\n", p.format(p.value.Index(i)))
 		}
 	})
 	p.indentPrint("}")
@@ -159,7 +157,7 @@ func (p *printer) printInterface() {
 	if e.Kind() == reflect.Invalid {
 		p.print(p.nil())
 	} else if e.IsValid() {
-		p.print(p.format(e.Interface()))
+		p.print(p.format(e))
 	} else {
 		p.printf("%s(%s)", p.typeString(), p.nil())
 	}
@@ -167,7 +165,7 @@ func (p *printer) printInterface() {
 
 func (p *printer) printPtr() {
 	if p.value.Elem().IsValid() {
-		p.printf("&%s", p.format(p.value.Elem().Interface()))
+		p.printf("&%s", p.format(p.value.Elem()))
 	} else {
 		p.printf("(%s)(%s)", p.typeString(), p.nil())
 	}
@@ -222,6 +220,9 @@ func (p *printer) nil() string {
 func (p *printer) format(object interface{}) string {
 	pp := newPrinter(object)
 	pp.depth = p.depth
+	if value, ok := object.(reflect.Value); ok {
+		pp.value = value
+	}
 	return pp.String()
 }
 

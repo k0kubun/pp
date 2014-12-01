@@ -21,6 +21,11 @@ type Foo struct {
 	HogeHoges []HogeHoge
 }
 
+type FooPri struct {
+	Public  string
+	private string
+}
+
 type Piyo struct {
 	Field1 map[string]string
 	F2     *Foo
@@ -73,6 +78,7 @@ var (
 		[]interface{}{1, 3},
 		interface{}(1),
 		HogeHoge{A: "test"},
+		FooPri{Public: "hello", private: "world"},
 	}
 )
 
