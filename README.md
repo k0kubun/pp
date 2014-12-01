@@ -44,6 +44,10 @@ func main() {
 - [ ] Struct
 - [ ] UnsafePointer
 
+### TODO
+
+support private field of struct
+
 ## License
 
 MIT License
