@@ -2,6 +2,7 @@ package pp
 
 import (
 	"fmt"
+	"unsafe"
 	. "github.com/k0kubun/palette"
 	"reflect"
 	"strings"
@@ -58,6 +59,7 @@ var (
 		arr,
 		[]string{"aaa", "bbb", "ccc"},
 		make(chan bool, 10),
+		unsafe.Pointer(uintptr(1)),
 	}
 )
 

@@ -42,7 +42,7 @@ func main() {
 - [x] Slice
 - [x] String
 - [x] Struct
-- [ ] UnsafePointer
+- [x] UnsafePointer
 - [x] Invalid
 
 ### TODO

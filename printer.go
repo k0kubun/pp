@@ -56,7 +56,7 @@ func (p *printer) String() string {
 	case reflect.Array, reflect.Slice:
 		p.printSlice()
 	case reflect.Chan:
-		p.printChan()
+		p.printf("(%s)(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Interface:
 		panic("interface not implemented")
 	case reflect.Ptr:
@@ -64,7 +64,7 @@ func (p *printer) String() string {
 	case reflect.Func:
 		panic("func not implemented")
 	case reflect.UnsafePointer:
-		panic("unsafepointer not implemented")
+		p.printf("%s(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Invalid:
 		p.print(BoldCyan("nil"))
 	default:
@@ -148,9 +148,8 @@ func (p *printer) printSlice() {
 	p.indentPrint("}")
 }
 
-func (p *printer) printChan() {
-	addr := fmt.Sprintf("%#v", p.value.Pointer())
-	p.printf("(%s)(%s)", p.typeString(), BoldBlue(addr))
+func (p *printer) pointerAddr() string {
+	return BoldBlue(fmt.Sprintf("%#v", p.value.Pointer()))
 }
 
 func (p *printer) typeString() string {
