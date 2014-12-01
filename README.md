@@ -35,7 +35,7 @@ func main() {
 - [x] Complex128
 - [x] Array
 - [x] Chan
-- [ ] Func
+- [x] Func
 - [ ] Interface
 - [x] Map
 - [ ] Ptr

@@ -60,6 +60,7 @@ var (
 		[]string{"aaa", "bbb", "ccc"},
 		make(chan bool, 10),
 		unsafe.Pointer(uintptr(1)),
+		func (a string) int { return 0 },
 	}
 )
 

@@ -62,7 +62,7 @@ func (p *printer) String() string {
 	case reflect.Ptr:
 		panic("ptr not implemented")
 	case reflect.Func:
-		panic("func not implemented")
+		p.printf("%s {...}", p.typeString())
 	case reflect.UnsafePointer:
 		p.printf("%s(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Invalid:
