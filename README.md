@@ -33,20 +33,21 @@ func main() {
 - [x] Float64
 - [x] Complex64
 - [x] Complex128
-- [ ] Array
+- [x] Array
 - [ ] Chan
 - [ ] Func
 - [ ] Interface
 - [x] Map
 - [ ] Ptr
-- [ ] Slice
+- [x] Slice
 - [x] String
 - [ ] Struct
 - [ ] UnsafePointer
 
 ### TODO
 
-support private field of struct
+- support private field of struct
+- better type parser
 
 ## License
 

@@ -53,6 +53,8 @@ func (p *printer) String() string {
 		p.printMap()
 	case reflect.Struct:
 		p.printStruct()
+	case reflect.Array, reflect.Slice:
+		p.printArray()
 	default:
 		p.print(p.raw())
 	}
@@ -102,13 +104,23 @@ func (p *printer) printMap() {
 }
 
 func (p *printer) printStruct() {
-	t := p.value.Type()
-	p.println(Green(t.String())+"{")
+	p.println(Green(p.value.Type().String())+"{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := Yellow(t.Field(i).Name)
+			field := Yellow(p.value.Type().Field(i).Name)
 			value := p.value.Field(i).Interface()
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+		}
+	})
+	p.indentPrint("}")
+}
+
+func (p *printer) printArray() {
+	p.println(Green(p.value.Type().String())+"{")
+	p.indented(func() {
+		for i := 0; i < p.value.Len(); i++ {
+			value := p.value.Index(i).Interface()
+			p.indentPrintf("%s,\n", p.format(value))
 		}
 	})
 	p.indentPrint("}")

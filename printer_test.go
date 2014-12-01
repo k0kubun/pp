@@ -14,9 +14,15 @@ type testCase struct {
 }
 
 type Foo struct {
-	Bar   int
-	Hoge  string
-	Hello map[string]string
+	Bar       int
+	Hoge      string
+	Hello     map[string]string
+	HogeHoges []HogeHoge
+}
+
+type HogeHoge struct {
+	Hell  string
+	World int
 }
 
 var (
@@ -41,10 +47,14 @@ var (
 		{"string", BoldRed(`"`) + Red("string") + BoldRed(`"`)},
 	}
 
+	arr [3]int
+
 	checkCases = []interface{}{
 		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
-		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}},
+		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}, HogeHoges: []HogeHoge{HogeHoge{Hell: "a", World: 1}, HogeHoge{Hell: "bbb", World: 100}}},
+		arr,
+		[]string{"aaa", "bbb", "ccc"},
 	}
 )
 
