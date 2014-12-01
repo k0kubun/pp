@@ -57,6 +57,16 @@ func (p *printer) String() string {
 		p.printSlice()
 	case reflect.Chan:
 		p.printChan()
+	case reflect.Interface:
+		panic("interface not implemented")
+	case reflect.Ptr:
+		panic("ptr not implemented")
+	case reflect.Func:
+		panic("func not implemented")
+	case reflect.UnsafePointer:
+		panic("unsafepointer not implemented")
+	case reflect.Invalid:
+		panic("invalid not implemented")
 	default:
 		p.print(p.raw())
 	}

@@ -43,6 +43,7 @@ func main() {
 - [x] String
 - [x] Struct
 - [ ] UnsafePointer
+- [ ] Interface
 
 ### TODO
 
