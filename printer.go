@@ -58,7 +58,7 @@ func (p *printer) String() string {
 	case reflect.Chan:
 		p.printf("(%s)(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Interface:
-		panic("interface not implemented")
+		p.printInterface()
 	case reflect.Ptr:
 		p.printPtr()
 	case reflect.Func:
@@ -66,7 +66,7 @@ func (p *printer) String() string {
 	case reflect.UnsafePointer:
 		p.printf("%s(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Invalid:
-		p.print(BoldCyan("nil"))
+		p.print(p.nil())
 	default:
 		p.print(p.raw())
 	}
@@ -153,11 +153,22 @@ func (p *printer) printSlice() {
 	p.indentPrint("}")
 }
 
+func (p *printer) printInterface() {
+	e := p.value.Elem()
+	if e.Kind() == reflect.Invalid {
+		p.print(p.nil())
+	} else if e.IsValid() {
+		p.print(p.format(e.Interface()))
+	} else {
+		p.printf("%s(%s)", p.typeString(), p.nil())
+	}
+}
+
 func (p *printer) printPtr() {
 	if p.value.Elem().IsValid() {
 		p.printf("&%s", p.format(p.value.Elem().Interface()))
 	} else {
-		p.printf("(%s)(%s)", p.typeString(), BoldCyan("nil"))
+		p.printf("(%s)(%s)", p.typeString(), p.nil())
 	}
 }
 
@@ -177,6 +188,10 @@ func (p *printer) indented(proc func()) {
 
 func (p *printer) raw() string {
 	return fmt.Sprintf("%#v", p.value.Interface())
+}
+
+func (p *printer) nil() string {
+	return BoldCyan("nil")
 }
 
 func (p *printer) format(object interface{}) string {

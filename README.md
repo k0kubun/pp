@@ -36,7 +36,7 @@ func main() {
 - [x] Array
 - [x] Chan
 - [x] Func
-- [ ] Interface
+- [x] Interface
 - [x] Map
 - [x] Ptr
 - [x] Slice

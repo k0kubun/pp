@@ -30,6 +30,7 @@ type Piyo struct {
 type HogeHoge struct {
 	Hell  string
 	World int
+	A interface{}
 }
 
 var (
@@ -69,6 +70,9 @@ var (
 		func (a string, b float32) int { return 0 },
 		&HogeHoge{},
 		&Piyo{Field1: map[string]string{"a": "b", "cc": "dd"}, F2: &Foo{}, Fie3: 128},
+		[]interface{}{1, 3},
+		interface{}(1),
+		HogeHoge{A: "test"},
 	}
 )
 
