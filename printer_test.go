@@ -2,11 +2,11 @@ package pp
 
 import (
 	"fmt"
-	"unsafe"
 	. "github.com/k0kubun/palette"
 	"reflect"
 	"strings"
 	"testing"
+	"unsafe"
 )
 
 type testCase struct {
@@ -30,7 +30,7 @@ type Piyo struct {
 type HogeHoge struct {
 	Hell  string
 	World int
-	A interface{}
+	A     interface{}
 }
 
 var (
@@ -54,7 +54,7 @@ var (
 		{complex64(complex(3, -4)), BoldBlue("(3-4i)")},
 		{complex128(complex(5, 6)), BoldBlue("(5+6i)")},
 		{"string", BoldRed(`"`) + Red("string") + BoldRed(`"`)},
-		{[]string{}, Green("[]string") + "{}"},
+		{[]string{}, "[]" + Green("string") + "{}"},
 	}
 
 	arr [3]int
@@ -67,7 +67,7 @@ var (
 		[]string{"aaa", "bbb", "ccc"},
 		make(chan bool, 10),
 		unsafe.Pointer(uintptr(1)),
-		func (a string, b float32) int { return 0 },
+		func(a string, b float32) int { return 0 },
 		&HogeHoge{},
 		&Piyo{Field1: map[string]string{"a": "b", "cc": "dd"}, F2: &Foo{}, Fie3: 128},
 		[]interface{}{1, 3},

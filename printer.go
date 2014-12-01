@@ -5,6 +5,7 @@ import (
 	"fmt"
 	. "github.com/k0kubun/palette"
 	"reflect"
+	"regexp"
 	"strings"
 	"text/tabwriter"
 )
@@ -177,7 +178,31 @@ func (p *printer) pointerAddr() string {
 }
 
 func (p *printer) typeString() string {
-	return Green(p.value.Type().String())
+	prefix := ""
+	t := p.value.Type().String()
+
+	if p.matchRegexp(t, `^\[\].+$`) {
+		prefix = "[]"
+		t = t[2:]
+	}
+
+	if p.matchRegexp(t, `^\[\d\].+$`) {
+		num := regexp.MustCompile(`\d`).FindString(t)
+		prefix = fmt.Sprintf("[%s]", Blue(num))
+		t = t[2+len(num):]
+	}
+
+	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
+		ts := strings.Split(t, ".")
+		t = fmt.Sprintf("%s.%s", ts[0], Green(ts[1]))
+	} else {
+		t = Green(t)
+	}
+	return prefix + t
+}
+
+func (p *printer) matchRegexp(text, exp string) bool {
+	return regexp.MustCompile(exp).MatchString(text)
 }
 
 func (p *printer) indented(proc func()) {
