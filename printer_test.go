@@ -27,6 +27,7 @@ type HogeHoge struct {
 
 var (
 	testCases = []testCase{
+		{nil, BoldCyan("nil")},
 		{true, BoldCyan("true")},
 		{false, BoldCyan("false")},
 		{int(4), BoldBlue("4")},

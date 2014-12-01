@@ -66,7 +66,7 @@ func (p *printer) String() string {
 	case reflect.UnsafePointer:
 		panic("unsafepointer not implemented")
 	case reflect.Invalid:
-		panic("invalid not implemented")
+		p.print(BoldCyan("nil"))
 	default:
 		p.print(p.raw())
 	}
