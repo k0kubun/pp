@@ -54,7 +54,9 @@ func (p *printer) String() string {
 	case reflect.Struct:
 		p.printStruct()
 	case reflect.Array, reflect.Slice:
-		p.printArray()
+		p.printSlice()
+	case reflect.Chan:
+		p.printChan()
 	default:
 		p.print(p.raw())
 	}
@@ -65,6 +67,11 @@ func (p *printer) String() string {
 
 func (p *printer) print(text string) {
 	fmt.Fprint(p.tw, text)
+}
+
+func (p *printer) printf(format string, args ...interface{}) {
+	text := fmt.Sprintf(format, args...)
+	p.print(text)
 }
 
 func (p *printer) println(text string) {
@@ -104,7 +111,7 @@ func (p *printer) printMap() {
 }
 
 func (p *printer) printStruct() {
-	p.println(Green(p.value.Type().String())+"{")
+	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
 			field := Yellow(p.value.Type().Field(i).Name)
@@ -115,8 +122,13 @@ func (p *printer) printStruct() {
 	p.indentPrint("}")
 }
 
-func (p *printer) printArray() {
-	p.println(Green(p.value.Type().String())+"{")
+func (p *printer) printSlice() {
+	if p.value.Len() == 0 {
+		p.printf("%s{}", p.typeString())
+		return
+	}
+
+	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.Len(); i++ {
 			value := p.value.Index(i).Interface()
@@ -124,6 +136,15 @@ func (p *printer) printArray() {
 		}
 	})
 	p.indentPrint("}")
+}
+
+func (p *printer) printChan() {
+	addr := fmt.Sprintf("%#v", p.value.Pointer())
+	p.printf("(%s)(%s)", p.typeString(), BoldBlue(addr))
+}
+
+func (p *printer) typeString() string {
+	return Green(p.value.Type().String())
 }
 
 func (p *printer) indented(proc func()) {

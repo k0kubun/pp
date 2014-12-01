@@ -34,14 +34,14 @@ func main() {
 - [x] Complex64
 - [x] Complex128
 - [x] Array
-- [ ] Chan
+- [x] Chan
 - [ ] Func
 - [ ] Interface
 - [x] Map
 - [ ] Ptr
 - [x] Slice
 - [x] String
-- [ ] Struct
+- [x] Struct
 - [ ] UnsafePointer
 
 ### TODO

@@ -45,6 +45,7 @@ var (
 		{complex64(complex(3, -4)), BoldBlue("(3-4i)")},
 		{complex128(complex(5, 6)), BoldBlue("(5+6i)")},
 		{"string", BoldRed(`"`) + Red("string") + BoldRed(`"`)},
+		{[]string{}, Green("[]string") + "{}"},
 	}
 
 	arr [3]int
@@ -55,6 +56,7 @@ var (
 		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}, HogeHoges: []HogeHoge{HogeHoge{Hell: "a", World: 1}, HogeHoge{Hell: "bbb", World: 100}}},
 		arr,
 		[]string{"aaa", "bbb", "ccc"},
+		make(chan bool, 10),
 	}
 )
 
