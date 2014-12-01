@@ -210,7 +210,19 @@ func (p *printer) indented(proc func()) {
 }
 
 func (p *printer) raw() string {
-	return fmt.Sprintf("%#v", p.value.Interface())
+	// Some value causes panic when Interface() is called.
+	switch p.value.Kind() {
+	case reflect.Bool:
+		return fmt.Sprintf("%#v", p.value.Bool())
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return fmt.Sprintf("%#v", p.value.Int())
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return fmt.Sprintf("%#v", p.value.Uint())
+	case reflect.Complex64, reflect.Complex128:
+		return fmt.Sprintf("%#v", p.value.Complex())
+	default:
+		return fmt.Sprintf("%#v", p.value.Interface())
+	}
 }
 
 func (p *printer) nil() string {

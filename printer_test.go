@@ -4,6 +4,7 @@ import (
 	"fmt"
 	. "github.com/k0kubun/palette"
 	"reflect"
+	"regexp"
 	"strings"
 	"testing"
 	"unsafe"
@@ -79,6 +80,7 @@ var (
 		interface{}(1),
 		HogeHoge{A: "test"},
 		FooPri{Public: "hello", private: "world"},
+		new(regexp.Regexp),
 	}
 )
 
