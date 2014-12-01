@@ -38,7 +38,7 @@ func main() {
 - [x] Func
 - [ ] Interface
 - [x] Map
-- [ ] Ptr
+- [x] Ptr
 - [x] Slice
 - [x] String
 - [x] Struct

@@ -60,7 +60,7 @@ func (p *printer) String() string {
 	case reflect.Interface:
 		panic("interface not implemented")
 	case reflect.Ptr:
-		panic("ptr not implemented")
+		p.printPtr()
 	case reflect.Func:
 		p.printf("%s {...}", p.typeString())
 	case reflect.UnsafePointer:
@@ -108,6 +108,11 @@ func (p *printer) printString() {
 }
 
 func (p *printer) printMap() {
+	if p.value.Len() == 0 {
+		p.printf("%s{}", p.typeString())
+		return
+	}
+
 	p.println("{")
 	p.indented(func() {
 		keys := p.value.MapKeys()
@@ -146,6 +151,14 @@ func (p *printer) printSlice() {
 		}
 	})
 	p.indentPrint("}")
+}
+
+func (p *printer) printPtr() {
+	if p.value.Elem().IsValid() {
+		p.printf("&%s", p.format(p.value.Elem().Interface()))
+	} else {
+		p.printf("(%s)(%s)", p.typeString(), BoldCyan("nil"))
+	}
 }
 
 func (p *printer) pointerAddr() string {

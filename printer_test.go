@@ -21,6 +21,12 @@ type Foo struct {
 	HogeHoges []HogeHoge
 }
 
+type Piyo struct {
+	Field1 map[string]string
+	F2     *Foo
+	Fie3   int
+}
+
 type HogeHoge struct {
 	Hell  string
 	World int
@@ -60,7 +66,9 @@ var (
 		[]string{"aaa", "bbb", "ccc"},
 		make(chan bool, 10),
 		unsafe.Pointer(uintptr(1)),
-		func (a string) int { return 0 },
+		func (a string, b float32) int { return 0 },
+		&HogeHoge{},
+		&Piyo{Field1: map[string]string{"a": "b", "cc": "dd"}, F2: &Foo{}, Fie3: 128},
 	}
 )
 
