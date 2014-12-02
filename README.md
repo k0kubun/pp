@@ -41,6 +41,10 @@ API doc is available at: http://godoc.org/github.com/k0kubun/pp
 
 ![](http://i.gyazo.com/1e88915b3a6a9129f69fb5d961c4f079.png)
 
+### Works on windows
+
+![](http://i.gyazo.com/ab791997a980f1ab3ee2a01586efdce6.png)
+
 ## License
 
 MIT License
