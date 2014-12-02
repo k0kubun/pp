@@ -3,19 +3,26 @@ package pp
 import (
 	"errors"
 	"fmt"
+	"github.com/mattn/go-colorable"
 	"io"
 )
 
+var out io.Writer
+
+func init() {
+	out = colorable.NewColorableStdout()
+}
+
 func Print(a ...interface{}) (n int, err error) {
-	return fmt.Print(formatAll(a)...)
+	return fmt.Fprint(out, formatAll(a)...)
 }
 
 func Printf(format string, a ...interface{}) (n int, err error) {
-	return fmt.Printf(format, formatAll(a)...)
+	return fmt.Fprintf(out, format, formatAll(a)...)
 }
 
 func Println(a ...interface{}) (n int, err error) {
-	return fmt.Println(formatAll(a)...)
+	return fmt.Fprintln(out, formatAll(a)...)
 }
 
 func Sprint(a ...interface{}) string {
