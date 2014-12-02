@@ -3,7 +3,6 @@ package pp
 import (
 	"bytes"
 	"fmt"
-	. "github.com/k0kubun/palette"
 	"reflect"
 	"regexp"
 	"strings"

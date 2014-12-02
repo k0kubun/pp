@@ -2,7 +2,6 @@ package pp
 
 import (
 	"fmt"
-	. "github.com/k0kubun/palette"
 	"reflect"
 	"regexp"
 	"strings"
