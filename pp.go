@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/mattn/go-colorable"
 	"io"
+	"os"
 )
 
 var out io.Writer
@@ -51,6 +52,21 @@ func Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
 
 func Errorf(format string, a ...interface{}) error {
 	return errors.New(Sprintf(format, a...))
+}
+
+func Fatal(a ...interface{}) {
+	fmt.Fprint(out, formatAll(a)...)
+	os.Exit(1)
+}
+
+func Fatalf(format string, a ...interface{}) {
+	fmt.Fprintf(out, format, formatAll(a)...)
+	os.Exit(1)
+}
+
+func Fatalln(a ...interface{}) {
+	fmt.Fprintln(out, formatAll(a)...)
+	os.Exit(1)
 }
 
 func formatAll(objects []interface{}) []interface{} {
