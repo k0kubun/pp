@@ -35,26 +35,26 @@ func TestColorize(t *testing.T) {
 		expect(t, test.input, test.result)
 	}
 
-	t.Logf(Black("black"))
-	t.Logf(Red("red"))
-	t.Logf(Green("green"))
-	t.Logf(Yellow("yellow"))
-	t.Logf(Blue("blue"))
-	t.Logf(Magenta("magenta"))
-	t.Logf(Cyan("cyan"))
-	t.Logf(White("white"))
-	t.Logf(BoldBlack("Black"))
-	t.Logf(BoldRed("Red"))
-	t.Logf(BoldGreen("Green"))
-	t.Logf(BoldYellow("Yellow"))
-	t.Logf(BoldBlue("Blue"))
-	t.Logf(BoldMagenta("Magenta"))
-	t.Logf(BoldCyan("Cyan"))
-	t.Logf(BoldWhite("White"))
+	t.Logf(black("black"))
+	t.Logf(red("red"))
+	t.Logf(green("green"))
+	t.Logf(yellow("yellow"))
+	t.Logf(blue("blue"))
+	t.Logf(magenta("magenta"))
+	t.Logf(cyan("cyan"))
+	t.Logf(white("white"))
+	t.Logf(boldBlack("Black"))
+	t.Logf(boldRed("Red"))
+	t.Logf(boldGreen("Green"))
+	t.Logf(boldYellow("Yellow"))
+	t.Logf(boldBlue("Blue"))
+	t.Logf(boldMagenta("Magenta"))
+	t.Logf(boldCyan("Cyan"))
+	t.Logf(boldWhite("White"))
 }
 
 func expect(t *testing.T, input, result string) {
-	actual := Colorize("palette", input)
+	actual := colorize("palette", input)
 	if actual != result {
 		t.Errorf("Expected: %#v, Actual: %#v", result, actual)
 	} else {

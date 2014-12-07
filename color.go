@@ -17,25 +17,25 @@ var (
 		"white":   37,
 	}
 
-	Black       = colorizer("black")
-	Red         = colorizer("red")
-	Green       = colorizer("green")
-	Yellow      = colorizer("yellow")
-	Blue        = colorizer("blue")
-	Magenta     = colorizer("magenta")
-	Cyan        = colorizer("cyan")
-	White       = colorizer("white")
-	BoldBlack   = colorizer("Black")
-	BoldRed     = colorizer("Red")
-	BoldGreen   = colorizer("Green")
-	BoldYellow  = colorizer("Yellow")
-	BoldBlue    = colorizer("Blue")
-	BoldMagenta = colorizer("Magenta")
-	BoldCyan    = colorizer("Cyan")
-	BoldWhite   = colorizer("White")
+	black       = colorizer("black")
+	red         = colorizer("red")
+	green       = colorizer("green")
+	yellow      = colorizer("yellow")
+	blue        = colorizer("blue")
+	magenta     = colorizer("magenta")
+	cyan        = colorizer("cyan")
+	white       = colorizer("white")
+	boldBlack   = colorizer("Black")
+	boldRed     = colorizer("Red")
+	boldGreen   = colorizer("Green")
+	boldYellow  = colorizer("Yellow")
+	boldBlue    = colorizer("Blue")
+	boldMagenta = colorizer("Magenta")
+	boldCyan    = colorizer("Cyan")
+	boldWhite   = colorizer("White")
 )
 
-func Colorize(text, color string) string {
+func colorize(text, color string) string {
 	return colorizer(color)(text)
 }
 

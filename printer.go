@@ -98,7 +98,7 @@ func (p *printer) indentPrintf(format string, args ...interface{}) {
 }
 
 func (p *printer) colorPrint(text, color string) {
-	p.print(Colorize(text, color))
+	p.print(colorize(text, color))
 }
 
 func (p *printer) printString() {
@@ -128,7 +128,7 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := Yellow(p.value.Type().Field(i).Name)
+			field := yellow(p.value.Type().Field(i).Name)
 			value := p.value.Field(i)
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 		}
@@ -171,7 +171,7 @@ func (p *printer) printPtr() {
 }
 
 func (p *printer) pointerAddr() string {
-	return BoldBlue(fmt.Sprintf("%#v", p.value.Pointer()))
+	return boldBlue(fmt.Sprintf("%#v", p.value.Pointer()))
 }
 
 func (p *printer) typeString() string {
@@ -185,15 +185,15 @@ func (p *printer) typeString() string {
 
 	if p.matchRegexp(t, `^\[\d\].+$`) {
 		num := regexp.MustCompile(`\d`).FindString(t)
-		prefix = fmt.Sprintf("[%s]", Blue(num))
+		prefix = fmt.Sprintf("[%s]", blue(num))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = fmt.Sprintf("%s.%s", ts[0], Green(ts[1]))
+		t = fmt.Sprintf("%s.%s", ts[0], green(ts[1]))
 	} else {
-		t = Green(t)
+		t = green(t)
 	}
 	return prefix + t
 }
@@ -225,7 +225,7 @@ func (p *printer) raw() string {
 }
 
 func (p *printer) nil() string {
-	return BoldCyan("nil")
+	return boldCyan("nil")
 }
 
 func (p *printer) format(object interface{}) string {
