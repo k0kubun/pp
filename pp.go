@@ -47,7 +47,7 @@ func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
 }
 
 func Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
-	return Fprintln(w, formatAll(a)...)
+	return fmt.Fprintln(w, formatAll(a)...)
 }
 
 func Errorf(format string, a ...interface{}) error {
