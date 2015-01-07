@@ -26,6 +26,23 @@ func Println(a ...interface{}) (n int, err error) {
 	return fmt.Fprintln(out, formatAll(a)...)
 }
 
+func Debug(a ...interface{}) {
+	if os.Getenv("DEBUG") != "" {
+		Print(a...)
+	}
+}
+func Debugf(format string, a ...interface{}) {
+	if os.Getenv("DEBUG") != "" {
+		Printf(format, a...)
+	}
+}
+
+func Debugln(a ...interface{}) {
+	if os.Getenv("DEBUG") != "" {
+		Println(a...)
+	}
+}
+
 func Sprint(a ...interface{}) string {
 	return fmt.Sprint(formatAll(a)...)
 }
