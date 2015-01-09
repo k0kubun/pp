@@ -1,4 +1,4 @@
-# pp [![wercker status](https://app.wercker.com/status/d68cd67ea8da91a05e4e61a79852dad9/s "wercker status")](https://app.wercker.com/project/bykey/d68cd67ea8da91a05e4e61a79852dad9)
+# pp [![wercker status](https://app.wercker.com/status/6934c847631da2cf672e559f927a90b2/s "wercker status")](https://app.wercker.com/project/bykey/6934c847631da2cf672e559f927a90b2)
 
 Colored pretty printer for Go language
 
