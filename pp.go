@@ -3,15 +3,19 @@ package pp
 import (
 	"errors"
 	"fmt"
-	"github.com/mattn/go-colorable"
 	"io"
 	"os"
+	"sync"
+
+	"github.com/mattn/go-colorable"
 )
 
-var out io.Writer
+var out, defaultOut io.Writer
+var outLock sync.Mutex
 
 func init() {
-	out = colorable.NewColorableStdout()
+	defaultOut = colorable.NewColorableStdout()
+	out = defaultOut
 }
 
 func Print(a ...interface{}) (n int, err error) {
@@ -67,6 +71,34 @@ func Fatalf(format string, a ...interface{}) {
 func Fatalln(a ...interface{}) {
 	fmt.Fprintln(out, formatAll(a)...)
 	os.Exit(1)
+}
+
+/*
+
+Change Print* functions output to o
+For example, you can limit output by ENV followings
+
+	func init() {
+		if os.Getenv("DEBUG") == "" {
+			pp.SetDefaultOutput(os.DevNull)
+		}
+	}
+
+*/
+func SetDefaultOutput(o io.Writer) {
+	outLock.Lock()
+	out = o
+	outLock.Unlock()
+}
+
+func GetDefaultOutput() io.Writer {
+	return out
+}
+
+func ResetDefaultOutput() {
+	outLock.Lock()
+	out = defaultOut
+	outLock.Unlock()
 }
 
 func formatAll(objects []interface{}) []interface{} {
