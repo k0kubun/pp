@@ -6,7 +6,6 @@ import (
 	"regexp"
 	"strings"
 	"testing"
-	"unsafe"
 )
 
 type testCase struct {
@@ -71,7 +70,6 @@ var (
 		arr,
 		[]string{"aaa", "bbb", "ccc"},
 		make(chan bool, 10),
-		unsafe.Pointer(uintptr(1)),
 		func(a string, b float32) int { return 0 },
 		&HogeHoge{},
 		&Piyo{Field1: map[string]string{"a": "b", "cc": "dd"}, F2: &Foo{}, Fie3: 128},
@@ -80,6 +78,9 @@ var (
 		HogeHoge{A: "test"},
 		FooPri{Public: "hello", private: "world"},
 		new(regexp.Regexp),
+
+		// FIXME: this crashes on Go 1.4
+		// unsafe.Pointer(uintptr(1)),
 	}
 )
 
