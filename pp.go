@@ -73,18 +73,14 @@ func Fatalln(a ...interface{}) {
 	os.Exit(1)
 }
 
-/*
-
-Change Print* functions output to o
-For example, you can limit output by ENV followings
-
-	func init() {
-		if os.Getenv("DEBUG") == "" {
-			pp.SetDefaultOutput(ioutil.Discard)
-		}
-	}
-
-*/
+// Change Print* functions output to `o`.
+// For example, you can limit output by ENV.
+//
+//	func init() {
+//		if os.Getenv("DEBUG") == "" {
+//			pp.SetDefaultOutput(ioutil.Discard)
+//		}
+//	}
 func SetDefaultOutput(o io.Writer) {
 	outLock.Lock()
 	out = o
