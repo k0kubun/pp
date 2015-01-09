@@ -5,9 +5,6 @@ import (
 	"testing"
 )
 
-type TestWriter struct {
-}
-
 func TestDefaultOutput(t *testing.T) {
 	testOutput := new(bytes.Buffer)
 	init := GetDefaultOutput()
