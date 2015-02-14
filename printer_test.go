@@ -83,14 +83,6 @@ var (
 			`,
 		},
 		{
-			map[string]int{"hell": 23, "world": 34}, `
-				{
-				  [red][bold]"[reset][red]hell[reset][red][bold]"[reset]:  [blue][bold]23[reset],
-				  [red][bold]"[reset][red]world[reset][red][bold]"[reset]: [blue][bold]34[reset],
-				}
-			`,
-		},
-		{
 			&c, `
 				&pp.[green]Circular[reset]{
 				  [yellow]C[reset]: ...,
@@ -103,6 +95,7 @@ var (
 	arr [3]int
 
 	checkCases = []interface{}{
+		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
 		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}, HogeHoges: []HogeHoge{HogeHoge{Hell: "a", World: 1}, HogeHoge{Hell: "bbb", World: 100}}},
 		arr,
