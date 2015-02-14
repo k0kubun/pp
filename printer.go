@@ -205,6 +205,7 @@ func (p *printer) printSlice() {
 
 	if p.value.Kind() == reflect.Slice {
 		if p.visited[p.value.Pointer()] {
+			// Stop travarsing cyclic reference
 			p.printf("%s{...}", p.typeString())
 			return
 		}
