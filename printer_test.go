@@ -7,6 +7,10 @@ import (
 	"strings"
 	"testing"
 	"unsafe"
+
+	// Use fork until following PR is merged
+	// https://github.com/mitchellh/colorstring/pull/3
+	"github.com/k0kubun/colorstring"
 )
 
 type testCase struct {
@@ -50,26 +54,26 @@ func init() {
 
 var (
 	testCases = []testCase{
-		{nil, boldCyan("nil")},
-		{true, boldCyan("true")},
-		{false, boldCyan("false")},
-		{int(4), boldBlue("4")},
-		{int8(8), boldBlue("8")},
-		{int16(16), boldBlue("16")},
-		{int32(32), boldBlue("32")},
-		{int64(64), boldBlue("64")},
-		{uint(4), boldBlue("0x4")},
-		{uint8(8), boldBlue("0x8")},
-		{uint16(16), boldBlue("0x10")},
-		{uint32(32), boldBlue("0x20")},
-		{uint64(64), boldBlue("0x40")},
-		{uintptr(128), boldBlue("0x80")},
-		{float32(2.23), boldMagenta("2.23")},
-		{float64(3.14), boldMagenta("3.14")},
-		{complex64(complex(3, -4)), boldBlue("(3-4i)")},
-		{complex128(complex(5, 6)), boldBlue("(5+6i)")},
-		{"string", boldRed(`"`) + red("string") + boldRed(`"`)},
-		{[]string{}, "[]" + green("string") + "{}"},
+		{nil, "[cyan][bold]nil"},
+		{true, "[cyan][bold]true"},
+		{false, "[cyan][bold]false"},
+		{int(4), "[blue][bold]4"},
+		{int8(8), "[blue][bold]8"},
+		{int16(16), "[blue][bold]16"},
+		{int32(32), "[blue][bold]32"},
+		{int64(64), "[blue][bold]64"},
+		{uint(4), "[blue][bold]0x4"},
+		{uint8(8), "[blue][bold]0x8"},
+		{uint16(16), "[blue][bold]0x10"},
+		{uint32(32), "[blue][bold]0x20"},
+		{uint64(64), "[blue][bold]0x40"},
+		{uintptr(128), "[blue][bold]0x80"},
+		{float32(2.23), "[magenta][bold]2.23"},
+		{float64(3.14), "[magenta][bold]3.14"},
+		{complex64(complex(3, -4)), "[blue][bold](3-4i)"},
+		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
+		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
+		{[]string{}, "[][green]string[reset]{}"},
 	}
 
 	arr [3]int
@@ -98,10 +102,11 @@ var (
 func TestFormat(t *testing.T) {
 	for _, test := range testCases {
 		actual := fmt.Sprintf("%s", format(test.object))
-		if test.expect != actual {
+		expect := colorstring.Color(test.expect)
+		if expect != actual {
 			v := reflect.ValueOf(test.object)
-			t.Errorf("\nTestCase: %#v\nType: %s\nExpect: %# v\nActual: %# v\n", test.object, v.Kind(), test.expect, actual)
-			continue
+			t.Errorf("\nTestCase: %#v\nType: %s\nExpect: %# v\nActual: %# v\n", test.object, v.Kind(), expect, actual)
+			return
 		}
 		logResult(t, test.object, actual)
 	}
