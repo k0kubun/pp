@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 	"testing"
+	"time"
 	"unsafe"
 
 	// Use fork until following PR is merged
@@ -40,6 +41,12 @@ type HogeHoge struct {
 	Hell  string
 	World int
 	A     interface{}
+}
+
+type User struct {
+	Name      string
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
 type Circular struct {
@@ -90,9 +97,14 @@ var (
 			`,
 		},
 		{"日本\t語\x00", `[red][bold]"[reset][red]日本[reset][magenta][bold]\t[reset][red]語[reset][magenta][bold]\x00[reset][red][bold]"`},
+		{
+			time.Date(2015, time.February, 14, 22, 15, 0, 0, time.UTC),
+			"[blue][bold]2015[reset]-[blue][bold]02[reset]-[blue][bold]14[reset] [blue][bold]22[reset]:[blue][bold]15[reset]:[blue][bold]00[reset] [blue][bold]UTC[reset]",
+		},
 	}
 
 	arr [3]int
+	tm  = time.Date(2015, time.January, 2, 0, 0, 0, 0, time.UTC)
 
 	checkCases = []interface{}{
 		map[string]int{"hell": 23, "world": 34},
@@ -111,6 +123,8 @@ var (
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
 		"日本\t語\n\000\U00101234a",
+		&tm,
+		&User{Name: "k0kubun", CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
 	}
 )
 

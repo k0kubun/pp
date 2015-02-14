@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 	"text/tabwriter"
+	"time"
 )
 
 const (
@@ -160,6 +161,11 @@ func (p *printer) printMap() {
 }
 
 func (p *printer) printStruct() {
+	if p.value.Type().String() == "time.Time" {
+		p.printTime()
+		return
+	}
+
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
@@ -169,6 +175,20 @@ func (p *printer) printStruct() {
 		}
 	})
 	p.indentPrint("}")
+}
+
+func (p *printer) printTime() {
+	tm := p.value.Interface().(time.Time)
+	p.printf(
+		"%s-%s-%s %s:%s:%s %s",
+		boldBlue(strconv.Itoa(tm.Year())),
+		boldBlue(fmt.Sprintf("%02d", tm.Month())),
+		boldBlue(fmt.Sprintf("%02d", tm.Day())),
+		boldBlue(fmt.Sprintf("%02d", tm.Hour())),
+		boldBlue(fmt.Sprintf("%02d", tm.Minute())),
+		boldBlue(fmt.Sprintf("%02d", tm.Second())),
+		boldBlue(tm.Location().String()),
+	)
 }
 
 func (p *printer) printSlice() {
