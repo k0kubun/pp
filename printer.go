@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"regexp"
+	"strconv"
 	"strings"
 	"text/tabwriter"
 )
@@ -104,8 +105,34 @@ func (p *printer) colorPrint(text, color string) {
 }
 
 func (p *printer) printString() {
+	quoted := strconv.Quote(p.value.String())
+	quoted = quoted[1 : len(quoted)-1]
+
 	p.colorPrint(`"`, "Red")
-	p.colorPrint(p.value.String(), "red")
+	for len(quoted) > 0 {
+		pos := strings.IndexByte(quoted, '\\')
+		if pos == -1 {
+			p.colorPrint(quoted, "red")
+			break
+		}
+		if pos != 0 {
+			p.colorPrint(quoted[0:pos], "red")
+		}
+
+		n := 1
+		switch quoted[pos+1] {
+		case 'x': // "\x00"
+			n = 3
+		case 'u': // "\u0000"
+			n = 5
+		case 'U': // "\U00000000"
+			n = 9
+		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9': // "\000"
+			n = 3
+		}
+		p.colorPrint(quoted[pos:pos+n+1], "Magenta")
+		quoted = quoted[pos+n+1:]
+	}
 	p.colorPrint(`"`, "Red")
 }
 

@@ -97,6 +97,7 @@ var (
 				}
 			`,
 		},
+		{"日本\t語\x00", `[red][bold]"[reset][red]日本[reset][magenta][bold]\t[reset][red]語[reset][magenta][bold]\x00[reset][red][bold]"`},
 	}
 
 	arr [3]int
@@ -116,6 +117,7 @@ var (
 		FooPri{Public: "hello", private: "world"},
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
+		"日本\t語\n\000\U00101234a",
 	}
 )
 
