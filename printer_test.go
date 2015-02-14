@@ -74,6 +74,14 @@ var (
 		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
 		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
 		{[]string{}, "[][green]string[reset]{}"},
+		{
+			[]*Piyo{nil, nil}, `
+			[]*pp.[green]Piyo[reset]{
+			  (*pp.[green]Piyo[reset])([cyan][bold]nil[reset]),
+			  (*pp.[green]Piyo[reset])([cyan][bold]nil[reset]),
+			}
+			`,
+		},
 	}
 
 	arr [3]int
@@ -94,7 +102,6 @@ var (
 		FooPri{Public: "hello", private: "world"},
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
-		[]*Piyo{nil, nil},
 		&c,
 	}
 )
@@ -102,7 +109,11 @@ var (
 func TestFormat(t *testing.T) {
 	for _, test := range testCases {
 		actual := fmt.Sprintf("%s", format(test.object))
-		expect := colorstring.Color(test.expect)
+
+		trimmed := strings.Replace(test.expect, "\t", "", -1)
+		trimmed = strings.TrimPrefix(trimmed, "\n")
+		trimmed = strings.TrimSuffix(trimmed, "\n")
+		expect := colorstring.Color(trimmed)
 		if expect != actual {
 			v := reflect.ValueOf(test.object)
 			t.Errorf("\nTestCase: %#v\nType: %s\nExpect: %# v\nActual: %# v\n", test.object, v.Kind(), expect, actual)
