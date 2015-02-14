@@ -15,6 +15,12 @@ const (
 	indentWidth = 2
 )
 
+var (
+	// If the length of array or slice is larger than this,
+	// the buffer will be shorten as {...}.
+	BufferFoldThreshold = 1024
+)
+
 func format(object interface{}) string {
 	return newPrinter(object).String()
 }
@@ -205,6 +211,12 @@ func (p *printer) printSlice() {
 		p.visited[p.value.Pointer()] = true
 	}
 
+	// Fold a large buffer
+	if p.value.Len() > BufferFoldThreshold {
+		p.printf("%s{...}", p.typeString())
+		return
+	}
+
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.Len(); i++ {
@@ -254,8 +266,8 @@ func (p *printer) typeString() string {
 		t = t[2:]
 	}
 
-	if p.matchRegexp(t, `^\[\d\].+$`) {
-		num := regexp.MustCompile(`\d`).FindString(t)
+	if p.matchRegexp(t, `^\[\d+\].+$`) {
+		num := regexp.MustCompile(`\d+`).FindString(t)
 		prefix = fmt.Sprintf("[%s]", blue(num))
 		t = t[2+len(num):]
 	}
