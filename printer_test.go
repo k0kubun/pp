@@ -38,6 +38,16 @@ type HogeHoge struct {
 	A     interface{}
 }
 
+type Circular struct {
+	C *Circular
+}
+
+var c Circular = Circular{}
+
+func init() {
+	c.C = &c
+}
+
 var (
 	testCases = []testCase{
 		{nil, boldCyan("nil")},
@@ -80,6 +90,7 @@ var (
 		FooPri{Public: "hello", private: "world"},
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
+		&c,
 	}
 )
 
