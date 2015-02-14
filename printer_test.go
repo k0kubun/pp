@@ -90,6 +90,7 @@ var (
 		FooPri{Public: "hello", private: "world"},
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
+		[]*Piyo{nil, nil},
 		&c,
 	}
 )

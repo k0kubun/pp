@@ -183,7 +183,9 @@ func (p *printer) printPtr() {
 		p.printf("...")
 		return
 	}
-	p.visited[p.value.Pointer()] = true
+	if p.value.Pointer() != 0 {
+		p.visited[p.value.Pointer()] = true
+	}
 
 	if p.value.Elem().IsValid() {
 		p.printf("&%s", p.format(p.value.Elem()))
