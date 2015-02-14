@@ -23,18 +23,20 @@ func newPrinter(object interface{}) *printer {
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
 
 	return &printer{
-		Buffer: buffer,
-		tw:     tw,
-		depth:  0,
-		value:  reflect.ValueOf(object),
+		Buffer:  buffer,
+		tw:      tw,
+		depth:   0,
+		value:   reflect.ValueOf(object),
+		visited: map[uintptr]bool{},
 	}
 }
 
 type printer struct {
 	*bytes.Buffer
-	tw    *tabwriter.Writer
-	depth int
-	value reflect.Value
+	tw      *tabwriter.Writer
+	depth   int
+	value   reflect.Value
+	visited map[uintptr]bool
 }
 
 func (p *printer) String() string {
@@ -113,6 +115,12 @@ func (p *printer) printMap() {
 		return
 	}
 
+	if p.visited[p.value.Pointer()] {
+		p.printf("%s{...}", p.typeString())
+		return
+	}
+	p.visited[p.value.Pointer()] = true
+
 	p.println("{")
 	p.indented(func() {
 		keys := p.value.MapKeys()
@@ -142,6 +150,14 @@ func (p *printer) printSlice() {
 		return
 	}
 
+	if p.value.Kind() == reflect.Slice {
+		if p.visited[p.value.Pointer()] {
+			p.printf("%s{...}", p.typeString())
+			return
+		}
+		p.visited[p.value.Pointer()] = true
+	}
+
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.Len(); i++ {
@@ -163,6 +179,12 @@ func (p *printer) printInterface() {
 }
 
 func (p *printer) printPtr() {
+	if p.visited[p.value.Pointer()] {
+		p.printf("...")
+		return
+	}
+	p.visited[p.value.Pointer()] = true
+
 	if p.value.Elem().IsValid() {
 		p.printf("&%s", p.format(p.value.Elem()))
 	} else {
@@ -231,6 +253,7 @@ func (p *printer) nil() string {
 func (p *printer) format(object interface{}) string {
 	pp := newPrinter(object)
 	pp.depth = p.depth
+	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
 		pp.value = value
 	}
