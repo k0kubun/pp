@@ -33,7 +33,43 @@ var (
 	boldMagenta = colorizer("Magenta")
 	boldCyan    = colorizer("Cyan")
 	boldWhite   = colorizer("White")
+
+	colorByFlag = map[int]FlagSet{
+		30: Black,
+		31: Red,
+		32: Green,
+		33: Yellow,
+		34: Blue,
+		35: Magenta,
+		36: Cyan,
+		37: White,
+	}
 )
+
+type FlagSet int
+
+const (
+	Black = 1 << iota
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+	BackBlack
+	BackRed
+	BackGreen
+	BackYellow
+	BackBlue
+	BackMagenta
+	BackCyan
+	BackWhite
+	Bold
+)
+
+type ColorScheme struct {
+}
 
 func colorize(text, color string) string {
 	return colorizer(color)(text)
