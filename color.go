@@ -1,54 +1,95 @@
 package pp
 
 import (
+	"bytes"
 	"fmt"
-	"strings"
+	"strconv"
 )
 
 var (
-	codeByColor = map[string]int{
-		"black":   30,
-		"red":     31,
-		"green":   32,
-		"yellow":  33,
-		"blue":    34,
-		"magenta": 35,
-		"cyan":    36,
-		"white":   37,
+	colorByFlag = map[int]FlagSet{
+		30: Black,
+		31: Red,
+		32: Green,
+		33: Yellow,
+		34: Blue,
+		35: Magenta,
+		36: Cyan,
+		37: White,
+		40: BackBlack,
+		41: BackRed,
+		42: BackGreen,
+		43: BackYellow,
+		44: BackBlue,
+		45: BackMagenta,
+		46: BackCyan,
+		47: BackWhite,
 	}
 
-	black       = colorizer("black")
-	red         = colorizer("red")
-	green       = colorizer("green")
-	yellow      = colorizer("yellow")
-	blue        = colorizer("blue")
-	magenta     = colorizer("magenta")
-	cyan        = colorizer("cyan")
-	white       = colorizer("white")
-	boldBlack   = colorizer("Black")
-	boldRed     = colorizer("Red")
-	boldGreen   = colorizer("Green")
-	boldYellow  = colorizer("Yellow")
-	boldBlue    = colorizer("Blue")
-	boldMagenta = colorizer("Magenta")
-	boldCyan    = colorizer("Cyan")
-	boldWhite   = colorizer("White")
+	defaultScheme = ColorScheme{
+		Bool:          Cyan,
+		Integer:       Blue,
+		Float:         Magenta,
+		String:        Red | BackBlue,
+		FieldName:     Yellow,
+		PointerAdress: Blue | Bold,
+		Nil:           Cyan,
+		Time:          Blue | Bold,
+		StructName:    Green,
+	}
 )
 
-func colorize(text, color string) string {
-	return colorizer(color)(text)
+type FlagSet uint
+
+const (
+	Black FlagSet = 1 << iota
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+	BackBlack
+	BackRed
+	BackGreen
+	BackYellow
+	BackBlue
+	BackMagenta
+	BackCyan
+	BackWhite
+	Bold
+)
+
+type ColorScheme struct {
+	Bool          FlagSet
+	Integer       FlagSet
+	Float         FlagSet
+	String        FlagSet
+	FieldName     FlagSet
+	PointerAdress FlagSet
+	Nil           FlagSet
+	Time          FlagSet
+	StructName    FlagSet
 }
 
-func colorizer(color string) func(string) string {
-	if code, ok := codeByColor[color]; ok {
-		return func(text string) string {
-			return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
+func colorize(text string, color FlagSet) string {
+	buf := bytes.NewBufferString("\x1b[")
+	firstPassed := false
+
+	for colorNumber, flag := range colorByFlag {
+		if flag&color != 0 {
+			if !firstPassed {
+				firstPassed = true
+			} else {
+				buf.WriteString(";")
+			}
+			buf.WriteString(strconv.Itoa(colorNumber))
 		}
-	} else if code, ok := codeByColor[strings.ToLower(color)]; ok {
-		return func(text string) string {
-			return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
-		}
-	} else {
-		panic("undefined colorizer: " + color)
 	}
+	buf.WriteString("m")
+	buf.WriteString(text)
+	buf.WriteString("\x1b[0m")
+
+	return buf.String()
 }
