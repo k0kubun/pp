@@ -2,7 +2,7 @@ package pp
 
 import (
 	"bytes"
-	"fmt"
+	"sort"
 	"strconv"
 )
 
@@ -24,7 +24,12 @@ var (
 		45: BackMagenta,
 		46: BackCyan,
 		47: BackWhite,
+		1:  Bold,
 	}
+
+	// Used for keeping track of all flags sorted by their colorCodes
+	// Useful for testing
+	flags []int
 
 	defaultScheme = ColorScheme{
 		Bool:          Cyan,
@@ -73,18 +78,26 @@ type ColorScheme struct {
 	StructName    FlagSet
 }
 
+func init() {
+	for key, _ := range colorByFlag {
+		flags = append(flags, key)
+	}
+	sort.Ints(flags)
+}
+
 func colorize(text string, color FlagSet) string {
 	buf := bytes.NewBufferString("\x1b[")
 	firstPassed := false
 
-	for colorNumber, flag := range colorByFlag {
+	for _, id := range flags {
+		flag := colorByFlag[id]
 		if flag&color != 0 {
 			if !firstPassed {
 				firstPassed = true
 			} else {
 				buf.WriteString(";")
 			}
-			buf.WriteString(strconv.Itoa(colorNumber))
+			buf.WriteString(strconv.Itoa(id))
 		}
 	}
 	buf.WriteString("m")
