@@ -35,7 +35,7 @@ var (
 		Bool:          Cyan,
 		Integer:       Blue,
 		Float:         Magenta,
-		String:        Red | BackBlue,
+		String:        Red,
 		FieldName:     Yellow,
 		PointerAdress: Blue | Bold,
 		Nil:           Cyan,
