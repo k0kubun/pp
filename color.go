@@ -33,15 +33,17 @@ var (
 	flags []int
 
 	defaultScheme = ColorScheme{
-		Bool:          Cyan,
-		Integer:       Blue,
-		Float:         Magenta,
-		String:        Red,
-		FieldName:     Yellow,
-		PointerAdress: Blue | Bold,
-		Nil:           Cyan,
-		Time:          Blue | Bold,
-		StructName:    Green,
+		Bool:            Cyan | Bold,
+		Integer:         Blue | Bold,
+		Float:           Magenta | Bold,
+		String:          Red,
+		StringQuotation: Red | Bold,
+		FieldName:       Yellow,
+		PointerAdress:   Blue | Bold,
+		Nil:             Cyan | Bold,
+		Time:            Blue | Bold,
+		StructName:      Green,
+		ObjectLength:    Blue,
 	}
 )
 
@@ -68,15 +70,17 @@ const (
 )
 
 type ColorScheme struct {
-	Bool          FlagSet
-	Integer       FlagSet
-	Float         FlagSet
-	String        FlagSet
-	FieldName     FlagSet
-	PointerAdress FlagSet
-	Nil           FlagSet
-	Time          FlagSet
-	StructName    FlagSet
+	Bool            FlagSet
+	Integer         FlagSet
+	Float           FlagSet
+	String          FlagSet
+	StringQuotation FlagSet
+	FieldName       FlagSet
+	PointerAdress   FlagSet
+	Nil             FlagSet
+	Time            FlagSet
+	StructName      FlagSet
+	ObjectLength    FlagSet
 }
 
 func init() {
@@ -99,21 +103,16 @@ func (cs *ColorScheme) fixColors() {
 }
 
 func colorize(text string, color FlagSet) string {
-	buf := bytes.NewBufferString("\x1b[")
-	firstPassed := false
+	buf := bytes.NewBufferString("")
 
 	for _, id := range flags {
 		flag := colorByFlag[id]
 		if flag&color != 0 {
-			if !firstPassed {
-				firstPassed = true
-			} else {
-				buf.WriteString(";")
-			}
+			buf.WriteString("\x1b[")
 			buf.WriteString(strconv.Itoa(id))
+			buf.WriteString("m")
 		}
 	}
-	buf.WriteString("m")
 	buf.WriteString(text)
 	buf.WriteString("\x1b[0m")
 

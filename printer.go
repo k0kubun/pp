@@ -115,7 +115,7 @@ func (p *printer) printString() {
 	quoted := strconv.Quote(p.value.String())
 	quoted = quoted[1 : len(quoted)-1]
 
-	p.colorPrint(`"`, currentScheme.String)
+	p.colorPrint(`"`, currentScheme.StringQuotation)
 	for len(quoted) > 0 {
 		pos := strings.IndexByte(quoted, '\\')
 		if pos == -1 {
@@ -140,7 +140,7 @@ func (p *printer) printString() {
 		p.colorPrint(quoted[pos:pos+n+1], currentScheme.Float)
 		quoted = quoted[pos+n+1:]
 	}
-	p.colorPrint(`"`, currentScheme.String)
+	p.colorPrint(`"`, currentScheme.StringQuotation)
 }
 
 func (p *printer) printMap() {
@@ -268,15 +268,15 @@ func (p *printer) typeString() string {
 
 	if p.matchRegexp(t, `^\[\d+\].+$`) {
 		num := regexp.MustCompile(`\d+`).FindString(t)
-		prefix = fmt.Sprintf("[%s]", colorize(num, currentScheme.Integer))
+		prefix = fmt.Sprintf("[%s]", colorize(num, currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], currentScheme.FieldName))
+		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], currentScheme.StructName))
 	} else {
-		t = colorize(t, currentScheme.FieldName)
+		t = colorize(t, currentScheme.StructName)
 	}
 	return prefix + t
 }

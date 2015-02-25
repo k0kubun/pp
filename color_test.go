@@ -14,12 +14,12 @@ var tests = []colorTest{
 	colorTest{
 		"Hello",
 		Blue | BackRed,
-		"\x1b[34;41mHello\x1b[0m",
+		"\x1b[34m\x1b[41mHello\x1b[0m",
 	},
 	colorTest{
 		"This is me",
 		Magenta | BackWhite,
-		"\x1b[35;47mThis is me\x1b[0m",
+		"\x1b[35m\x1b[47mThis is me\x1b[0m",
 	},
 	colorTest{
 		"How are you",
