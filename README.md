@@ -98,8 +98,8 @@ API doc is available at: http://godoc.org/github.com/k0kubun/pp
 ![](http://i.gyazo.com/ab791997a980f1ab3ee2a01586efdce6.png)
 
 ## Contributers
-[Takashi Kokubun](https://github.com/k0kubun)
-[Jan Berktold](https://github.com/JanBerktold)
+- [Takashi Kokubun](https://github.com/k0kubun)
+- [Jan Berktold](https://github.com/JanBerktold)
 
 ## License
 
