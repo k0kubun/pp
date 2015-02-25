@@ -12,9 +12,11 @@ import (
 
 var out, defaultOut io.Writer
 var outLock sync.Mutex
+var currentScheme ColorScheme
 
 func init() {
 	defaultOut = colorable.NewColorableStdout()
+	currentScheme = defaultScheme
 	out = defaultOut
 }
 
