@@ -114,6 +114,17 @@ func ResetDefaultOutput() {
 	outLock.Unlock()
 }
 
+// SetColorScheme takes a colorscheme sets it for usage by all future Print calls.
+func SetColorScheme(scheme ColorScheme) {
+	currentScheme = scheme
+}
+
+// ResetColorScheme renders any prior SetColorScheme calls invalid.
+// All Print calls are going to use the default colors from now on.
+func ResetColorScheme() {
+	currentScheme = defaultScheme
+}
+
 func formatAll(objects []interface{}) []interface{} {
 	results := []interface{}{}
 	for _, object := range objects {
