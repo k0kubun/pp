@@ -29,6 +29,60 @@ pp.Fprintf()
 // ...
 ```
 
+### Customizability
+
+If you require, you may change the colors for syntax highlighting:
+
+```go
+// Create a struct describing your scheme
+scheme := pp.ColorScheme{
+	Bool:          pp.Cyan,
+	Integer:       pp.Blue,
+	Float:         pp.Magenta,
+	String:        pp.Red,
+	FieldName:     pp.Yellow,
+	PointerAdress: pp.Blue | pp.Bold,
+	Nil:           pp.Cyan,
+	Time:          pp.Blue | pp.Bold,
+	StructName:    pp.Green,
+}
+
+// Register it for usage
+pp.SetColorScheme(scheme)
+```
+
+If you would like to revert to the default highlighting, you may do so by calling pp.ResetColorScheme().
+
+Out of the following color flags, you may combine any color with a background color and optionally with the bold parameter. Please note that bold will likely not work on the windows platform.
+
+Unset color fields will revert back to the default value for that field.
+
+```go
+// Colors
+Black
+Red
+Green
+Yellow
+Blue
+Magenta
+Cyan
+White
+
+// Background colors
+BackBlack
+BackRed
+BackGreen
+BackYellow
+BackBlue
+BackMagenta
+BackCyan
+BackWhite
+
+// Other
+Bold
+```
+
+##
 API doc is available at: http://godoc.org/github.com/k0kubun/pp
 
 ## Demo
@@ -44,6 +98,10 @@ API doc is available at: http://godoc.org/github.com/k0kubun/pp
 ### Works on windows
 
 ![](http://i.gyazo.com/ab791997a980f1ab3ee2a01586efdce6.png)
+
+## Contributers
+- [Takashi Kokubun](https://github.com/k0kubun)
+- [Jan Berktold](https://github.com/JanBerktold)
 
 ## License
 

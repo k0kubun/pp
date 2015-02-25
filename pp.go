@@ -116,6 +116,7 @@ func ResetDefaultOutput() {
 
 // SetColorScheme takes a colorscheme sets it for usage by all future Print calls.
 func SetColorScheme(scheme ColorScheme) {
+	scheme.fixColors()
 	currentScheme = scheme
 }
 
