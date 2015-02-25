@@ -50,13 +50,13 @@ type printer struct {
 func (p *printer) String() string {
 	switch p.value.Kind() {
 	case reflect.Bool:
-		p.colorPrint(p.raw(), "Cyan")
+		p.colorPrint(p.raw(), currentScheme.Bool)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Uintptr, reflect.Complex64, reflect.Complex128:
-		p.colorPrint(p.raw(), "Blue")
+		p.colorPrint(p.raw(), currentScheme.Integer)
 	case reflect.Float32, reflect.Float64:
-		p.colorPrint(p.raw(), "Magenta")
+		p.colorPrint(p.raw(), currentScheme.Float)
 	case reflect.String:
 		p.printString()
 	case reflect.Map:
@@ -107,7 +107,7 @@ func (p *printer) indentPrintf(format string, args ...interface{}) {
 	p.indentPrint(text)
 }
 
-func (p *printer) colorPrint(text, color string) {
+func (p *printer) colorPrint(text string, color FlagSet) {
 	p.print(colorize(text, color))
 }
 
@@ -115,15 +115,15 @@ func (p *printer) printString() {
 	quoted := strconv.Quote(p.value.String())
 	quoted = quoted[1 : len(quoted)-1]
 
-	p.colorPrint(`"`, "Red")
+	p.colorPrint(`"`, currentScheme.StringQuotation)
 	for len(quoted) > 0 {
 		pos := strings.IndexByte(quoted, '\\')
 		if pos == -1 {
-			p.colorPrint(quoted, "red")
+			p.colorPrint(quoted, currentScheme.String)
 			break
 		}
 		if pos != 0 {
-			p.colorPrint(quoted[0:pos], "red")
+			p.colorPrint(quoted[0:pos], currentScheme.String)
 		}
 
 		n := 1
@@ -137,10 +137,10 @@ func (p *printer) printString() {
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9': // "\000"
 			n = 3
 		}
-		p.colorPrint(quoted[pos:pos+n+1], "Magenta")
+		p.colorPrint(quoted[pos:pos+n+1], currentScheme.Float)
 		quoted = quoted[pos+n+1:]
 	}
-	p.colorPrint(`"`, "Red")
+	p.colorPrint(`"`, currentScheme.StringQuotation)
 }
 
 func (p *printer) printMap() {
@@ -175,7 +175,7 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := yellow(p.value.Type().Field(i).Name)
+			field := colorize(p.value.Type().Field(i).Name, currentScheme.FieldName)
 			value := p.value.Field(i)
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 		}
@@ -187,13 +187,13 @@ func (p *printer) printTime() {
 	tm := p.value.Interface().(time.Time)
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
-		boldBlue(strconv.Itoa(tm.Year())),
-		boldBlue(fmt.Sprintf("%02d", tm.Month())),
-		boldBlue(fmt.Sprintf("%02d", tm.Day())),
-		boldBlue(fmt.Sprintf("%02d", tm.Hour())),
-		boldBlue(fmt.Sprintf("%02d", tm.Minute())),
-		boldBlue(fmt.Sprintf("%02d", tm.Second())),
-		boldBlue(tm.Location().String()),
+		colorize(strconv.Itoa(tm.Year()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Month()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Day()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Hour()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Minute()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Second()), currentScheme.Time),
+		colorize(tm.Location().String(), currentScheme.Time),
 	)
 }
 
@@ -254,7 +254,7 @@ func (p *printer) printPtr() {
 }
 
 func (p *printer) pointerAddr() string {
-	return boldBlue(fmt.Sprintf("%#v", p.value.Pointer()))
+	return colorize(fmt.Sprintf("%#v", p.value.Pointer()), currentScheme.PointerAdress)
 }
 
 func (p *printer) typeString() string {
@@ -268,15 +268,15 @@ func (p *printer) typeString() string {
 
 	if p.matchRegexp(t, `^\[\d+\].+$`) {
 		num := regexp.MustCompile(`\d+`).FindString(t)
-		prefix = fmt.Sprintf("[%s]", blue(num))
+		prefix = fmt.Sprintf("[%s]", colorize(num, currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = fmt.Sprintf("%s.%s", ts[0], green(ts[1]))
+		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], currentScheme.StructName))
 	} else {
-		t = green(t)
+		t = colorize(t, currentScheme.StructName)
 	}
 	return prefix + t
 }
@@ -308,7 +308,7 @@ func (p *printer) raw() string {
 }
 
 func (p *printer) nil() string {
-	return boldCyan("nil")
+	return colorize("nil", currentScheme.Nil)
 }
 
 func (p *printer) format(object interface{}) string {

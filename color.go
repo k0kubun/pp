@@ -1,54 +1,120 @@
 package pp
 
 import (
-	"fmt"
-	"strings"
+	"bytes"
+	"reflect"
+	"sort"
+	"strconv"
 )
 
 var (
-	codeByColor = map[string]int{
-		"black":   30,
-		"red":     31,
-		"green":   32,
-		"yellow":  33,
-		"blue":    34,
-		"magenta": 35,
-		"cyan":    36,
-		"white":   37,
+	colorByFlag = map[int]FlagSet{
+		30: Black,
+		31: Red,
+		32: Green,
+		33: Yellow,
+		34: Blue,
+		35: Magenta,
+		36: Cyan,
+		37: White,
+		40: BackBlack,
+		41: BackRed,
+		42: BackGreen,
+		43: BackYellow,
+		44: BackBlue,
+		45: BackMagenta,
+		46: BackCyan,
+		47: BackWhite,
+		1:  Bold,
 	}
 
-	black       = colorizer("black")
-	red         = colorizer("red")
-	green       = colorizer("green")
-	yellow      = colorizer("yellow")
-	blue        = colorizer("blue")
-	magenta     = colorizer("magenta")
-	cyan        = colorizer("cyan")
-	white       = colorizer("white")
-	boldBlack   = colorizer("Black")
-	boldRed     = colorizer("Red")
-	boldGreen   = colorizer("Green")
-	boldYellow  = colorizer("Yellow")
-	boldBlue    = colorizer("Blue")
-	boldMagenta = colorizer("Magenta")
-	boldCyan    = colorizer("Cyan")
-	boldWhite   = colorizer("White")
+	// Used for keeping track of all flags sorted by their colorCodes
+	// Useful for testing
+	flags []int
+
+	defaultScheme = ColorScheme{
+		Bool:            Cyan | Bold,
+		Integer:         Blue | Bold,
+		Float:           Magenta | Bold,
+		String:          Red,
+		StringQuotation: Red | Bold,
+		FieldName:       Yellow,
+		PointerAdress:   Blue | Bold,
+		Nil:             Cyan | Bold,
+		Time:            Blue | Bold,
+		StructName:      Green,
+		ObjectLength:    Blue,
+	}
 )
 
-func colorize(text, color string) string {
-	return colorizer(color)(text)
+type FlagSet uint
+
+const (
+	Black FlagSet = 1 << iota
+	Red
+	Green
+	Yellow
+	Blue
+	Magenta
+	Cyan
+	White
+	BackBlack
+	BackRed
+	BackGreen
+	BackYellow
+	BackBlue
+	BackMagenta
+	BackCyan
+	BackWhite
+	Bold
+)
+
+type ColorScheme struct {
+	Bool            FlagSet
+	Integer         FlagSet
+	Float           FlagSet
+	String          FlagSet
+	StringQuotation FlagSet
+	FieldName       FlagSet
+	PointerAdress   FlagSet
+	Nil             FlagSet
+	Time            FlagSet
+	StructName      FlagSet
+	ObjectLength    FlagSet
 }
 
-func colorizer(color string) func(string) string {
-	if code, ok := codeByColor[color]; ok {
-		return func(text string) string {
-			return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
-		}
-	} else if code, ok := codeByColor[strings.ToLower(color)]; ok {
-		return func(text string) string {
-			return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
-		}
-	} else {
-		panic("undefined colorizer: " + color)
+func init() {
+	for key, _ := range colorByFlag {
+		flags = append(flags, key)
 	}
+	sort.Ints(flags)
+}
+
+// Makes sure each Color is set, if not reverts that field to default value
+func (cs *ColorScheme) fixColors() {
+	typ := reflect.Indirect(reflect.ValueOf(cs))
+	defaultType := reflect.ValueOf(defaultScheme)
+	for i := 0; i < typ.NumField(); i++ {
+		field := typ.Field(i)
+		if field.Uint() == 0 {
+			field.SetUint(defaultType.Field(i).Uint())
+		}
+	}
+}
+
+func colorize(text string, color FlagSet) string {
+	buf := bytes.NewBufferString("")
+
+	for _, id := range flags {
+		flag := colorByFlag[id]
+		if flag&color != 0 {
+			buf.WriteString("\x1b[")
+			buf.WriteString(strconv.Itoa(id))
+			buf.WriteString("m")
+		}
+	}
+	buf.WriteString(text)
+	buf.WriteString("\x1b[0m")
+
+	return buf.String()
 }

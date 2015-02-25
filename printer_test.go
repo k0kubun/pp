@@ -65,31 +65,31 @@ func init() {
 
 var (
 	testCases = []testCase{
-		{nil, "[cyan][bold]nil"},
-		{true, "[cyan][bold]true"},
-		{false, "[cyan][bold]false"},
-		{int(4), "[blue][bold]4"},
-		{int8(8), "[blue][bold]8"},
-		{int16(16), "[blue][bold]16"},
-		{int32(32), "[blue][bold]32"},
-		{int64(64), "[blue][bold]64"},
-		{uint(4), "[blue][bold]0x4"},
-		{uint8(8), "[blue][bold]0x8"},
-		{uint16(16), "[blue][bold]0x10"},
-		{uint32(32), "[blue][bold]0x20"},
-		{uint64(64), "[blue][bold]0x40"},
-		{uintptr(128), "[blue][bold]0x80"},
-		{float32(2.23), "[magenta][bold]2.23"},
-		{float64(3.14), "[magenta][bold]3.14"},
-		{complex64(complex(3, -4)), "[blue][bold](3-4i)"},
-		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
-		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
+		{nil, "[bold][cyan]nil"},
+		{true, "[bold][cyan]true"},
+		{false, "[bold][cyan]false"},
+		{int(4), "[bold][blue]4"},
+		{int8(8), "[bold][blue]8"},
+		{int16(16), "[bold][blue]16"},
+		{int32(32), "[bold][blue]32"},
+		{int64(64), "[bold][blue]64"},
+		{uint(4), "[bold][blue]0x4"},
+		{uint8(8), "[bold][blue]0x8"},
+		{uint16(16), "[bold][blue]0x10"},
+		{uint32(32), "[bold][blue]0x20"},
+		{uint64(64), "[bold][blue]0x40"},
+		{uintptr(128), "[bold][blue]0x80"},
+		{float32(2.23), "[bold][magenta]2.23"},
+		{float64(3.14), "[bold][magenta]3.14"},
+		{complex64(complex(3, -4)), "[bold][blue](3-4i)"},
+		{complex128(complex(5, 6)), "[bold][blue](5+6i)"},
+		{"string", `[bold][red]"[reset][red]string[reset][bold][red]"`},
 		{[]string{}, "[][green]string[reset]{}"},
 		{
 			[]*Piyo{nil, nil}, `
 			[]*pp.[green]Piyo[reset]{
-			  (*pp.[green]Piyo[reset])([cyan][bold]nil[reset]),
-			  (*pp.[green]Piyo[reset])([cyan][bold]nil[reset]),
+			  (*pp.[green]Piyo[reset])([bold][cyan]nil[reset]),
+			  (*pp.[green]Piyo[reset])([bold][cyan]nil[reset]),
 			}
 			`,
 		},
@@ -100,10 +100,10 @@ var (
 				}
 			`,
 		},
-		{"日本\t語\x00", `[red][bold]"[reset][red]日本[reset][magenta][bold]\t[reset][red]語[reset][magenta][bold]\x00[reset][red][bold]"`},
+		{"日本\t語\x00", `[bold][red]"[reset][red]日本[reset][bold][magenta]\t[reset][red]語[reset][bold][magenta]\x00[reset][bold][red]"`},
 		{
 			time.Date(2015, time.February, 14, 22, 15, 0, 0, time.UTC),
-			"[blue][bold]2015[reset]-[blue][bold]02[reset]-[blue][bold]14[reset] [blue][bold]22[reset]:[blue][bold]15[reset]:[blue][bold]00[reset] [blue][bold]UTC[reset]",
+			"[bold][blue]2015[reset]-[bold][blue]02[reset]-[bold][blue]14[reset] [bold][blue]22[reset]:[bold][blue]15[reset]:[bold][blue]00[reset] [bold][blue]UTC[reset]",
 		},
 		{
 			LargeBuffer{}, `
