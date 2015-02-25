@@ -2,6 +2,7 @@ package pp
 
 import (
 	"bytes"
+	"reflect"
 	"sort"
 	"strconv"
 )
@@ -83,6 +84,18 @@ func init() {
 		flags = append(flags, key)
 	}
 	sort.Ints(flags)
+}
+
+// Makes sure each Color is set, if not reverts that field to default value
+func (cs *ColorScheme) fixColors() {
+	typ := reflect.Indirect(reflect.ValueOf(cs))
+	defaultType := reflect.ValueOf(defaultScheme)
+	for i := 0; i < typ.NumField(); i++ {
+		field := typ.Field(i)
+		if field.Uint() == 0 {
+			field.SetUint(defaultType.Field(i).Uint())
+		}
+	}
 }
 
 func colorize(text string, color FlagSet) string {
