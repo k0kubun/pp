@@ -55,6 +55,8 @@ If you would like to revert to the default highlighting, you may do so by callin
 
 Out of the following color flags, you may combine any color with a background color and optionally with the bold parameter. Please note that bold will likely not work on the windows platform.
 
+Unset color fields will revert back to the default value for that field.
+
 ```go
 // Colors
 Black
