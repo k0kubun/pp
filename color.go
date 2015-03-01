@@ -6,6 +6,10 @@ import (
 )
 
 var (
+	// If you set false to this variable, you can use pretty formatter
+	// without coloring.
+	ColoringEnabled = true
+
 	codeByColor = map[string]int{
 		"black":   30,
 		"red":     31,
@@ -42,10 +46,16 @@ func colorize(text, color string) string {
 func colorizer(color string) func(string) string {
 	if code, ok := codeByColor[color]; ok {
 		return func(text string) string {
+			if !ColoringEnabled {
+				return text
+			}
 			return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
 		}
 	} else if code, ok := codeByColor[strings.ToLower(color)]; ok {
 		return func(text string) string {
+			if !ColoringEnabled {
+				return text
+			}
 			return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
 		}
 	} else {

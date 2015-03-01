@@ -10,7 +10,8 @@ type colorTest struct {
 }
 
 var (
-	expects = []colorTest{
+	testText = "palette"
+	expects  = []colorTest{
 		{"black", "\x1b[30mpalette\x1b[0m"},
 		{"red", "\x1b[31mpalette\x1b[0m"},
 		{"green", "\x1b[32mpalette\x1b[0m"},
@@ -51,10 +52,16 @@ func TestColorize(t *testing.T) {
 	t.Logf(boldMagenta("Magenta"))
 	t.Logf(boldCyan("Cyan"))
 	t.Logf(boldWhite("White"))
+
+	ColoringEnabled = false
+	for _, test := range expects {
+		expect(t, test.input, testText)
+	}
+	ColoringEnabled = true
 }
 
 func expect(t *testing.T, input, result string) {
-	actual := colorize("palette", input)
+	actual := colorize(testText, input)
 	if actual != result {
 		t.Errorf("Expected: %#v, Actual: %#v", result, actual)
 	} else {
