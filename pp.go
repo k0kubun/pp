@@ -10,11 +10,14 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
-var out, defaultOut io.Writer
-var outLock sync.Mutex
+var (
+	out     io.Writer
+	outLock sync.Mutex
+
+	defaultOut = colorable.NewColorableStdout()
+)
 
 func init() {
-	defaultOut = colorable.NewColorableStdout()
 	out = defaultOut
 }
 
