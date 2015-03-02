@@ -44,18 +44,16 @@ func colorize(text, color string) string {
 }
 
 func colorizer(color string) func(string) string {
+	if !ColoringEnabled {
+		return func(text string) string { return text }
+	}
+
 	if code, ok := codeByColor[color]; ok {
 		return func(text string) string {
-			if !ColoringEnabled {
-				return text
-			}
 			return fmt.Sprintf("\033[%dm%s\033[0m", code, text)
 		}
 	} else if code, ok := codeByColor[strings.ToLower(color)]; ok {
 		return func(text string) string {
-			if !ColoringEnabled {
-				return text
-			}
 			return fmt.Sprintf("\033[%dm\033[1m%s\033[0m", code, text)
 		}
 	} else {
