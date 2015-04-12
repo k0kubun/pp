@@ -53,6 +53,14 @@ type LargeBuffer struct {
 	Buf [1025]byte
 }
 
+type Private struct {
+	b bool
+	i int
+	u uint
+	f float32
+	c complex128
+}
+
 type Circular struct {
 	C *Circular
 }
@@ -79,8 +87,8 @@ var (
 		{uint32(32), "[blue][bold]0x20"},
 		{uint64(64), "[blue][bold]0x40"},
 		{uintptr(128), "[blue][bold]0x80"},
-		{float32(2.23), "[magenta][bold]2.23"},
-		{float64(3.14), "[magenta][bold]3.14"},
+		{float32(2.23), "[magenta][bold]2.230000"},
+		{float64(3.14), "[magenta][bold]3.140000"},
 		{complex64(complex(3, -4)), "[blue][bold](3-4i)"},
 		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
 		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
@@ -118,6 +126,7 @@ var (
 	tm  = time.Date(2015, time.January, 2, 0, 0, 0, 0, time.UTC)
 
 	checkCases = []interface{}{
+		Private{b: false, i: 1, u: 2, f: 2.22, c: complex(5, 6)},
 		map[string]int{"hell": 23, "world": 34},
 		map[string]map[string]string{"s1": map[string]string{"v1": "m1", "va1": "me1"}, "si2": map[string]string{"v2": "m2"}},
 		Foo{Bar: 1, Hoge: "a", Hello: map[string]string{"hel": "world", "a": "b"}, HogeHoges: []HogeHoge{HogeHoge{Hell: "a", World: 1}, HogeHoge{Hell: "bbb", World: 100}}},
