@@ -239,12 +239,19 @@ func (p *printer) printSlice() {
 
 		if groupsize > 0 {
 			for i := 0; i < p.value.Len(); i++ {
-				if i%groupsize == 0 && i > 0 {
-					p.printf("\n")
+				// indent for new group
+				if i%groupsize == 0 {
+					p.print(p.indent())
 				}
-				p.indentPrintf("%s,", p.format(p.value.Index(i)))
+				// slice element
+				p.printf("%s,", p.format(p.value.Index(i)))
+				// space or newline
+				if (i+1)%groupsize == 0 || i+1 == p.value.Len() {
+					p.print("\n")
+				} else {
+					p.print(" ")
+				}
 			}
-			p.printf("\n")
 		} else {
 			for i := 0; i < p.value.Len(); i++ {
 				p.indentPrintf("%s,\n", p.format(p.value.Index(i)))
