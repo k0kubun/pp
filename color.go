@@ -5,11 +5,13 @@ import (
 	"reflect"
 )
 
-// no color
-const NoColor uint16 = 1 << 15
-
-// foreground colors
 const (
+	// No color
+	NoColor uint16 = 1 << 15
+)
+
+const (
+	// Foreground colors for ColorScheme.
 	_ uint16 = iota | NoColor
 	Black
 	Red
@@ -24,8 +26,8 @@ const (
 	ansiForegroundOffset = 30 - 1
 )
 
-// background colors
 const (
+	// Background colors for ColorScheme.
 	_ uint16 = iota<<bitsBackground | NoColor
 	BackgroundBlack
 	BackgroundRed
@@ -40,14 +42,15 @@ const (
 	ansiBackgroundOffset = 40 - 1
 )
 
-// bold flag
 const (
+	// Bold flag for ColorScheme.
 	Bold     uint16 = 1<<bitsBold | NoColor
 	bitsBold        = 8
 	maskBold        = 1 << bitsBold
 	ansiBold        = 1
 )
 
+// To use with SetColorScheme.
 type ColorScheme struct {
 	Bool            uint16
 	Integer         uint16

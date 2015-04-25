@@ -118,7 +118,7 @@ func ResetDefaultOutput() {
 	outLock.Unlock()
 }
 
-// SetColorScheme takes a colorscheme sets it for usage by all future Print calls.
+// SetColorScheme takes a colorscheme used by all future Print calls.
 func SetColorScheme(scheme ColorScheme) {
 	scheme.fixColors()
 	currentScheme = scheme
