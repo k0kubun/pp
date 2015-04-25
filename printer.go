@@ -245,7 +245,7 @@ func (p *printer) printInterface() {
 
 func (p *printer) printPtr() {
 	if p.visited[p.value.Pointer()] {
-		p.printf("...")
+		p.printf("&%s{...}", p.elemTypeString())
 		return
 	}
 	if p.value.Pointer() != 0 {
@@ -264,8 +264,15 @@ func (p *printer) pointerAddr() string {
 }
 
 func (p *printer) typeString() string {
+	return p.colorizeType(p.value.Type().String())
+}
+
+func (p *printer) elemTypeString() string {
+	return p.colorizeType(p.value.Elem().Type().String())
+}
+
+func (p *printer) colorizeType(t string) string {
 	prefix := ""
-	t := p.value.Type().String()
 
 	if p.matchRegexp(t, `^\[\].+$`) {
 		prefix = "[]"

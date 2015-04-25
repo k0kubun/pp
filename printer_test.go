@@ -108,7 +108,7 @@ var (
 		{
 			&c, `
 				&pp.[green]Circular[reset]{
-				  [yellow]C[reset]: ...,
+				  [yellow]C[reset]: &pp.[green]Circular[reset]{...},
 				}
 			`,
 		},
