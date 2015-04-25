@@ -27,3 +27,11 @@ func TestDefaultOutput(t *testing.T) {
 		t.Errorf("it should be reset to initial default output")
 	}
 }
+
+func TestColorScheme(t *testing.T) {
+	SetColorScheme(ColorScheme{})
+
+	if currentScheme.FieldName == 0 {
+		t.FailNow()
+	}
+}

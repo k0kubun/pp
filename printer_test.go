@@ -115,7 +115,7 @@ var (
 		{"日本\t語\x00", `[red][bold]"[reset][red]日本[reset][magenta][bold]\t[reset][red]語[reset][magenta][bold]\x00[reset][red][bold]"`},
 		{
 			time.Date(2015, time.February, 14, 22, 15, 0, 0, time.UTC),
-			"[blue][bold]2015[reset]-[blue][bold]02[reset]-[blue][bold]14[reset] [blue][bold]22[reset]:[blue][bold]15[reset]:[blue][bold]00[reset] [blue][bold]UTC[reset]",
+			"[blue][bold]2015-02-14 22:15:00 UTC[reset]",
 		},
 		{
 			LargeBuffer{}, `

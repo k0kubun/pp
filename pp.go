@@ -15,10 +15,13 @@ var (
 	outLock sync.Mutex
 
 	defaultOut = colorable.NewColorableStdout()
+
+	currentScheme ColorScheme
 )
 
 func init() {
 	out = defaultOut
+	currentScheme = defaultScheme
 }
 
 // Print prints given arguments.
@@ -113,6 +116,17 @@ func ResetDefaultOutput() {
 	outLock.Lock()
 	out = defaultOut
 	outLock.Unlock()
+}
+
+// SetColorScheme takes a colorscheme sets it for usage by all future Print calls.
+func SetColorScheme(scheme ColorScheme) {
+	scheme.fixColors()
+	currentScheme = scheme
+}
+
+// ResetColorScheme resets colorscheme to default.
+func ResetColorScheme() {
+	currentScheme = defaultScheme
 }
 
 func formatAll(objects []interface{}) []interface{} {
