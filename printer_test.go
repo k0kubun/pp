@@ -43,6 +43,9 @@ type HogeHoge struct {
 	A     interface{}
 }
 
+type EmptyStruct struct {
+}
+
 type User struct {
 	Name      string
 	CreatedAt time.Time
@@ -93,6 +96,7 @@ var (
 		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
 		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
 		{[]string{}, "[][green]string[reset]{}"},
+		{EmptyStruct{}, "pp.[green]EmptyStruct[reset]{}"},
 		{
 			[]*Piyo{nil, nil}, `
 			[]*pp.[green]Piyo[reset]{

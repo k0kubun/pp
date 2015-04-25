@@ -172,6 +172,11 @@ func (p *printer) printStruct() {
 		return
 	}
 
+	if p.value.NumField() == 0 {
+		p.print(p.typeString() + "{}")
+		return
+	}
+
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
