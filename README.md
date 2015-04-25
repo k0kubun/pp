@@ -31,6 +31,56 @@ pp.Fprintf()
 
 API doc is available at: http://godoc.org/github.com/k0kubun/pp
 
+### Custom colors
+
+If you require, you may change the colors (all or some) for syntax highlighting:
+
+```go
+// Create a struct describing your scheme
+scheme := pp.ColorScheme{
+	Integer:       pp.Green | pp.Bold,
+	Float:         pp.Black | pp.BackgroundWhite | pp.Bold,
+	String:        pp.Yellow,
+}
+
+// Register it for usage
+pp.SetColorScheme(scheme)
+```
+
+Look into ColorScheme struct for the field names.
+
+If you would like to revert to the default highlighting, you may do so by calling `pp.ResetColorScheme()`.
+
+Out of the following color flags, you may combine any color with a background color and optionally with the bold parameter. Please note that bold will likely not work on the windows platform.
+
+```go
+// Colors
+Black
+Red
+Green
+Yellow
+Blue
+Magenta
+Cyan
+White
+
+// Background colors
+BackgroundBlack
+BackgroundRed
+BackgroundGreen
+BackgroundYellow
+BackgroundBlue
+BackgroundMagenta
+BackgroundCyan
+BackgroundWhite
+
+// Other
+Bold
+
+// Special
+NoColor
+```
+
 ## Demo
 
 ### Timeline
