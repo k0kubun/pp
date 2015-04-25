@@ -43,6 +43,9 @@ type HogeHoge struct {
 	A     interface{}
 }
 
+type EmptyStruct struct {
+}
+
 type User struct {
 	Name      string
 	CreatedAt time.Time
@@ -82,10 +85,10 @@ var (
 		{int32(32), "[blue][bold]32"},
 		{int64(64), "[blue][bold]64"},
 		{uint(4), "[blue][bold]0x4"},
-		{uint8(8), "[blue][bold]0x8"},
-		{uint16(16), "[blue][bold]0x10"},
-		{uint32(32), "[blue][bold]0x20"},
-		{uint64(64), "[blue][bold]0x40"},
+		{uint8(8), "[blue][bold]0x08"},
+		{uint16(16), "[blue][bold]0x0010"},
+		{uint32(32), "[blue][bold]0x00000020"},
+		{uint64(64), "[blue][bold]0x0000000000000040"},
 		{uintptr(128), "[blue][bold]0x80"},
 		{float32(2.23), "[magenta][bold]2.230000"},
 		{float64(3.14), "[magenta][bold]3.140000"},
@@ -93,6 +96,7 @@ var (
 		{complex128(complex(5, 6)), "[blue][bold](5+6i)"},
 		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
 		{[]string{}, "[][green]string[reset]{}"},
+		{EmptyStruct{}, "pp.[green]EmptyStruct[reset]{}"},
 		{
 			[]*Piyo{nil, nil}, `
 			[]*pp.[green]Piyo[reset]{
@@ -104,7 +108,7 @@ var (
 		{
 			&c, `
 				&pp.[green]Circular[reset]{
-				  [yellow]C[reset]: ...,
+				  [yellow]C[reset]: &pp.[green]Circular[reset]{...},
 				}
 			`,
 		},
@@ -119,6 +123,37 @@ var (
 			  [yellow]Buf[reset]: [[blue]1025[reset]][green]uint8[reset]{...},
 			}
 			`,
+		},
+		{
+			[]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			`[][green]uint8[reset]{
+				  [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset], [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset], [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset],
+				  [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset],
+			}`,
+		},
+		{
+			[]uint16{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			`[][green]uint16[reset]{
+				  [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset], [blue][bold]0x0006[reset], [blue][bold]0x0007[reset],
+				  [blue][bold]0x0008[reset], [blue][bold]0x0009[reset], [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset],
+				  [blue][bold]0x0006[reset], [blue][bold]0x0007[reset], [blue][bold]0x0008[reset], [blue][bold]0x0009[reset],
+			}`,
+		},
+		{
+			[]uint32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
+			`[][green]uint32[reset]{
+				  [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset], [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset],
+				  [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset], [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset],
+				  [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset], [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset],
+			}`,
+		},
+		{
+			[]uint64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0},
+			`[][green]uint64[reset]{
+				  [blue][bold]0x0000000000000000[reset], [blue][bold]0x0000000000000001[reset], [blue][bold]0x0000000000000002[reset], [blue][bold]0x0000000000000003[reset],
+				  [blue][bold]0x0000000000000004[reset], [blue][bold]0x0000000000000005[reset], [blue][bold]0x0000000000000006[reset], [blue][bold]0x0000000000000007[reset],
+				  [blue][bold]0x0000000000000008[reset], [blue][bold]0x0000000000000009[reset], [blue][bold]0x0000000000000000[reset],
+			}`,
 		},
 	}
 

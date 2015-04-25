@@ -172,6 +172,11 @@ func (p *printer) printStruct() {
 		return
 	}
 
+	if p.value.NumField() == 0 {
+		p.print(p.typeString() + "{}")
+		return
+	}
+
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
@@ -220,8 +225,30 @@ func (p *printer) printSlice() {
 
 	p.println(p.typeString() + "{")
 	p.indented(func() {
-		for i := 0; i < p.value.Len(); i++ {
-			p.indentPrintf("%s,\n", p.format(p.value.Index(i)))
+		groupsize := 0
+		switch p.value.Type().Elem().Kind() {
+		case reflect.Uint8:
+			groupsize = 16
+		case reflect.Uint16:
+			groupsize = 8
+		case reflect.Uint32:
+			groupsize = 8
+		case reflect.Uint64:
+			groupsize = 4
+		}
+
+		if groupsize > 0 {
+			for i := 0; i < p.value.Len(); i++ {
+				if i%groupsize == 0 && i > 0 {
+					p.printf("\n")
+				}
+				p.indentPrintf("%s,", p.format(p.value.Index(i)))
+			}
+			p.printf("\n")
+		} else {
+			for i := 0; i < p.value.Len(); i++ {
+				p.indentPrintf("%s,\n", p.format(p.value.Index(i)))
+			}
 		}
 	})
 	p.indentPrint("}")
@@ -240,7 +267,7 @@ func (p *printer) printInterface() {
 
 func (p *printer) printPtr() {
 	if p.visited[p.value.Pointer()] {
-		p.printf("...")
+		p.printf("&%s{...}", p.elemTypeString())
 		return
 	}
 	if p.value.Pointer() != 0 {
@@ -259,8 +286,15 @@ func (p *printer) pointerAddr() string {
 }
 
 func (p *printer) typeString() string {
+	return p.colorizeType(p.value.Type().String())
+}
+
+func (p *printer) elemTypeString() string {
+	return p.colorizeType(p.value.Elem().Type().String())
+}
+
+func (p *printer) colorizeType(t string) string {
 	prefix := ""
-	t := p.value.Type().String()
 
 	if p.matchRegexp(t, `^\[\].+$`) {
 		prefix = "[]"
@@ -299,8 +333,16 @@ func (p *printer) raw() string {
 		return fmt.Sprintf("%#v", p.value.Bool())
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return fmt.Sprintf("%#v", p.value.Int())
-	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+	case reflect.Uint, reflect.Uintptr:
 		return fmt.Sprintf("%#v", p.value.Uint())
+	case reflect.Uint8:
+		return fmt.Sprintf("0x%02x", p.value.Uint())
+	case reflect.Uint16:
+		return fmt.Sprintf("0x%04x", p.value.Uint())
+	case reflect.Uint32:
+		return fmt.Sprintf("0x%08x", p.value.Uint())
+	case reflect.Uint64:
+		return fmt.Sprintf("0x%016x", p.value.Uint())
 	case reflect.Float32, reflect.Float64:
 		return fmt.Sprintf("%f", p.value.Float())
 	case reflect.Complex64, reflect.Complex128:
