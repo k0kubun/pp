@@ -190,18 +190,15 @@ func (p *printer) printStruct() {
 
 func (p *printer) printTime() {
 	tm := p.value.Interface().(time.Time)
-	p.colorPrint(
-		fmt.Sprintf(
-			"%s-%s-%s %s:%s:%s %s",
-			strconv.Itoa(tm.Year()),
-			fmt.Sprintf("%02d", tm.Month()),
-			fmt.Sprintf("%02d", tm.Day()),
-			fmt.Sprintf("%02d", tm.Hour()),
-			fmt.Sprintf("%02d", tm.Minute()),
-			fmt.Sprintf("%02d", tm.Second()),
-			tm.Location().String(),
-		),
-		currentScheme.Time,
+	p.printf(
+		"%s-%s-%s %s:%s:%s %s",
+		colorize(strconv.Itoa(tm.Year()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Month()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Day()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Hour()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Minute()), currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Second()), currentScheme.Time),
+		colorize(tm.Location().String(), currentScheme.Time),
 	)
 }
 
