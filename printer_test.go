@@ -125,35 +125,54 @@ var (
 			`,
 		},
 		{
-			[]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
-			`[][green]uint8[reset]{
-				  [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset], [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset], [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset],
-				  [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset],
-			}`,
+			[]byte{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, `
+			[][green]uint8[reset]{
+			  [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset], [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset], [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset], [blue][bold]0x03[reset], [blue][bold]0x04[reset], [blue][bold]0x05[reset],
+			  [blue][bold]0x06[reset], [blue][bold]0x07[reset], [blue][bold]0x08[reset], [blue][bold]0x09[reset],
+			}
+			`,
 		},
 		{
-			[]uint16{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
-			`[][green]uint16[reset]{
-				  [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset], [blue][bold]0x0006[reset], [blue][bold]0x0007[reset],
-				  [blue][bold]0x0008[reset], [blue][bold]0x0009[reset], [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset],
-				  [blue][bold]0x0006[reset], [blue][bold]0x0007[reset], [blue][bold]0x0008[reset], [blue][bold]0x0009[reset],
-			}`,
+			[]uint16{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, `
+			[][green]uint16[reset]{
+			  [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset], [blue][bold]0x0006[reset], [blue][bold]0x0007[reset],
+			  [blue][bold]0x0008[reset], [blue][bold]0x0009[reset], [blue][bold]0x0000[reset], [blue][bold]0x0001[reset], [blue][bold]0x0002[reset], [blue][bold]0x0003[reset], [blue][bold]0x0004[reset], [blue][bold]0x0005[reset],
+			  [blue][bold]0x0006[reset], [blue][bold]0x0007[reset], [blue][bold]0x0008[reset], [blue][bold]0x0009[reset],
+			}
+			`,
 		},
 		{
-			[]uint32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9},
-			`[][green]uint32[reset]{
-				  [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset], [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset],
-				  [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset], [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset],
-				  [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset], [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset],
-			}`,
+			[]uint32{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, `
+			[][green]uint32[reset]{
+			  [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset], [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset],
+			  [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset], [blue][bold]0x00000000[reset], [blue][bold]0x00000001[reset], [blue][bold]0x00000002[reset], [blue][bold]0x00000003[reset], [blue][bold]0x00000004[reset], [blue][bold]0x00000005[reset],
+			  [blue][bold]0x00000006[reset], [blue][bold]0x00000007[reset], [blue][bold]0x00000008[reset], [blue][bold]0x00000009[reset],
+			}
+			`,
 		},
 		{
-			[]uint64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0},
-			`[][green]uint64[reset]{
-				  [blue][bold]0x0000000000000000[reset], [blue][bold]0x0000000000000001[reset], [blue][bold]0x0000000000000002[reset], [blue][bold]0x0000000000000003[reset],
-				  [blue][bold]0x0000000000000004[reset], [blue][bold]0x0000000000000005[reset], [blue][bold]0x0000000000000006[reset], [blue][bold]0x0000000000000007[reset],
-				  [blue][bold]0x0000000000000008[reset], [blue][bold]0x0000000000000009[reset], [blue][bold]0x0000000000000000[reset],
-			}`,
+			[]uint64{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0}, `
+			[][green]uint64[reset]{
+			  [blue][bold]0x0000000000000000[reset], [blue][bold]0x0000000000000001[reset], [blue][bold]0x0000000000000002[reset], [blue][bold]0x0000000000000003[reset],
+			  [blue][bold]0x0000000000000004[reset], [blue][bold]0x0000000000000005[reset], [blue][bold]0x0000000000000006[reset], [blue][bold]0x0000000000000007[reset],
+			  [blue][bold]0x0000000000000008[reset], [blue][bold]0x0000000000000009[reset], [blue][bold]0x0000000000000000[reset],
+			}
+			`,
+		},
+		{
+			[][]byte{{0, 1, 2}, {3, 4}, {255}}, `
+			[][green][]uint8[reset]{
+			  [][green]uint8[reset]{
+			    [blue][bold]0x00[reset], [blue][bold]0x01[reset], [blue][bold]0x02[reset],
+			  },
+			  [][green]uint8[reset]{
+			    [blue][bold]0x03[reset], [blue][bold]0x04[reset],
+			  },
+			  [][green]uint8[reset]{
+			    [blue][bold]0xff[reset],
+			  },
+			}
+			`,
 		},
 	}
 
