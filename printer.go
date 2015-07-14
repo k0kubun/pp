@@ -9,6 +9,7 @@ import (
 	"strings"
 	"text/tabwriter"
 	"time"
+	"unsafe"
 )
 
 const (
@@ -189,12 +190,13 @@ func (p *printer) printStruct() {
 }
 
 func (p *printer) printTime() {
+	var tm time.Time
 	if !p.value.CanInterface() {
-		p.printf("(cannot print unexported field)")
-		return
+		tm = *(*time.Time)(unsafe.Pointer(p.value.UnsafeAddr()))
+	} else {
+		tm = p.value.Interface().(time.Time)
 	}
 
-	tm := p.value.Interface().(time.Time)
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
 		colorize(strconv.Itoa(tm.Year()), currentScheme.Time),
