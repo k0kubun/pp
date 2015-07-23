@@ -50,7 +50,6 @@ type User struct {
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
-	deletedAt time.Time
 }
 
 type LargeBuffer struct {
@@ -199,7 +198,7 @@ var (
 		unsafe.Pointer(new(regexp.Regexp)),
 		"日本\t語\n\000\U00101234a",
 		&tm,
-		&User{Name: "k0kubun", CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC(), deletedAt: time.Now().UTC()},
+		&User{Name: "k0kubun", CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC()},
 	}
 )
 
