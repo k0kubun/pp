@@ -190,7 +190,7 @@ func (p *printer) printStruct() {
 
 func (p *printer) printTime() {
 	if !p.value.CanInterface() {
-		p.printf("(cannot print unexported field)")
+		p.printf("(unexported time.Time)")
 		return
 	}
 
