@@ -1,8 +1,14 @@
 # Change Log
 
-## [Unreleased](https://github.com/k0kubun/pp/tree/HEAD)
+## [v2.3.0](https://github.com/k0kubun/pp/tree/v2.3.0) (2017-01-23)
+[Full Changelog](https://github.com/k0kubun/pp/compare/v2.2.0...v2.3.0)
 
-[Full Changelog](https://github.com/k0kubun/pp/compare/v2.1.0...HEAD)
+**Merged pull requests:**
+
+- Add WithLineInfo method for print filename and line number along [\#24](https://github.com/k0kubun/pp/pull/24) ([huydx](https://github.com/huydx))
+
+## [v2.2.0](https://github.com/k0kubun/pp/tree/v2.2.0) (2015-07-23)
+[Full Changelog](https://github.com/k0kubun/pp/compare/v2.1.0...v2.2.0)
 
 **Closed issues:**
 
