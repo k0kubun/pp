@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"sync"
+	"runtime"
 
 	"github.com/mattn/go-colorable"
 )
@@ -17,6 +18,9 @@ var (
 	defaultOut = colorable.NewColorableStdout()
 
 	currentScheme ColorScheme
+	// WithLineInfo add file name and line information to output
+	// call this function with care, because getting stack has performance penalty
+	WithLineInfo = false
 )
 
 func init() {
@@ -129,8 +133,16 @@ func ResetColorScheme() {
 	currentScheme = defaultScheme
 }
 
+
+
 func formatAll(objects []interface{}) []interface{} {
 	results := []interface{}{}
+
+	if WithLineInfo {
+		_, fn, line, _ := runtime.Caller(2) // 2 because current Caller is pp itself
+		results = append(results, fmt.Sprintf("%s:%d\n", fn, line))
+	}
+
 	for _, object := range objects {
 		results = append(results, format(object))
 	}
