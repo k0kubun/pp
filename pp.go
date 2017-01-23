@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sync"
 	"runtime"
+	"sync"
 
 	"github.com/mattn/go-colorable"
 )
@@ -132,8 +132,6 @@ func SetColorScheme(scheme ColorScheme) {
 func ResetColorScheme() {
 	currentScheme = defaultScheme
 }
-
-
 
 func formatAll(objects []interface{}) []interface{} {
 	results := []interface{}{}
