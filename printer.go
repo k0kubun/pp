@@ -155,7 +155,7 @@ func (p *printer) printMap() {
 	}
 	p.visited[p.value.Pointer()] = true
 
-	p.println("{")
+	p.printf("%s{", p.typeString())
 	p.indented(func() {
 		keys := p.value.MapKeys()
 		for i := 0; i < p.value.Len(); i++ {
