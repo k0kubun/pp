@@ -175,6 +175,16 @@ var (
 			}
 			`,
 		},
+		{
+			map[string]interface{}{"foo": 10, "bar": map[int]int{20: 30}}, `
+			[green]map[string]interface {}[reset]{
+			  [red][bold]"[reset][red]foo[reset][red][bold]"[reset]: [blue][bold]10[reset],
+			  [red][bold]"[reset][red]bar[reset][red][bold]"[reset]: [green]map[int]int[reset]{
+			    [blue][bold]20[reset]: [blue][bold]30[reset],
+			  },
+			}
+			`,
+		},
 	}
 
 	arr [3]int

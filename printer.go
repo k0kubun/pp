@@ -158,7 +158,7 @@ func (p *printer) printMap() {
 	p.visited[p.value.Pointer()] = true
 
 	if PrintMapTypes {
-		p.printf("%s{", p.typeString())
+		p.printf("%s{\n", p.typeString())
 	} else {
 		p.println("{")
 	}
