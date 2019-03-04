@@ -19,8 +19,6 @@ var (
 	// If the length of array or slice is larger than this,
 	// the buffer will be shorten as {...}.
 	BufferFoldThreshold = 1024
-	// PrintMapTypes when set to true will have map types will always appended to maps.
-	PrintMapTypes = true
 )
 
 func format(object interface{}) string {
@@ -157,11 +155,7 @@ func (p *printer) printMap() {
 	}
 	p.visited[p.value.Pointer()] = true
 
-	if PrintMapTypes {
-		p.printf("%s{\n", p.typeString())
-	} else {
-		p.println("{")
-	}
+	p.printf("%s{\n", p.typeString())
 	p.indented(func() {
 		keys := p.value.MapKeys()
 		for i := 0; i < p.value.Len(); i++ {
