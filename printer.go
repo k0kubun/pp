@@ -394,6 +394,20 @@ func isEmptyValue(v reflect.Value) bool {
 		return v.Float() == 0
 	case reflect.Interface, reflect.Ptr:
 		return v.IsNil()
+	case reflect.Struct:
+		if !v.CanInterface() {
+			return false
+		}
+
+		switch v.Type().String() {
+		case "struct {}":
+			return true
+		case "time.Time":
+			tm := v.Interface().(time.Time)
+			return tm.IsZero()
+		}
+
+		return false
 	}
 	return false
 }
