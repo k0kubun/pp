@@ -31,6 +31,24 @@ pp.Fprintf()
 
 API doc is available at: http://godoc.org/github.com/k0kubun/pp
 
+### Options
+
+Set indent width:
+```go
+pp.SetIndentWidth(4) // default: 2
+```
+
+Add file name and line information to output.
+Use it with care, because getting stack has performance penalty
+```go
+pp.WithLineInfo(true) // default: false
+```
+
+Print struct fields with zero values:
+```go
+pp.PrintZeroStructFields(true) // default: false
+```
+
 ### Custom colors
 
 If you require, you may change the colors (all or some) for syntax highlighting:

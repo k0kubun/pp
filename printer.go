@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-const (
-	indentWidth = 2
-)
-
 var (
 	// If the length of array or slice is larger than this,
 	// the buffer will be shorten as {...}.
@@ -182,7 +178,9 @@ func (p *printer) printStruct() {
 		for i := 0; i < p.value.NumField(); i++ {
 			field := colorize(p.value.Type().Field(i).Name, currentScheme.FieldName)
 			value := p.value.Field(i)
-			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+			if printZeroStructFields || !isEmptyValue(value) {
+				p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+			}
 		}
 	})
 	p.indentPrint("}")
@@ -380,4 +378,22 @@ func (p *printer) format(object interface{}) string {
 
 func (p *printer) indent() string {
 	return strings.Repeat("\t", p.depth)
+}
+
+func isEmptyValue(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Array, reflect.Map, reflect.Slice, reflect.String:
+		return v.Len() == 0
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return v.Float() == 0
+	case reflect.Interface, reflect.Ptr:
+		return v.IsNil()
+	}
+	return false
 }

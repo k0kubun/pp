@@ -8,7 +8,7 @@ import (
 	"runtime"
 	"sync"
 
-	"github.com/mattn/go-colorable"
+	colorable "github.com/mattn/go-colorable"
 )
 
 var (
@@ -18,9 +18,10 @@ var (
 	defaultOut = colorable.NewColorableStdout()
 
 	currentScheme ColorScheme
-	// WithLineInfo add file name and line information to output
-	// call this function with care, because getting stack has performance penalty
-	WithLineInfo = false
+	withLineInfo  = false
+
+	indentWidth           = 2
+	printZeroStructFields = false
 )
 
 func init() {
@@ -133,10 +134,26 @@ func ResetColorScheme() {
 	currentScheme = defaultScheme
 }
 
+// SetIndentWidth sets the width of indent.
+func SetIndentWidth(width uint8) {
+	indentWidth = int(width)
+}
+
+// WithLineInfo add file name and line information to output
+// call this function with care, because getting stack has performance penalty
+func WithLineInfo(with bool) {
+	withLineInfo = with
+}
+
+// PrintZeroStructFields enables printing of struct fields with zero values
+func PrintZeroStructFields(toPrint bool) {
+	printZeroStructFields = toPrint
+}
+
 func formatAll(objects []interface{}) []interface{} {
 	results := []interface{}{}
 
-	if WithLineInfo {
+	if withLineInfo {
 		_, fn, line, _ := runtime.Caller(2) // 2 because current Caller is pp itself
 		results = append(results, fmt.Sprintf("%s:%d\n", fn, line))
 	}
