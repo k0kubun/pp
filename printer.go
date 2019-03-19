@@ -178,7 +178,7 @@ func (p *printer) printStruct() {
 		for i := 0; i < p.value.NumField(); i++ {
 			field := colorize(p.value.Type().Field(i).Name, currentScheme.FieldName)
 			value := p.value.Field(i)
-			if printZeroStructFields || !isEmptyValue(value) {
+			if emitEmpty || !isEmptyValue(value) {
 				p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 			}
 		}

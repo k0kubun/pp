@@ -20,8 +20,8 @@ var (
 	currentScheme ColorScheme
 	withLineInfo  = false
 
-	indentWidth           = 2
-	printZeroStructFields = false
+	indentWidth = 2
+	emitEmpty   = false
 )
 
 func init() {
@@ -145,9 +145,14 @@ func WithLineInfo(with bool) {
 	withLineInfo = with
 }
 
-// PrintZeroStructFields enables printing of struct fields with zero values
-func PrintZeroStructFields(toPrint bool) {
-	printZeroStructFields = toPrint
+// EmitEmpty enables printing of struct fields with zero values
+func EmitEmpty() {
+	emitEmpty = true
+}
+
+// EmitEmpty disables printing of struct fields with zero values
+func OmitEmpty() {
+	emitEmpty = false
 }
 
 func formatAll(objects []interface{}) []interface{} {

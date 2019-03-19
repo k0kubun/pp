@@ -46,7 +46,8 @@ pp.WithLineInfo(true) // default: false
 
 Print struct fields with zero values:
 ```go
-pp.PrintZeroStructFields(true) // default: false
+pp.EmitEmpty() // to print
+pp.OmitEmpty() // default. To skip
 ```
 
 ### Custom colors
