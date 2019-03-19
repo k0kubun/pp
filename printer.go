@@ -195,16 +195,7 @@ func (p *printer) printTime() {
 	}
 
 	tm := p.value.Interface().(time.Time)
-	p.printf(
-		"%s-%s-%s %s:%s:%s %s",
-		colorize(strconv.Itoa(tm.Year()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Month()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Day()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Hour()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Minute()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Second()), currentScheme.Time),
-		colorize(tm.Location().String(), currentScheme.Time),
-	)
+	p.printf(`pp.StrToTime("%s")`, colorize(tm.Format(time.RFC3339), currentScheme.Time))
 }
 
 func (p *printer) printSlice() {
