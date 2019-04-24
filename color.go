@@ -22,7 +22,7 @@ const (
 	Cyan
 	White
 	bitsForeground       = 0
-	maskForegorund       = 0xf
+	maskForeground       = 0xf
 	ansiForegroundOffset = 30 - 1
 )
 
@@ -103,7 +103,7 @@ func colorize(text string, color uint16) string {
 		return text
 	}
 
-	foreground := color & maskForegorund >> bitsForeground
+	foreground := color & maskForeground >> bitsForeground
 	background := color & maskBackground >> bitsBackground
 	bold := color & maskBold
 
