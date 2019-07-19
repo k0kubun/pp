@@ -215,7 +215,7 @@ var (
 
 func TestFormat(t *testing.T) {
 	for _, test := range testCases {
-		actual := fmt.Sprintf("%s", format(test.object))
+		actual := fmt.Sprintf("%s", defaultPrettyPrinter.format(test.object))
 
 		trimmed := strings.Replace(test.expect, "\t", "", -1)
 		trimmed = strings.TrimPrefix(trimmed, "\n")
@@ -230,7 +230,7 @@ func TestFormat(t *testing.T) {
 	}
 
 	for _, object := range checkCases {
-		actual := fmt.Sprintf("%s", format(object))
+		actual := fmt.Sprintf("%s", defaultPrettyPrinter.format(object))
 		logResult(t, object, actual)
 	}
 }

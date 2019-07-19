@@ -29,6 +29,14 @@ pp.Fprintf()
 // ...
 ```
 
+You can also create own instances that do not interfer with the default printer
+```go
+mypp := pp.New()
+mypp.SetOutput(os.Stderr)
+mypp.Println()
+// ...
+```
+
 API doc is available at: http://godoc.org/github.com/k0kubun/pp
 
 ### Custom colors
