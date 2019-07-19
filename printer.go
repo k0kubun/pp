@@ -23,42 +23,44 @@ var (
 	PrintMapTypes = true
 )
 
-func format(object interface{}) string {
-	return newPrinter(object).String()
+func (pp *PrettyPrinter) format(object interface{}) string {
+	return newPrinter(object, &pp.currentScheme).String()
 }
 
-func newPrinter(object interface{}) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
 
 	return &printer{
-		Buffer:  buffer,
-		tw:      tw,
-		depth:   0,
-		value:   reflect.ValueOf(object),
-		visited: map[uintptr]bool{},
+		Buffer:        buffer,
+		tw:            tw,
+		depth:         0,
+		value:         reflect.ValueOf(object),
+		visited:       map[uintptr]bool{},
+		currentScheme: currentScheme,
 	}
 }
 
 type printer struct {
 	*bytes.Buffer
-	tw      *tabwriter.Writer
-	depth   int
-	value   reflect.Value
-	visited map[uintptr]bool
+	tw            *tabwriter.Writer
+	depth         int
+	value         reflect.Value
+	visited       map[uintptr]bool
+	currentScheme *ColorScheme
 }
 
 func (p *printer) String() string {
 	switch p.value.Kind() {
 	case reflect.Bool:
-		p.colorPrint(p.raw(), currentScheme.Bool)
+		p.colorPrint(p.raw(), p.currentScheme.Bool)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64,
 		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64,
 		reflect.Uintptr, reflect.Complex64, reflect.Complex128:
-		p.colorPrint(p.raw(), currentScheme.Integer)
+		p.colorPrint(p.raw(), p.currentScheme.Integer)
 	case reflect.Float32, reflect.Float64:
-		p.colorPrint(p.raw(), currentScheme.Float)
+		p.colorPrint(p.raw(), p.currentScheme.Float)
 	case reflect.String:
 		p.printString()
 	case reflect.Map:
@@ -117,15 +119,15 @@ func (p *printer) printString() {
 	quoted := strconv.Quote(p.value.String())
 	quoted = quoted[1 : len(quoted)-1]
 
-	p.colorPrint(`"`, currentScheme.StringQuotation)
+	p.colorPrint(`"`, p.currentScheme.StringQuotation)
 	for len(quoted) > 0 {
 		pos := strings.IndexByte(quoted, '\\')
 		if pos == -1 {
-			p.colorPrint(quoted, currentScheme.String)
+			p.colorPrint(quoted, p.currentScheme.String)
 			break
 		}
 		if pos != 0 {
-			p.colorPrint(quoted[0:pos], currentScheme.String)
+			p.colorPrint(quoted[0:pos], p.currentScheme.String)
 		}
 
 		n := 1
@@ -139,10 +141,10 @@ func (p *printer) printString() {
 		case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9': // "\000"
 			n = 3
 		}
-		p.colorPrint(quoted[pos:pos+n+1], currentScheme.EscapedChar)
+		p.colorPrint(quoted[pos:pos+n+1], p.currentScheme.EscapedChar)
 		quoted = quoted[pos+n+1:]
 	}
-	p.colorPrint(`"`, currentScheme.StringQuotation)
+	p.colorPrint(`"`, p.currentScheme.StringQuotation)
 }
 
 func (p *printer) printMap() {
@@ -186,7 +188,7 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := colorize(p.value.Type().Field(i).Name, currentScheme.FieldName)
+			field := colorize(p.value.Type().Field(i).Name, p.currentScheme.FieldName)
 			value := p.value.Field(i)
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 		}
@@ -203,13 +205,13 @@ func (p *printer) printTime() {
 	tm := p.value.Interface().(time.Time)
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
-		colorize(strconv.Itoa(tm.Year()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Month()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Day()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Hour()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Minute()), currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Second()), currentScheme.Time),
-		colorize(tm.Location().String(), currentScheme.Time),
+		colorize(strconv.Itoa(tm.Year()), p.currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Month()), p.currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Day()), p.currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Hour()), p.currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Minute()), p.currentScheme.Time),
+		colorize(fmt.Sprintf("%02d", tm.Second()), p.currentScheme.Time),
+		colorize(tm.Location().String(), p.currentScheme.Time),
 	)
 }
 
@@ -300,7 +302,7 @@ func (p *printer) printPtr() {
 }
 
 func (p *printer) pointerAddr() string {
-	return colorize(fmt.Sprintf("%#v", p.value.Pointer()), currentScheme.PointerAdress)
+	return colorize(fmt.Sprintf("%#v", p.value.Pointer()), p.currentScheme.PointerAdress)
 }
 
 func (p *printer) typeString() string {
@@ -321,15 +323,15 @@ func (p *printer) colorizeType(t string) string {
 
 	if p.matchRegexp(t, `^\[\d+\].+$`) {
 		num := regexp.MustCompile(`\d+`).FindString(t)
-		prefix = fmt.Sprintf("[%s]", colorize(num, currentScheme.ObjectLength))
+		prefix = fmt.Sprintf("[%s]", colorize(num, p.currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], currentScheme.StructName))
+		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], p.currentScheme.StructName))
 	} else {
-		t = colorize(t, currentScheme.StructName)
+		t = colorize(t, p.currentScheme.StructName)
 	}
 	return prefix + t
 }
@@ -371,11 +373,11 @@ func (p *printer) raw() string {
 }
 
 func (p *printer) nil() string {
-	return colorize("nil", currentScheme.Nil)
+	return colorize("nil", p.currentScheme.Nil)
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object)
+	pp := newPrinter(object, p.currentScheme)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
