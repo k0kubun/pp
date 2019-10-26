@@ -23,11 +23,11 @@ var (
 	PrintMapTypes = true
 )
 
-func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme).String()
+func (pp *PrettyPrinter) format(object interface{}, maxDepth int) string {
+	return newPrinter(object, &pp.currentScheme, maxDepth).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
@@ -36,7 +36,7 @@ func newPrinter(object interface{}, currentScheme *ColorScheme) *printer {
 		Buffer:        buffer,
 		tw:            tw,
 		depth:         0,
-		max_depth:     2,
+		maxDepth:      maxDepth,
 		value:         reflect.ValueOf(object),
 		visited:       map[uintptr]bool{},
 		currentScheme: currentScheme,
@@ -47,7 +47,7 @@ type printer struct {
 	*bytes.Buffer
 	tw            *tabwriter.Writer
 	depth         int
-	max_depth     int
+	maxDepth      int
 	value         reflect.Value
 	visited       map[uintptr]bool
 	currentScheme *ColorScheme
@@ -344,7 +344,7 @@ func (p *printer) matchRegexp(text, exp string) bool {
 
 func (p *printer) indented(proc func()) {
 	p.depth++
-	if p.depth <= p.max_depth {
+	if p.maxDepth == -1 || p.depth <= p.maxDepth {
 		proc()
 	}
 	p.depth--
@@ -381,7 +381,7 @@ func (p *printer) nil() string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {

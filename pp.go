@@ -15,6 +15,7 @@ var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
 	defaultPrettyPrinter = &PrettyPrinter{}
+	printerMaxDepth      = -1
 )
 
 func init() {
@@ -154,7 +155,7 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 	}
 
 	for _, object := range objects {
-		results = append(results, pp.format(object))
+		results = append(results, pp.format(object, printerMaxDepth))
 	}
 	return results
 }
@@ -254,6 +255,11 @@ func SetColorScheme(scheme ColorScheme) {
 // ResetColorScheme resets colorscheme to default.
 func ResetColorScheme() {
 	defaultPrettyPrinter.ResetColorScheme()
+}
+
+// SetMaxDepth sets the printer's Depth, -1 prints all
+func SetMaxDepth(v int) {
+	printerMaxDepth = v
 }
 
 // WithLineInfo add file name and line information to output
