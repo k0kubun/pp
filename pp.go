@@ -15,13 +15,14 @@ var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
 	defaultPrettyPrinter = &PrettyPrinter{}
-	printerMaxDepth      = -1
+	defaultMaxDepth      = -1
 )
 
 func init() {
 	defaultPrettyPrinter.out = defaultOut
 	defaultPrettyPrinter.currentScheme = defaultScheme
 	defaultPrettyPrinter.WithLineInfo = defaultWithLineInfo
+	defaultPrettyPrinter.maxDepth = defaultMaxDepth
 }
 
 type PrettyPrinter struct {
@@ -31,6 +32,7 @@ type PrettyPrinter struct {
 	// call this function with care, because getting stack has performance penalty
 	WithLineInfo bool
 	outLock      sync.Mutex
+	maxDepth     int
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -39,6 +41,7 @@ func New() *PrettyPrinter {
 		out:           defaultOut,
 		currentScheme: defaultScheme,
 		WithLineInfo:  defaultWithLineInfo,
+		maxDepth:      defaultMaxDepth,
 	}
 }
 
@@ -155,7 +158,7 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 	}
 
 	for _, object := range objects {
-		results = append(results, pp.format(object, printerMaxDepth))
+		results = append(results, pp.format(object))
 	}
 	return results
 }
@@ -258,8 +261,8 @@ func ResetColorScheme() {
 }
 
 // SetMaxDepth sets the printer's Depth, -1 prints all
-func SetMaxDepth(v int) {
-	printerMaxDepth = v
+func SetDefaultMaxDepth(v int) {
+	defaultPrettyPrinter.maxDepth = v
 }
 
 // WithLineInfo add file name and line information to output

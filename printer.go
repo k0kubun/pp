@@ -23,8 +23,8 @@ var (
 	PrintMapTypes = true
 )
 
-func (pp *PrettyPrinter) format(object interface{}, maxDepth int) string {
-	return newPrinter(object, &pp.currentScheme, maxDepth).String()
+func (pp *PrettyPrinter) format(object interface{}) string {
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth).String()
 }
 
 func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int) *printer {
