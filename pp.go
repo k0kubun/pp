@@ -15,14 +15,13 @@ var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
 	defaultPrettyPrinter = &PrettyPrinter{}
-	defaultMaxDepth      = -1
 )
 
 func init() {
 	defaultPrettyPrinter.out = defaultOut
 	defaultPrettyPrinter.currentScheme = defaultScheme
 	defaultPrettyPrinter.WithLineInfo = defaultWithLineInfo
-	defaultPrettyPrinter.maxDepth = defaultMaxDepth
+	defaultPrettyPrinter.maxDepth = -1
 }
 
 type PrettyPrinter struct {
@@ -41,7 +40,7 @@ func New() *PrettyPrinter {
 		out:           defaultOut,
 		currentScheme: defaultScheme,
 		WithLineInfo:  defaultWithLineInfo,
-		maxDepth:      defaultMaxDepth,
+		maxDepth:      -1,
 	}
 }
 
