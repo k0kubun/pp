@@ -21,6 +21,7 @@ func init() {
 	defaultPrettyPrinter.out = defaultOut
 	defaultPrettyPrinter.currentScheme = defaultScheme
 	defaultPrettyPrinter.WithLineInfo = defaultWithLineInfo
+	defaultPrettyPrinter.maxDepth = -1
 }
 
 type PrettyPrinter struct {
@@ -30,6 +31,7 @@ type PrettyPrinter struct {
 	// call this function with care, because getting stack has performance penalty
 	WithLineInfo bool
 	outLock      sync.Mutex
+	maxDepth     int
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -38,6 +40,7 @@ func New() *PrettyPrinter {
 		out:           defaultOut,
 		currentScheme: defaultScheme,
 		WithLineInfo:  defaultWithLineInfo,
+		maxDepth:      -1,
 	}
 }
 
@@ -254,6 +257,11 @@ func SetColorScheme(scheme ColorScheme) {
 // ResetColorScheme resets colorscheme to default.
 func ResetColorScheme() {
 	defaultPrettyPrinter.ResetColorScheme()
+}
+
+// SetMaxDepth sets the printer's Depth, -1 prints all
+func SetDefaultMaxDepth(v int) {
+	defaultPrettyPrinter.maxDepth = v
 }
 
 // WithLineInfo add file name and line information to output
