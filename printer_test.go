@@ -70,6 +70,7 @@ type Circular struct {
 }
 
 var c Circular = Circular{}
+var nilSlice []int
 
 func init() {
 	c.C = &c
@@ -78,6 +79,7 @@ func init() {
 var (
 	testCases = []testCase{
 		{nil, "[cyan][bold]nil"},
+		{nilSlice, "[][green]int[reset]([cyan][bold]nil[reset])"},
 		{true, "[cyan][bold]true"},
 		{false, "[cyan][bold]false"},
 		{int(4), "[blue][bold]4"},
