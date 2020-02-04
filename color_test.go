@@ -50,7 +50,7 @@ var tests = []colorTest{
 
 func TestColorize(t *testing.T) {
 	for _, test := range tests {
-		if output := colorize(test.input, test.color); output != test.result {
+		if output := colorizeText(test.input, test.color); output != test.result {
 			t.Errorf("Expected %q, got %q", test.result, output)
 		}
 	}

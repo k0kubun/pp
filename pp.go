@@ -14,33 +14,28 @@ import (
 var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
-	defaultPrettyPrinter = &PrettyPrinter{}
+	defaultPrettyPrinter = New()
 )
-
-func init() {
-	defaultPrettyPrinter.out = defaultOut
-	defaultPrettyPrinter.currentScheme = defaultScheme
-	defaultPrettyPrinter.WithLineInfo = defaultWithLineInfo
-	defaultPrettyPrinter.maxDepth = -1
-}
 
 type PrettyPrinter struct {
 	out           io.Writer
 	currentScheme ColorScheme
 	// WithLineInfo add file name and line information to output
 	// call this function with care, because getting stack has performance penalty
-	WithLineInfo bool
-	outLock      sync.Mutex
-	maxDepth     int
+	WithLineInfo    bool
+	outLock         sync.Mutex
+	maxDepth        int
+	coloringEnabled bool
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
 func New() *PrettyPrinter {
 	return &PrettyPrinter{
-		out:           defaultOut,
-		currentScheme: defaultScheme,
-		WithLineInfo:  defaultWithLineInfo,
-		maxDepth:      -1,
+		out:             defaultOut,
+		currentScheme:   defaultScheme,
+		WithLineInfo:    defaultWithLineInfo,
+		maxDepth:        -1,
+		coloringEnabled: true,
 	}
 }
 
@@ -110,6 +105,10 @@ func (pp *PrettyPrinter) Fatalf(format string, a ...interface{}) {
 func (pp *PrettyPrinter) Fatalln(a ...interface{}) {
 	fmt.Fprintln(pp.out, pp.formatAll(a)...)
 	os.Exit(1)
+}
+
+func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
+	pp.coloringEnabled = enabled
 }
 
 // SetOutput sets pp's output

@@ -24,33 +24,35 @@ var (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
 
 	return &printer{
-		Buffer:        buffer,
-		tw:            tw,
-		depth:         0,
-		maxDepth:      maxDepth,
-		value:         reflect.ValueOf(object),
-		visited:       map[uintptr]bool{},
-		currentScheme: currentScheme,
+		Buffer:          buffer,
+		tw:              tw,
+		depth:           0,
+		maxDepth:        maxDepth,
+		value:           reflect.ValueOf(object),
+		visited:         map[uintptr]bool{},
+		currentScheme:   currentScheme,
+		coloringEnabled: coloringEnabled,
 	}
 }
 
 type printer struct {
 	*bytes.Buffer
-	tw            *tabwriter.Writer
-	depth         int
-	maxDepth      int
-	value         reflect.Value
-	visited       map[uintptr]bool
-	currentScheme *ColorScheme
+	tw              *tabwriter.Writer
+	depth           int
+	maxDepth        int
+	value           reflect.Value
+	visited         map[uintptr]bool
+	currentScheme   *ColorScheme
+	coloringEnabled bool
 }
 
 func (p *printer) String() string {
@@ -114,7 +116,7 @@ func (p *printer) indentPrintf(format string, args ...interface{}) {
 }
 
 func (p *printer) colorPrint(text string, color uint16) {
-	p.print(colorize(text, color))
+	p.print(p.colorize(text, color))
 }
 
 func (p *printer) printString() {
@@ -190,7 +192,7 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := colorize(p.value.Type().Field(i).Name, p.currentScheme.FieldName)
+			field := p.colorize(p.value.Type().Field(i).Name, p.currentScheme.FieldName)
 			value := p.value.Field(i)
 			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
 		}
@@ -207,13 +209,13 @@ func (p *printer) printTime() {
 	tm := p.value.Interface().(time.Time)
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
-		colorize(strconv.Itoa(tm.Year()), p.currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Month()), p.currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Day()), p.currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Hour()), p.currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Minute()), p.currentScheme.Time),
-		colorize(fmt.Sprintf("%02d", tm.Second()), p.currentScheme.Time),
-		colorize(tm.Location().String(), p.currentScheme.Time),
+		p.colorize(strconv.Itoa(tm.Year()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Month()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Day()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Hour()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Minute()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Second()), p.currentScheme.Time),
+		p.colorize(tm.Location().String(), p.currentScheme.Time),
 	)
 }
 
@@ -308,7 +310,7 @@ func (p *printer) printPtr() {
 }
 
 func (p *printer) pointerAddr() string {
-	return colorize(fmt.Sprintf("%#v", p.value.Pointer()), p.currentScheme.PointerAdress)
+	return p.colorize(fmt.Sprintf("%#v", p.value.Pointer()), p.currentScheme.PointerAdress)
 }
 
 func (p *printer) typeString() string {
@@ -329,15 +331,15 @@ func (p *printer) colorizeType(t string) string {
 
 	if p.matchRegexp(t, `^\[\d+\].+$`) {
 		num := regexp.MustCompile(`\d+`).FindString(t)
-		prefix = fmt.Sprintf("[%s]", colorize(num, p.currentScheme.ObjectLength))
+		prefix = fmt.Sprintf("[%s]", p.colorize(num, p.currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = fmt.Sprintf("%s.%s", ts[0], colorize(ts[1], p.currentScheme.StructName))
+		t = fmt.Sprintf("%s.%s", ts[0], p.colorize(ts[1], p.currentScheme.StructName))
 	} else {
-		t = colorize(t, p.currentScheme.StructName)
+		t = p.colorize(t, p.currentScheme.StructName)
 	}
 	return prefix + t
 }
@@ -381,11 +383,19 @@ func (p *printer) raw() string {
 }
 
 func (p *printer) nil() string {
-	return colorize("nil", p.currentScheme.Nil)
+	return p.colorize("nil", p.currentScheme.Nil)
+}
+
+func (p *printer) colorize(text string, color uint16) string {
+	if ColoringEnabled && p.coloringEnabled {
+		return colorizeText(text, color)
+	} else {
+		return text
+	}
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
