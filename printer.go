@@ -72,13 +72,13 @@ func (p *printer) String() string {
 	case reflect.Array, reflect.Slice:
 		p.printSlice()
 	case reflect.Chan:
-		p.printf("(%s)(%s)", p.typeString(), p.pointerAddr())
+		p.printChan()
 	case reflect.Interface:
 		p.printInterface()
 	case reflect.Ptr:
 		p.printPtr()
 	case reflect.Func:
-		p.printf("%s {...}", p.typeString())
+		p.printFunc()
 	case reflect.UnsafePointer:
 		p.printf("%s(%s)", p.typeString(), p.pointerAddr())
 	case reflect.Invalid:
@@ -150,6 +150,10 @@ func (p *printer) printString() {
 }
 
 func (p *printer) printMap() {
+	if p.value.IsNil() {
+		p.printf("%s(%s)", p.typeString(), p.nil())
+		return
+	}
 	if p.value.Len() == 0 {
 		p.printf("%s{}", p.typeString())
 		return
@@ -305,6 +309,22 @@ func (p *printer) printPtr() {
 	} else {
 		p.printf("(%s)(%s)", p.typeString(), p.nil())
 	}
+}
+
+func (p *printer) printFunc() {
+	if p.value.IsNil() {
+		p.printf("%s(%s)", p.typeString(), p.nil())
+		return
+	}
+	p.printf("%s {...}", p.typeString())
+}
+
+func (p *printer) printChan() {
+	if p.value.IsNil() {
+		p.printf("%s(%s)", p.typeString(), p.nil())
+		return
+	}
+	p.printf("(%s)(%s)", p.typeString(), p.pointerAddr())
 }
 
 func (p *printer) pointerAddr() string {

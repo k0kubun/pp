@@ -71,6 +71,9 @@ type Circular struct {
 
 var c Circular = Circular{}
 var nilSlice []int
+var nilMap map[int]int
+var nilChan chan (int)
+var nilFunc func()
 
 func init() {
 	c.C = &c
@@ -80,6 +83,9 @@ var (
 	testCases = []testCase{
 		{nil, "[cyan][bold]nil"},
 		{nilSlice, "[][green]int[reset]([cyan][bold]nil[reset])"},
+		{nilMap, "[green]map[int]int[reset]([cyan][bold]nil[reset])"},
+		{nilChan, "[green]chan int[reset]([cyan][bold]nil[reset])"},
+		{nilFunc, "[green]func()[reset]([cyan][bold]nil[reset])"},
 		{true, "[cyan][bold]true"},
 		{false, "[cyan][bold]false"},
 		{int(4), "[blue][bold]4"},
@@ -100,6 +106,9 @@ var (
 		{"string", `[red][bold]"[reset][red]string[reset][red][bold]"`},
 		{[]string{}, "[][green]string[reset]{}"},
 		{EmptyStruct{}, "pp.[green]EmptyStruct[reset]{}"},
+		{map[int]int{}, "[green]map[int]int[reset]{}"},
+		{func() {}, "[green]func()[reset] {...}"},
+		{make(chan int), "([green]chan[reset]) int"},
 		{
 			[]*Piyo{nil, nil}, `
 			[]*pp.[green]Piyo[reset]{
