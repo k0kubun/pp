@@ -67,8 +67,7 @@ type ColorScheme struct {
 }
 
 var (
-	// If you set false to this variable, you can use pretty formatter
-	// without coloring.
+	// DEPRECATED: Use PrettyPrinter.SetColoringEnabled().
 	ColoringEnabled = true
 
 	defaultScheme = ColorScheme{
@@ -98,11 +97,7 @@ func (cs *ColorScheme) fixColors() {
 	}
 }
 
-func colorize(text string, color uint16) string {
-	if !ColoringEnabled {
-		return text
-	}
-
+func colorizeText(text string, color uint16) string {
 	foreground := color & maskForeground >> bitsForeground
 	background := color & maskBackground >> bitsBackground
 	bold := color & maskBold
