@@ -14,7 +14,7 @@ import (
 var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
-	defaultPrettyPrinter = New()
+	defaultPrettyPrinter = newPrettyPrinter(3) // pp.* => PrettyPrinter.* => formatAll
 )
 
 type PrettyPrinter struct {
@@ -26,16 +26,22 @@ type PrettyPrinter struct {
 	outLock         sync.Mutex
 	maxDepth        int
 	coloringEnabled bool
+	callerLevel     int
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
 func New() *PrettyPrinter {
+	return newPrettyPrinter(2) // PrettyPrinter.* => formatAll
+}
+
+func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 	return &PrettyPrinter{
 		out:             defaultOut,
 		currentScheme:   defaultScheme,
 		WithLineInfo:    defaultWithLineInfo,
 		maxDepth:        -1,
 		coloringEnabled: true,
+		callerLevel:     callerLevel,
 	}
 }
 
@@ -151,7 +157,7 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 	}
 
 	if withLineInfo {
-		_, fn, line, _ := runtime.Caller(2) // 2 because current Caller is pp itself
+		_, fn, line, _ := runtime.Caller(pp.callerLevel)
 		results = append(results, fmt.Sprintf("%s:%d\n", fn, line))
 	}
 
