@@ -2,6 +2,7 @@ package pp
 
 import (
 	"fmt"
+	"math/big"
 	"reflect"
 	"regexp"
 	"strings"
@@ -177,6 +178,7 @@ var (
 			}
 			`,
 		},
+		// Note: this seems like failing randomly
 		{
 			map[string]interface{}{"foo": 10, "bar": map[int]int{20: 30}}, `
 			[green]map[string]interface {}[reset]{
@@ -191,6 +193,9 @@ var (
 
 	arr [3]int
 	tm  = time.Date(2015, time.January, 2, 0, 0, 0, 0, time.UTC)
+
+	bigInt, _      = new(big.Int).SetString("-908f8474ea971baf", 16)
+	bigFloat, _, _ = big.ParseFloat("3.1415926535897932384626433832795028", 10, 10, big.ToZero)
 
 	checkCases = []interface{}{
 		Private{b: false, i: 1, u: 2, f: 2.22, c: complex(5, 6)},
@@ -210,6 +215,8 @@ var (
 		new(regexp.Regexp),
 		unsafe.Pointer(new(regexp.Regexp)),
 		"日本\t語\n\000\U00101234a",
+		bigInt,
+		bigFloat,
 		&tm,
 		&User{Name: "k0kubun", CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC(), deletedAt: time.Now().UTC()},
 	}

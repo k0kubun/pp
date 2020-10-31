@@ -3,6 +3,7 @@ package pp
 import (
 	"bytes"
 	"fmt"
+	"math/big"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -179,9 +180,19 @@ func (p *printer) printMap() {
 }
 
 func (p *printer) printStruct() {
-	if p.value.Type().String() == "time.Time" {
-		p.printTime()
-		return
+	if p.value.CanInterface() {
+		if p.value.Type().String() == "time.Time" {
+			p.printTime()
+			return
+		} else if p.value.Type().String() == "big.Int" {
+			bigInt := p.value.Interface().(big.Int)
+			p.print(p.colorize(bigInt.String(), p.currentScheme.Integer))
+			return
+		} else if p.value.Type().String() == "big.Float" {
+			bigFloat := p.value.Interface().(big.Float)
+			p.print(p.colorize(bigFloat.String(), p.currentScheme.Float))
+			return
+		}
 	}
 
 	if p.value.NumField() == 0 {
@@ -201,11 +212,6 @@ func (p *printer) printStruct() {
 }
 
 func (p *printer) printTime() {
-	if !p.value.CanInterface() {
-		p.printf("(unexported time.Time)")
-		return
-	}
-
 	tm := p.value.Interface().(time.Time)
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
