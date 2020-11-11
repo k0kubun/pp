@@ -120,8 +120,9 @@ func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
 // SetOutput sets pp's output
 func (pp *PrettyPrinter) SetOutput(o io.Writer) {
 	pp.outLock.Lock()
+	defer pp.outLock.Unlock()
+
 	pp.out = o
-	pp.outLock.Unlock()
 }
 
 // GetOutput returns pp's output.
@@ -132,8 +133,9 @@ func (pp *PrettyPrinter) GetOutput() io.Writer {
 // ResetOutput sets pp's output back to the default output
 func (pp *PrettyPrinter) ResetOutput() {
 	pp.outLock.Lock()
+	defer pp.outLock.Unlock()
+
 	pp.out = defaultOut
-	pp.outLock.Unlock()
 }
 
 // SetColorScheme takes a colorscheme used by all future Print calls.
