@@ -17,7 +17,7 @@ const (
 )
 
 var (
-	// If the length of array or slice is larger than this,
+	// BufferFoldThreshold If the length of array or slice is larger than this,
 	// the buffer will be shorten as {...}.
 	BufferFoldThreshold = 1024
 	// PrintMapTypes when set to true will have map types will always appended to maps.
@@ -225,6 +225,7 @@ func (p *printer) printTime() {
 	)
 }
 
+//revive:disable:cyclomatic High complexity score but easy to understand
 func (p *printer) printSlice() {
 	if p.value.Kind() == reflect.Slice && p.value.IsNil() {
 		p.printf("%s(%s)", p.typeString(), p.nil())
@@ -395,9 +396,8 @@ func (p *printer) nil() string {
 func (p *printer) colorize(text string, color uint16) string {
 	if ColoringEnabled && p.coloringEnabled {
 		return colorizeText(text, color)
-	} else {
-		return text
 	}
+	return text
 }
 
 func (p *printer) format(object interface{}) string {

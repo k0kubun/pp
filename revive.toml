@@ -1,0 +1,45 @@
+ignoreGeneratedHeader = false
+severity = "warning"
+confidence = 0.8
+errorCode = 1
+warningCode = 1
+
+[rule.cyclomatic]
+	arguments =[15]
+
+[rule.function-result-limit]
+	arguments =[3]
+
+[rule.atomic]
+[rule.blank-imports]
+[rule.bool-literal-in-expr]
+[rule.confusing-results]
+[rule.constant-logical-expr]
+[rule.context-as-argument]
+[rule.context-keys-type]
+[rule.dot-imports]
+[rule.empty-block]
+[rule.error-naming]
+[rule.error-return]
+[rule.error-strings]
+[rule.errorf]
+[rule.exported]
+[rule.if-return]
+[rule.increment-decrement]
+[rule.indent-error-flow]
+[rule.modifies-parameter]
+[rule.modifies-value-receiver]
+[rule.package-comments]
+[rule.range-val-in-closure]
+[rule.range]
+[rule.receiver-naming]
+[rule.redefines-builtin-id]
+[rule.struct-tag]
+[rule.superfluous-else]
+[rule.time-naming]
+[rule.unexported-return]
+[rule.unnecessary-stmt]
+[rule.unreachable-code]
+[rule.var-declaration]
+[rule.var-naming]
+[rule.waitgroup-by-value]

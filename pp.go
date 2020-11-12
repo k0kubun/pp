@@ -17,6 +17,7 @@ var (
 	defaultPrettyPrinter = newPrettyPrinter(3) // pp.* => PrettyPrinter.* => formatAll
 )
 
+// PrettyPrinter pretty printer
 type PrettyPrinter struct {
 	out           io.Writer
 	currentScheme ColorScheme
@@ -113,6 +114,7 @@ func (pp *PrettyPrinter) Fatalln(a ...interface{}) {
 	os.Exit(1)
 }
 
+// SetColoringEnabled enabled color
 func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
 	pp.coloringEnabled = enabled
 }
@@ -234,7 +236,7 @@ func Fatalln(a ...interface{}) {
 	defaultPrettyPrinter.Fatalln(a...)
 }
 
-// Change Print* functions' output to a given writer.
+// SetDefaultOutput Change Print* functions' output to a given writer.
 // For example, you can limit output by ENV.
 //
 //	func init() {
@@ -246,12 +248,12 @@ func SetDefaultOutput(o io.Writer) {
 	defaultPrettyPrinter.SetOutput(o)
 }
 
-// GetOutput returns pp's default output.
+// GetDefaultOutput returns pp's default output.
 func GetDefaultOutput() io.Writer {
 	return defaultPrettyPrinter.GetOutput()
 }
 
-// Change Print* functions' output to default one.
+// ResetDefaultOutput Change Print* functions' output to default one.
 func ResetDefaultOutput() {
 	defaultPrettyPrinter.ResetOutput()
 }
@@ -266,7 +268,7 @@ func ResetColorScheme() {
 	defaultPrettyPrinter.ResetColorScheme()
 }
 
-// SetMaxDepth sets the printer's Depth, -1 prints all
+// SetDefaultMaxDepth sets the printer's Depth, -1 prints all
 func SetDefaultMaxDepth(v int) {
 	defaultPrettyPrinter.maxDepth = v
 }

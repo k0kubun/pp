@@ -70,7 +70,7 @@ type Circular struct {
 	C *Circular
 }
 
-var c Circular = Circular{}
+var c = Circular{}
 var nilSlice []int
 
 func init() {
