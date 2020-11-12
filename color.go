@@ -6,28 +6,20 @@ import (
 )
 
 const (
-	// NoColor no color
+	// No color
 	NoColor uint16 = 1 << 15
 )
 
 const (
 	// Foreground colors for ColorScheme.
 	_ uint16 = iota | NoColor
-	// Black color black
 	Black
-	// Red color red
 	Red
-	// Green color green
 	Green
-	// Yellow color yellow
 	Yellow
-	// Blue color blue
 	Blue
-	// Magenta color magenta
 	Magenta
-	// Cyan color cyan
 	Cyan
-	// White color white
 	White
 	bitsForeground       = 0
 	maskForeground       = 0xf
@@ -37,21 +29,13 @@ const (
 const (
 	// Background colors for ColorScheme.
 	_ uint16 = iota<<bitsBackground | NoColor
-	// BackgroundBlack background color black
 	BackgroundBlack
-	// BackgroundRed background color red
 	BackgroundRed
-	// BackgroundGreen background color green
 	BackgroundGreen
-	// BackgroundYellow background color yellow
 	BackgroundYellow
-	// BackgroundBlue background color blue
 	BackgroundBlue
-	// BackgroundMagenta background color magenta
 	BackgroundMagenta
-	// BackgroundCyan background color cyan
 	BackgroundCyan
-	// BackgroundWhite background color white
 	BackgroundWhite
 	bitsBackground       = 4
 	maskBackground       = 0xf << bitsBackground
@@ -66,7 +50,7 @@ const (
 	ansiBold        = 1
 )
 
-// ColorScheme To use with SetColorScheme.
+// To use with SetColorScheme.
 type ColorScheme struct {
 	Bool            uint16
 	Integer         uint16
@@ -83,7 +67,7 @@ type ColorScheme struct {
 }
 
 var (
-	// ColoringEnabled DEPRECATED: Use PrettyPrinter.SetColoringEnabled().
+	// DEPRECATED: Use PrettyPrinter.SetColoringEnabled().
 	ColoringEnabled = true
 
 	defaultScheme = ColorScheme{

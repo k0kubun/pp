@@ -24,14 +24,13 @@ jobs:
     - name: Get dependencies
       run: |
         go get -v -t -d ./...
-        go get -u github.com/mgechev/revive
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
 
-    - name: Revive
-      run: revive -config revive.toml -exclude ./vendor/... ./...
+    - name: Build
+      run: go build -v .
 
     - name: Test
       run: go test -v .
