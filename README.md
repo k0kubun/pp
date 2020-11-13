@@ -1,4 +1,4 @@
-# pp [![wercker status](https://app.wercker.com/status/fc5308fe78e92594f7ea09b67a486caf/s/master "wercker status")](https://app.wercker.com/project/byKey/fc5308fe78e92594f7ea09b67a486caf)
+# pp ![Go](https://github.com/k0kubun/pp/workflows/Go/badge.svg)
 
 Colored pretty printer for Go language
 
