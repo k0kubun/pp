@@ -170,10 +170,9 @@ func (p *printer) printMap() {
 		p.println("{")
 	}
 	p.indented(func() {
-		keys := p.value.MapKeys()
-		for i := 0; i < p.value.Len(); i++ {
-			value := p.value.MapIndex(keys[i])
-			p.indentPrintf("%s:\t%s,\n", p.format(keys[i]), p.format(value))
+		value := sortMap(p.value)
+		for i := 0; i < value.Len(); i++ {
+			p.indentPrintf("%s:\t%s,\n", p.format(value.keys[i]), p.format(value.values[i]))
 		}
 	})
 	p.indentPrint("}")
