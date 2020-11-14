@@ -1,4 +1,4 @@
-# pp ![Go](https://github.com/k0kubun/pp/workflows/Go/badge.svg)
+# pp [![Go](https://github.com/k0kubun/pp/workflows/Go/badge.svg)](https://github.com/k0kubun/pp/actions)
 
 Colored pretty printer for Go language
 
