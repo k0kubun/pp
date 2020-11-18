@@ -12,10 +12,10 @@ func sortMap(value reflect.Value) *sortedMap {
 
 	keys := make([]reflect.Value, 0, value.Len())
 	values := make([]reflect.Value, 0, value.Len())
-	mapRange := value.MapRange()
-	for mapRange.Next() {
-		keys = append(keys, mapRange.Key())
-		values = append(values, mapRange.Value())
+	mapKeys := value.MapKeys()
+	for i := 0; i < len(mapKeys); i++ {
+		keys = append(keys, mapKeys[i])
+		values = append(values, value.MapIndex(mapKeys[i]))
 	}
 
 	sorted := &sortedMap{
