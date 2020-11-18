@@ -1,12 +1,16 @@
 # Changelog
 
-## [Unreleased](https://github.com/k0kubun/pp/tree/HEAD)
+## [v3.0.7](https://github.com/k0kubun/pp/tree/v3.0.7) (2020-11-18)
 
-[Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.6...HEAD)
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.6...v3.0.7)
 
 **Closed issues:**
 
 - Sort map by key before printing [\#23](https://github.com/k0kubun/pp/issues/23)
+
+**Merged pull requests:**
+
+- Resurrect Go 1.11 support [\#46](https://github.com/k0kubun/pp/pull/46) ([k0kubun](https://github.com/k0kubun))
 
 ## [v3.0.6](https://github.com/k0kubun/pp/tree/v3.0.6) (2020-11-14)
 
