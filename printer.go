@@ -180,7 +180,7 @@ func (p *printer) printMap() {
 
 func (p *printer) printStruct() {
 	if p.value.CanInterface() {
-		if p.value.Type().String() == "time.Time" {
+		if p.value.Type().String() == "time.Time" && p.value.Type().PkgPath() == "time" {
 			p.printTime()
 			return
 		} else if p.value.Type().String() == "big.Int" {
