@@ -202,9 +202,31 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := p.colorize(p.value.Type().Field(i).Name, p.currentScheme.FieldName)
+			field := p.value.Type().Field(i)
 			value := p.value.Field(i)
-			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+
+			var fieldName string
+			if tag := field.Tag.Get("pp"); tag != "" {
+				parts := strings.Split(tag, ",")
+				if len(parts) == 2 && parts[1] == "omitempty" && value.IsZero() {
+					// omit field
+					continue
+				}
+
+				if parts[0] == "-" {
+					// omit field
+					continue
+				}
+
+				// fieldName could be empty here - ",omitempty"
+				fieldName = parts[0]
+			}
+			if fieldName == "" {
+				fieldName = field.Name
+			}
+
+			colorizedFieldName := p.colorize(fieldName, p.currentScheme.FieldName)
+			p.indentPrintf("%s:\t%s,\n", colorizedFieldName, p.format(value))
 		}
 	})
 	p.indentPrint("}")
