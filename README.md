@@ -38,8 +38,6 @@ mypp.Println()
 // ...
 ```
 
-API doc is available at: http://godoc.org/github.com/k0kubun/pp
-
 ### Custom colors
 
 If you require, you may change the colors (all or some) for syntax highlighting:
