@@ -1,4 +1,4 @@
-# pp [![Go](https://github.com/k0kubun/pp/workflows/Go/badge.svg)](https://github.com/k0kubun/pp/actions)
+# pp [![Go](https://github.com/k0kubun/pp/workflows/Go/badge.svg)](https://github.com/k0kubun/pp/actions) [![Go Reference](https://pkg.go.dev/badge/github.com/k0kubun/pp/v3.svg)](https://pkg.go.dev/github.com/k0kubun/pp/v3)
 
 Colored pretty printer for Go language
 
