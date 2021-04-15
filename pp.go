@@ -26,6 +26,7 @@ type PrettyPrinter struct {
 	outLock         sync.Mutex
 	maxDepth        int
 	coloringEnabled bool
+	decimalUint     bool
 	callerLevel     int
 }
 
@@ -41,6 +42,7 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 		WithLineInfo:    defaultWithLineInfo,
 		maxDepth:        -1,
 		coloringEnabled: true,
+		decimalUint:     false,
 		callerLevel:     callerLevel,
 	}
 }
@@ -115,6 +117,10 @@ func (pp *PrettyPrinter) Fatalln(a ...interface{}) {
 
 func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
 	pp.coloringEnabled = enabled
+}
+
+func (pp *PrettyPrinter) SetDecimalUint(enabled bool) {
+	pp.decimalUint = enabled
 }
 
 // SetOutput sets pp's output
