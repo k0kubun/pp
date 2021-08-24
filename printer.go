@@ -3,6 +3,7 @@ package pp
 import (
 	"bytes"
 	"fmt"
+	"math"
 	"math/big"
 	"reflect"
 	"regexp"
@@ -170,10 +171,9 @@ func (p *printer) printMap() {
 		p.println("{")
 	}
 	p.indented(func() {
-		keys := p.value.MapKeys()
-		for i := 0; i < p.value.Len(); i++ {
-			value := p.value.MapIndex(keys[i])
-			p.indentPrintf("%s:\t%s,\n", p.format(keys[i]), p.format(value))
+		value := sortMap(p.value)
+		for i := 0; i < value.Len(); i++ {
+			p.indentPrintf("%s:\t%s,\n", p.format(value.keys[i]), p.format(value.values[i]))
 		}
 	})
 	p.indentPrint("}")
@@ -181,7 +181,7 @@ func (p *printer) printMap() {
 
 func (p *printer) printStruct() {
 	if p.value.CanInterface() {
-		if p.value.Type().String() == "time.Time" {
+		if p.value.Type().String() == "time.Time" && p.value.Type().PkgPath() == "time" {
 			p.printTime()
 			return
 		} else if p.value.Type().String() == "big.Int" {
@@ -203,9 +203,31 @@ func (p *printer) printStruct() {
 	p.println(p.typeString() + "{")
 	p.indented(func() {
 		for i := 0; i < p.value.NumField(); i++ {
-			field := p.colorize(p.value.Type().Field(i).Name, p.currentScheme.FieldName)
+			field := p.value.Type().Field(i)
 			value := p.value.Field(i)
-			p.indentPrintf("%s:\t%s,\n", field, p.format(value))
+
+			var fieldName string
+			if tag := field.Tag.Get("pp"); tag != "" {
+				parts := strings.Split(tag, ",")
+				if len(parts) == 2 && parts[1] == "omitempty" && valueIsZero(value) {
+					// omit field
+					continue
+				}
+
+				if parts[0] == "-" {
+					// omit field
+					continue
+				}
+
+				// fieldName could be empty here - ",omitempty"
+				fieldName = parts[0]
+			}
+			if fieldName == "" {
+				fieldName = field.Name
+			}
+
+			colorizedFieldName := p.colorize(fieldName, p.currentScheme.FieldName)
+			p.indentPrintf("%s:\t%s,\n", colorizedFieldName, p.format(value))
 		}
 	})
 	p.indentPrint("}")
@@ -412,4 +434,47 @@ func (p *printer) format(object interface{}) string {
 
 func (p *printer) indent() string {
 	return strings.Repeat("\t", p.depth)
+}
+
+// valueIsZero reports whether v is the zero value for its type.
+// It returns false if the argument is invalid.
+// This is a copy paste of reflect#IsZero from go1.15. It is not present before go1.13 (source: https://golang.org/doc/go1.13#library)
+// 	source: https://golang.org/src/reflect/value.go?s=34297:34325#L1090
+// This will need to be updated for new types or the decision should be made to drop support for Go version pre go1.13
+func valueIsZero(v reflect.Value) bool {
+	switch v.Kind() {
+	case reflect.Bool:
+		return !v.Bool()
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		return v.Int() == 0
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uintptr:
+		return v.Uint() == 0
+	case reflect.Float32, reflect.Float64:
+		return math.Float64bits(v.Float()) == 0
+	case reflect.Complex64, reflect.Complex128:
+		c := v.Complex()
+		return math.Float64bits(real(c)) == 0 && math.Float64bits(imag(c)) == 0
+	case reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			if !valueIsZero(v.Index(i)) {
+				return false
+			}
+		}
+		return true
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Ptr, reflect.Slice, reflect.UnsafePointer:
+		return v.IsNil()
+	case reflect.String:
+		return v.Len() == 0
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			if !valueIsZero(v.Field(i)) {
+				return false
+			}
+		}
+		return true
+	default:
+		// this is the only difference between stdlib reflect#IsZero and this function. We're not going to
+		// panic on the default cause, even
+		return false
+	}
 }
