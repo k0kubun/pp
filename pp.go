@@ -18,15 +18,17 @@ var (
 )
 
 type PrettyPrinter struct {
-	out           io.Writer
-	currentScheme ColorScheme
-	// WithLineInfo add file name and line information to output
-	// call this function with care, because getting stack has performance penalty
-	WithLineInfo    bool
+	// WithLineInfo adds file name and line information to output.
+	// Call this function with care, because getting stack has performance penalty.
+	WithLineInfo bool
+	// To support WithLineInfo, we need to know which frame we should look at.
+	// Thus callerLevel sets the number of frames it needs to skip.
+	callerLevel     int
+	out             io.Writer
+	currentScheme   ColorScheme
 	outLock         sync.Mutex
 	maxDepth        int
 	coloringEnabled bool
-	callerLevel     int
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -36,12 +38,12 @@ func New() *PrettyPrinter {
 
 func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 	return &PrettyPrinter{
+		WithLineInfo:    defaultWithLineInfo,
+		callerLevel:     callerLevel,
 		out:             defaultOut,
 		currentScheme:   defaultScheme,
-		WithLineInfo:    defaultWithLineInfo,
 		maxDepth:        -1,
 		coloringEnabled: true,
-		callerLevel:     callerLevel,
 	}
 }
 
