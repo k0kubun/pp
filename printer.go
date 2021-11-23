@@ -26,10 +26,11 @@ var (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.exportedOnly).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, exportedOnly bool) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool) *printer {
+
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
@@ -43,6 +44,7 @@ func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, co
 		visited:         map[uintptr]bool{},
 		currentScheme:   currentScheme,
 		coloringEnabled: coloringEnabled,
+		decimalUint:     decimalUint,
 		exportedOnly:    exportedOnly,
 	}
 }
@@ -56,6 +58,7 @@ type printer struct {
 	visited         map[uintptr]bool
 	currentScheme   *ColorScheme
 	coloringEnabled bool
+	decimalUint     bool
 	exportedOnly    bool
 }
 
@@ -398,15 +401,35 @@ func (p *printer) raw() string {
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		return fmt.Sprintf("%#v", p.value.Int())
 	case reflect.Uint, reflect.Uintptr:
-		return fmt.Sprintf("%#v", p.value.Uint())
+		if p.decimalUint {
+			return fmt.Sprintf("%d", p.value.Uint())
+		} else {
+			return fmt.Sprintf("%#v", p.value.Uint())
+		}
 	case reflect.Uint8:
-		return fmt.Sprintf("0x%02x", p.value.Uint())
+		if p.decimalUint {
+			return fmt.Sprintf("%d", p.value.Uint())
+		} else {
+			return fmt.Sprintf("0x%02x", p.value.Uint())
+		}
 	case reflect.Uint16:
-		return fmt.Sprintf("0x%04x", p.value.Uint())
+		if p.decimalUint {
+			return fmt.Sprintf("%d", p.value.Uint())
+		} else {
+			return fmt.Sprintf("0x%04x", p.value.Uint())
+		}
 	case reflect.Uint32:
-		return fmt.Sprintf("0x%08x", p.value.Uint())
+		if p.decimalUint {
+			return fmt.Sprintf("%d", p.value.Uint())
+		} else {
+			return fmt.Sprintf("0x%08x", p.value.Uint())
+		}
 	case reflect.Uint64:
-		return fmt.Sprintf("0x%016x", p.value.Uint())
+		if p.decimalUint {
+			return fmt.Sprintf("%d", p.value.Uint())
+		} else {
+			return fmt.Sprintf("0x%016x", p.value.Uint())
+		}
 	case reflect.Float32, reflect.Float64:
 		return fmt.Sprintf("%f", p.value.Float())
 	case reflect.Complex64, reflect.Complex128:
@@ -429,7 +452,7 @@ func (p *printer) colorize(text string, color uint16) string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.exportedOnly)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
