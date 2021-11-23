@@ -29,6 +29,8 @@ type PrettyPrinter struct {
 	outLock         sync.Mutex
 	maxDepth        int
 	coloringEnabled bool
+	// This skips unexported fields of structs.
+	exportedOnly bool
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -44,6 +46,7 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 		currentScheme:   defaultScheme,
 		maxDepth:        -1,
 		coloringEnabled: true,
+		exportedOnly:    false,
 	}
 }
 
@@ -117,6 +120,10 @@ func (pp *PrettyPrinter) Fatalln(a ...interface{}) {
 
 func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
 	pp.coloringEnabled = enabled
+}
+
+func (pp *PrettyPrinter) SetExportedOnly(enabled bool) {
+	pp.exportedOnly = enabled
 }
 
 // SetOutput sets pp's output

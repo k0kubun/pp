@@ -26,10 +26,10 @@ var (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.exportedOnly).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, exportedOnly bool) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
@@ -43,6 +43,7 @@ func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, co
 		visited:         map[uintptr]bool{},
 		currentScheme:   currentScheme,
 		coloringEnabled: coloringEnabled,
+		exportedOnly:    exportedOnly,
 	}
 }
 
@@ -55,6 +56,7 @@ type printer struct {
 	visited         map[uintptr]bool
 	currentScheme   *ColorScheme
 	coloringEnabled bool
+	exportedOnly    bool
 }
 
 func (p *printer) String() string {
@@ -224,6 +226,10 @@ func (p *printer) printStruct() {
 			}
 			if fieldName == "" {
 				fieldName = field.Name
+			}
+
+			if p.exportedOnly && ('a' <= fieldName[0] && fieldName[0] <= 'z') {
+				continue
 			}
 
 			colorizedFieldName := p.colorize(fieldName, p.currentScheme.FieldName)
@@ -423,7 +429,7 @@ func (p *printer) colorize(text string, color uint16) string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.exportedOnly)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
