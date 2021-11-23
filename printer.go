@@ -231,7 +231,7 @@ func (p *printer) printStruct() {
 				fieldName = field.Name
 			}
 
-			if p.exportedOnly && ('a' <= fieldName[0] && fieldName[0] <= 'z') {
+			if p.exportedOnly && field.PkgPath != "" {
 				continue
 			}
 
