@@ -26,10 +26,10 @@ var (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
@@ -44,6 +44,7 @@ func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, co
 		currentScheme:   currentScheme,
 		coloringEnabled: coloringEnabled,
 		decimalUint:     decimalUint,
+		exportedOnly:    exportedOnly,
 	}
 }
 
@@ -57,6 +58,7 @@ type printer struct {
 	currentScheme   *ColorScheme
 	coloringEnabled bool
 	decimalUint     bool
+	exportedOnly    bool
 }
 
 func (p *printer) String() string {
@@ -197,35 +199,44 @@ func (p *printer) printStruct() {
 		}
 	}
 
-	if p.value.NumField() == 0 {
+	var fields []int
+	for i := 0; i < p.value.NumField(); i++ {
+		field := p.value.Type().Field(i)
+		value := p.value.Field(i)
+		// ignore unexported if needed
+		if p.exportedOnly && field.PkgPath != "" {
+			continue
+		}
+		// ignore fields if zero value, or explicitly set
+		if tag := field.Tag.Get("pp"); tag != "" {
+			parts := strings.Split(tag, ",")
+			if len(parts) == 2 && parts[1] == "omitempty" && valueIsZero(value) {
+				continue
+			}
+			if parts[0] == "-" {
+				continue
+			}
+		}
+		fields = append(fields, i)
+	}
+
+	if len(fields) == 0 {
 		p.print(p.typeString() + "{}")
 		return
 	}
 
 	p.println(p.typeString() + "{")
 	p.indented(func() {
-		for i := 0; i < p.value.NumField(); i++ {
+		for _, i := range fields {
 			field := p.value.Type().Field(i)
 			value := p.value.Field(i)
 
-			var fieldName string
+			fieldName := field.Name
 			if tag := field.Tag.Get("pp"); tag != "" {
-				parts := strings.Split(tag, ",")
-				if len(parts) == 2 && parts[1] == "omitempty" && valueIsZero(value) {
-					// omit field
-					continue
+				tagName := strings.Split(tag, ",")
+				if tagName[0] != "" {
+					fieldName = tagName[0]
 				}
-
-				if parts[0] == "-" {
-					// omit field
-					continue
-				}
-
-				// fieldName could be empty here - ",omitempty"
-				fieldName = parts[0]
-			}
-			if fieldName == "" {
-				fieldName = field.Name
 			}
 
 			colorizedFieldName := p.colorize(fieldName, p.currentScheme.FieldName)
@@ -445,7 +456,7 @@ func (p *printer) colorize(text string, color uint16) string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {

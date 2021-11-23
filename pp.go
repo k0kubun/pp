@@ -30,6 +30,8 @@ type PrettyPrinter struct {
 	maxDepth        int
 	coloringEnabled bool
 	decimalUint     bool
+	// This skips unexported fields of structs.
+	exportedOnly bool
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -46,6 +48,7 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 		maxDepth:        -1,
 		coloringEnabled: true,
 		decimalUint:     false,
+		exportedOnly:    false,
 	}
 }
 
@@ -123,6 +126,10 @@ func (pp *PrettyPrinter) SetColoringEnabled(enabled bool) {
 
 func (pp *PrettyPrinter) SetDecimalUint(enabled bool) {
 	pp.decimalUint = enabled
+}
+
+func (pp *PrettyPrinter) SetExportedOnly(enabled bool) {
+	pp.exportedOnly = enabled
 }
 
 // SetOutput sets pp's output
