@@ -2,6 +2,7 @@ package pp
 
 import (
 	"bytes"
+	"fmt"
 	"math"
 	"math/big"
 	"reflect"
@@ -28,41 +29,48 @@ var (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly, pp.thousandsSeparator).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool, thousandsSeparator bool) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
 
-	return &printer{
-		Buffer:           buffer,
-		tw:               tw,
-		depth:            0,
-		maxDepth:         maxDepth,
-		value:            reflect.ValueOf(object),
-		visited:          map[uintptr]bool{},
-		currentScheme:    currentScheme,
-		coloringEnabled:  coloringEnabled,
-		decimalUint:      decimalUint,
-		exportedOnly:     exportedOnly,
-		localizedPrinter: message.NewPrinter(language.Und),
+	printer := &printer{
+		Buffer:             buffer,
+		tw:                 tw,
+		depth:              0,
+		maxDepth:           maxDepth,
+		value:              reflect.ValueOf(object),
+		visited:            map[uintptr]bool{},
+		currentScheme:      currentScheme,
+		coloringEnabled:    coloringEnabled,
+		decimalUint:        decimalUint,
+		exportedOnly:       exportedOnly,
+		thousandsSeparator: thousandsSeparator,
 	}
+
+	if thousandsSeparator {
+		printer.localizedPrinter = message.NewPrinter(language.English)
+	}
+
+	return printer
 }
 
 type printer struct {
 	*bytes.Buffer
-	tw               *tabwriter.Writer
-	depth            int
-	maxDepth         int
-	value            reflect.Value
-	visited          map[uintptr]bool
-	currentScheme    *ColorScheme
-	coloringEnabled  bool
-	decimalUint      bool
-	exportedOnly     bool
-	localizedPrinter *message.Printer
+	tw                 *tabwriter.Writer
+	depth              int
+	maxDepth           int
+	value              reflect.Value
+	visited            map[uintptr]bool
+	currentScheme      *ColorScheme
+	coloringEnabled    bool
+	decimalUint        bool
+	exportedOnly       bool
+	thousandsSeparator bool
+	localizedPrinter   *message.Printer
 }
 
 func (p *printer) String() string {
@@ -104,11 +112,11 @@ func (p *printer) String() string {
 }
 
 func (p *printer) print(text string) {
-	p.localizedPrinter.Fprint(p.tw, text)
+	fmt.Fprint(p.tw, text)
 }
 
 func (p *printer) printf(format string, args ...interface{}) {
-	text := p.localizedPrinter.Sprintf(format, args...)
+	text := fmt.Sprintf(format, args...)
 	p.print(text)
 }
 
@@ -121,7 +129,7 @@ func (p *printer) indentPrint(text string) {
 }
 
 func (p *printer) indentPrintf(format string, args ...interface{}) {
-	text := p.localizedPrinter.Sprintf(format, args...)
+	text := fmt.Sprintf(format, args...)
 	p.indentPrint(text)
 }
 
@@ -255,11 +263,11 @@ func (p *printer) printTime() {
 	p.printf(
 		"%s-%s-%s %s:%s:%s %s",
 		p.colorize(strconv.Itoa(tm.Year()), p.currentScheme.Time),
-		p.colorize(p.localizedPrinter.Sprintf("%02d", tm.Month()), p.currentScheme.Time),
-		p.colorize(p.localizedPrinter.Sprintf("%02d", tm.Day()), p.currentScheme.Time),
-		p.colorize(p.localizedPrinter.Sprintf("%02d", tm.Hour()), p.currentScheme.Time),
-		p.colorize(p.localizedPrinter.Sprintf("%02d", tm.Minute()), p.currentScheme.Time),
-		p.colorize(p.localizedPrinter.Sprintf("%02d", tm.Second()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Month()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Day()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Hour()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Minute()), p.currentScheme.Time),
+		p.colorize(fmt.Sprintf("%02d", tm.Second()), p.currentScheme.Time),
 		p.colorize(tm.Location().String(), p.currentScheme.Time),
 	)
 }
@@ -355,7 +363,7 @@ func (p *printer) printPtr() {
 }
 
 func (p *printer) pointerAddr() string {
-	return p.colorize(p.localizedPrinter.Sprintf("%#v", p.value.Pointer()), p.currentScheme.PointerAdress)
+	return p.colorize(fmt.Sprintf("%#v", p.value.Pointer()), p.currentScheme.PointerAdress)
 }
 
 func (p *printer) typeString() string {
@@ -376,13 +384,13 @@ func (p *printer) colorizeType(t string) string {
 
 	if p.matchRegexp(t, `^\[\d+\].+$`) {
 		num := regexp.MustCompile(`\d+`).FindString(t)
-		prefix = p.localizedPrinter.Sprintf("[%s]", p.colorize(num, p.currentScheme.ObjectLength))
+		prefix = fmt.Sprintf("[%s]", p.colorize(num, p.currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
 	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
 		ts := strings.Split(t, ".")
-		t = p.localizedPrinter.Sprintf("%s.%s", ts[0], p.colorize(ts[1], p.currentScheme.StructName))
+		t = fmt.Sprintf("%s.%s", ts[0], p.colorize(ts[1], p.currentScheme.StructName))
 	} else {
 		t = p.colorize(t, p.currentScheme.StructName)
 	}
@@ -401,49 +409,57 @@ func (p *printer) indented(proc func()) {
 	p.depth--
 }
 
+func (p *printer) fmtOrLocalizedSprintf(format string, a ...interface{}) string {
+	if p.localizedPrinter == nil {
+		return fmt.Sprintf(format, a...)
+	}
+
+	return p.localizedPrinter.Sprintf(format, a...)
+}
+
 func (p *printer) raw() string {
 	// Some value causes panic when Interface() is called.
 	switch p.value.Kind() {
 	case reflect.Bool:
-		return p.localizedPrinter.Sprintf("%#v", p.value.Bool())
+		return fmt.Sprintf("%#v", p.value.Bool())
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		return p.localizedPrinter.Sprintf("%d", p.value.Int())
+		return p.fmtOrLocalizedSprintf("%v", p.value.Int())
 	case reflect.Uint, reflect.Uintptr:
 		if p.decimalUint {
-			return p.localizedPrinter.Sprintf("%d", p.value.Uint())
+			return p.fmtOrLocalizedSprintf("%d", p.value.Uint())
 		} else {
-			return p.localizedPrinter.Sprintf("%#v", p.value.Uint())
+			return fmt.Sprintf("%#v", p.value.Uint())
 		}
 	case reflect.Uint8:
 		if p.decimalUint {
-			return p.localizedPrinter.Sprintf("%d", p.value.Uint())
+			return fmt.Sprintf("%d", p.value.Uint())
 		} else {
-			return p.localizedPrinter.Sprintf("0x%02x", p.value.Uint())
+			return fmt.Sprintf("0x%02x", p.value.Uint())
 		}
 	case reflect.Uint16:
 		if p.decimalUint {
-			return p.localizedPrinter.Sprintf("%d", p.value.Uint())
+			return p.fmtOrLocalizedSprintf("%d", p.value.Uint())
 		} else {
-			return p.localizedPrinter.Sprintf("0x%04x", p.value.Uint())
+			return fmt.Sprintf("0x%04x", p.value.Uint())
 		}
 	case reflect.Uint32:
 		if p.decimalUint {
-			return p.localizedPrinter.Sprintf("%d", p.value.Uint())
+			return p.fmtOrLocalizedSprintf("%d", p.value.Uint())
 		} else {
-			return p.localizedPrinter.Sprintf("0x%08x", p.value.Uint())
+			return fmt.Sprintf("0x%08x", p.value.Uint())
 		}
 	case reflect.Uint64:
 		if p.decimalUint {
-			return p.localizedPrinter.Sprintf("%d", p.value.Uint())
+			return p.fmtOrLocalizedSprintf("%d", p.value.Uint())
 		} else {
-			return p.localizedPrinter.Sprintf("0x%016x", p.value.Uint())
+			return fmt.Sprintf("0x%016x", p.value.Uint())
 		}
 	case reflect.Float32, reflect.Float64:
-		return p.localizedPrinter.Sprintf("%f", p.value.Float())
+		return p.fmtOrLocalizedSprintf("%f", p.value.Float())
 	case reflect.Complex64, reflect.Complex128:
-		return p.localizedPrinter.Sprintf("%#v", p.value.Complex())
+		return fmt.Sprintf("%#v", p.value.Complex())
 	default:
-		return p.localizedPrinter.Sprintf("%#v", p.value.Interface())
+		return fmt.Sprintf("%#v", p.value.Interface())
 	}
 }
 
@@ -460,7 +476,7 @@ func (p *printer) colorize(text string, color uint16) string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly, p.thousandsSeparator)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
