@@ -222,8 +222,30 @@ var (
 )
 
 func TestFormat(t *testing.T) {
-	for _, test := range testCases {
-		actual := fmt.Sprintf("%s", defaultPrettyPrinter.format(test.object))
+	processTestCases(t, defaultPrettyPrinter, testCases)
+}
+
+func TestThousands(t *testing.T) {
+	thousandsTestCases := []testCase{
+		{int(4), "[blue][bold]4"},
+		{int(4000), "[blue][bold]4,000"},
+		{uint(1000), "[blue][bold]1,000"},
+		{uint16(16000), "[blue][bold]16,000"},
+		{uint32(32000), "[blue][bold]32,000"},
+		{uint64(64000), "[blue][bold]64,000"},
+		{float64(3000.14), "[magenta][bold]3,000.140000"},
+	}
+
+	thousandsPrinter := newPrettyPrinter(3)
+	thousandsPrinter.SetThousandsSeparator(true)
+	thousandsPrinter.SetDecimalUint(true)
+
+	processTestCases(t, thousandsPrinter, thousandsTestCases)
+}
+
+func processTestCases(t *testing.T, printer *PrettyPrinter, cases []testCase) {
+	for _, test := range cases {
+		actual := fmt.Sprintf("%s", printer.format(test.object))
 
 		trimmed := strings.Replace(test.expect, "\t", "", -1)
 		trimmed = strings.TrimPrefix(trimmed, "\n")
@@ -238,7 +260,7 @@ func TestFormat(t *testing.T) {
 	}
 
 	for _, object := range checkCases {
-		actual := fmt.Sprintf("%s", defaultPrettyPrinter.format(object))
+		actual := fmt.Sprintf("%s", printer.format(object))
 		logResult(t, object, actual)
 	}
 }

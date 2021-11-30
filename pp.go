@@ -23,13 +23,14 @@ type PrettyPrinter struct {
 	WithLineInfo bool
 	// To support WithLineInfo, we need to know which frame we should look at.
 	// Thus callerLevel sets the number of frames it needs to skip.
-	callerLevel     int
-	out             io.Writer
-	currentScheme   ColorScheme
-	outLock         sync.Mutex
-	maxDepth        int
-	coloringEnabled bool
-	decimalUint     bool
+	callerLevel        int
+	out                io.Writer
+	currentScheme      ColorScheme
+	outLock            sync.Mutex
+	maxDepth           int
+	coloringEnabled    bool
+	decimalUint        bool
+	thousandsSeparator bool
 	// This skips unexported fields of structs.
 	exportedOnly bool
 }
@@ -130,6 +131,10 @@ func (pp *PrettyPrinter) SetDecimalUint(enabled bool) {
 
 func (pp *PrettyPrinter) SetExportedOnly(enabled bool) {
 	pp.exportedOnly = enabled
+}
+
+func (pp *PrettyPrinter) SetThousandsSeparator(enabled bool) {
+	pp.thousandsSeparator = enabled
 }
 
 // SetOutput sets pp's output
