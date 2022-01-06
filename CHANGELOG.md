@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.1.0](https://github.com/k0kubun/pp/tree/v3.1.0) (2022-01-06)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.10...v3.1.0)
+
+**Merged pull requests:**
+
+- Use SetDecimalUnit\(true\) by default [\#65](https://github.com/k0kubun/pp/pull/65) ([k0kubun](https://github.com/k0kubun))
+
 ## [v3.0.10](https://github.com/k0kubun/pp/tree/v3.0.10) (2022-01-06)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.9...v3.0.10)
