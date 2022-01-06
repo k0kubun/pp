@@ -1,5 +1,32 @@
 # Changelog
 
+## [v3.0.8](https://github.com/k0kubun/pp/tree/v3.0.8) (2021-11-30)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.7...v3.0.8)
+
+**Closed issues:**
+
+- Add option to skip unexported fields [\#59](https://github.com/k0kubun/pp/issues/59)
+- Verb '%T' is working incorrectly in formatted print [\#58](https://github.com/k0kubun/pp/issues/58)
+- Option to print byte as decimal [\#54](https://github.com/k0kubun/pp/issues/54)
+- Option for thousands separator [\#53](https://github.com/k0kubun/pp/issues/53)
+- The color part of vim is messy [\#52](https://github.com/k0kubun/pp/issues/52)
+- Bug: `printTime` assumes the standard library time [\#47](https://github.com/k0kubun/pp/issues/47)
+- Feature request: Add `pp:"noprint"` tag [\#42](https://github.com/k0kubun/pp/issues/42)
+- Feature request: omitempty [\#22](https://github.com/k0kubun/pp/issues/22)
+- Unable to print invalid address [\#21](https://github.com/k0kubun/pp/issues/21)
+
+**Merged pull requests:**
+
+- build: upgrade `go` directive in `go.mod` to 1.17 [\#62](https://github.com/k0kubun/pp/pull/62) ([Juneezee](https://github.com/Juneezee))
+- SetThousandsSeparator [\#61](https://github.com/k0kubun/pp/pull/61) ([mariusgrigoriu](https://github.com/mariusgrigoriu))
+- Add ExportedOnly option [\#60](https://github.com/k0kubun/pp/pull/60) ([k0kubun](https://github.com/k0kubun))
+- Add SetDecimalUint option [\#55](https://github.com/k0kubun/pp/pull/55) ([k0kubun](https://github.com/k0kubun))
+- Add Badge for pkg.go.dev [\#51](https://github.com/k0kubun/pp/pull/51) ([zakuro9715](https://github.com/zakuro9715))
+- Fix typo in README.md [\#50](https://github.com/k0kubun/pp/pull/50) ([bl-ue](https://github.com/bl-ue))
+- Add Struct Tag Support for Printing [\#49](https://github.com/k0kubun/pp/pull/49) ([rickbau5](https://github.com/rickbau5))
+- Ensure time.Time is from standard library [\#48](https://github.com/k0kubun/pp/pull/48) ([bquenin](https://github.com/bquenin))
+
 ## [v3.0.7](https://github.com/k0kubun/pp/tree/v3.0.7) (2020-11-18)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.6...v3.0.7)
@@ -100,7 +127,7 @@
 
 **Merged pull requests:**
 
-- check whether reflect.Value can call `Interface\(\)` [\#19](https://github.com/k0kubun/pp/pull/19) ([skatsuta](https://github.com/skatsuta))
+- check whether reflect.Value can call `Interface()` [\#19](https://github.com/k0kubun/pp/pull/19) ([skatsuta](https://github.com/skatsuta))
 - Fix indent for slices [\#18](https://github.com/k0kubun/pp/pull/18) ([sdidyk](https://github.com/sdidyk))
 
 ## [v2.1.0](https://github.com/k0kubun/pp/tree/v2.1.0) (2015-04-25)
