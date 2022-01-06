@@ -9,7 +9,7 @@ Colored pretty printer for Go language
 Just call `pp.Print()`.
 
 ```go
-import pp "github.com/k0kubun/pp/v3"
+import "github.com/k0kubun/pp/v3"
 
 m := map[string]string{"foo": "bar", "hello": "world"}
 pp.Print(m)
