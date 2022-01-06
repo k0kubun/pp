@@ -1,6 +1,7 @@
 package pp
 
 import (
+	"bytes"
 	"fmt"
 	"math/big"
 	"reflect"
@@ -9,10 +10,6 @@ import (
 	"testing"
 	"time"
 	"unsafe"
-
-	// Use fork until following PR is merged
-	// https://github.com/mitchellh/colorstring/pull/3
-	"github.com/k0kubun/colorstring"
 )
 
 type testCase struct {
@@ -250,7 +247,7 @@ func processTestCases(t *testing.T, printer *PrettyPrinter, cases []testCase) {
 		trimmed := strings.Replace(test.expect, "\t", "", -1)
 		trimmed = strings.TrimPrefix(trimmed, "\n")
 		trimmed = strings.TrimSuffix(trimmed, "\n")
-		expect := colorstring.Color(trimmed)
+		expect := colorString(trimmed)
 		if expect != actual {
 			v := reflect.ValueOf(test.object)
 			t.Errorf("\nTestCase: %#v\nType: %s\nExpect: %# v\nActual: %# v\n", test.object, v.Kind(), expect, actual)
@@ -276,3 +273,44 @@ func logResult(t *testing.T, object interface{}, actual string) {
 func isMultiLine(text string) bool {
 	return strings.Contains(text, "\n")
 }
+
+func colorString(text string) string {
+	buf := new(bytes.Buffer)
+	colored := false
+
+	lastMatch := []int{0, 0}
+	for _, match := range colorRe.FindAllStringIndex(text, -1) {
+		buf.WriteString(text[lastMatch[1]:match[0]])
+		lastMatch = match
+
+		var colorText string
+		color := text[lastMatch[0]+1 : lastMatch[1]-1]
+		if code, ok := colors[color]; ok {
+			colored = (color != "reset")
+			colorText = fmt.Sprintf("\033[%sm", code)
+		} else {
+			colorText = text[lastMatch[0]:lastMatch[1]]
+		}
+		buf.WriteString(colorText)
+	}
+	buf.WriteString(text[lastMatch[1]:])
+
+	if colored {
+		buf.WriteString("\033[0m")
+	}
+	return buf.String()
+}
+
+var (
+	colorRe = regexp.MustCompile(`(?i)\[[a-z0-9_-]+\]`)
+	colors  = map[string]string{
+		"red":     "31",
+		"green":   "32",
+		"yellow":  "33",
+		"blue":    "34",
+		"magenta": "35",
+		"cyan":    "36",
+		"bold":    "1",
+		"reset":   "0",
+	}
+)
