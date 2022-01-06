@@ -48,7 +48,7 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 		currentScheme:   defaultScheme,
 		maxDepth:        -1,
 		coloringEnabled: true,
-		decimalUint:     false,
+		decimalUint:     true,
 		exportedOnly:    false,
 	}
 }
