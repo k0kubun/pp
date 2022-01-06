@@ -1,5 +1,13 @@
 # Changelog
 
+## [v3.0.10](https://github.com/k0kubun/pp/tree/v3.0.10) (2022-01-06)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.9...v3.0.10)
+
+**Merged pull requests:**
+
+- Remove k0kubun/colorstring from dependencies [\#64](https://github.com/k0kubun/pp/pull/64) ([k0kubun](https://github.com/k0kubun))
+
 ## [v3.0.9](https://github.com/k0kubun/pp/tree/v3.0.9) (2022-01-06)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.8...v3.0.9)
