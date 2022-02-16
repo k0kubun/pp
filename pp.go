@@ -68,7 +68,7 @@ func (pp *PrettyPrinter) Println(a ...interface{}) (n int, err error) {
 	return fmt.Fprintln(pp.out, pp.formatAll(a)...)
 }
 
-// Sprint formats given arguemnts and returns the result as string.
+// Sprint formats given arguments and returns the result as string.
 func (pp *PrettyPrinter) Sprint(a ...interface{}) string {
 	return fmt.Sprint(pp.formatAll(a)...)
 }
@@ -78,7 +78,7 @@ func (pp *PrettyPrinter) Sprintf(format string, a ...interface{}) string {
 	return fmt.Sprintf(format, pp.formatAll(a)...)
 }
 
-// Sprintln formats given arguemnts with newline and returns the result as string.
+// Sprintln formats given arguments with newline and returns the result as string.
 func (pp *PrettyPrinter) Sprintln(a ...interface{}) string {
 	return fmt.Sprintln(pp.formatAll(a)...)
 }
@@ -204,7 +204,7 @@ func Println(a ...interface{}) (n int, err error) {
 	return defaultPrettyPrinter.Println(a...)
 }
 
-// Sprint formats given arguemnts and returns the result as string.
+// Sprint formats given arguments and returns the result as string.
 func Sprint(a ...interface{}) string {
 	return defaultPrettyPrinter.Sprint(a...)
 }
@@ -214,7 +214,7 @@ func Sprintf(format string, a ...interface{}) string {
 	return defaultPrettyPrinter.Sprintf(format, a...)
 }
 
-// Sprintln formats given arguemnts with newline and returns the result as string.
+// Sprintln formats given arguments with newline and returns the result as string.
 func Sprintln(a ...interface{}) string {
 	return defaultPrettyPrinter.Sprintln(a...)
 }
