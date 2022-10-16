@@ -15,6 +15,8 @@ import (
 // Global variable API
 // see also: color.go
 var (
+	// Default pretty printer. It's public so that you can modify config globally.
+	Default = newPrettyPrinter(3) // pp.* => PrettyPrinter.* => formatAll
 	// If the length of array or slice is larger than this,
 	// the buffer will be shorten as {...}.
 	BufferFoldThreshold = 1024
@@ -27,9 +29,8 @@ var (
 
 // Internals
 var (
-	defaultOut           = colorable.NewColorableStdout()
-	defaultWithLineInfo  = false
-	defaultPrettyPrinter = newPrettyPrinter(3) // pp.* => PrettyPrinter.* => formatAll
+	defaultOut          = colorable.NewColorableStdout()
+	defaultWithLineInfo = false
 )
 
 type PrettyPrinter struct {
@@ -189,7 +190,7 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 
 	// fix for backwards capability
 	withLineInfo := pp.WithLineInfo
-	if pp == defaultPrettyPrinter {
+	if pp == Default {
 		withLineInfo = WithLineInfo
 	}
 
@@ -206,67 +207,67 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 
 // Print prints given arguments.
 func Print(a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Print(a...)
+	return Default.Print(a...)
 }
 
 // Printf prints a given format.
 func Printf(format string, a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Printf(format, a...)
+	return Default.Printf(format, a...)
 }
 
 // Println prints given arguments with newline.
 func Println(a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Println(a...)
+	return Default.Println(a...)
 }
 
 // Sprint formats given arguments and returns the result as string.
 func Sprint(a ...interface{}) string {
-	return defaultPrettyPrinter.Sprint(a...)
+	return Default.Sprint(a...)
 }
 
 // Sprintf formats with pretty print and returns the result as string.
 func Sprintf(format string, a ...interface{}) string {
-	return defaultPrettyPrinter.Sprintf(format, a...)
+	return Default.Sprintf(format, a...)
 }
 
 // Sprintln formats given arguments with newline and returns the result as string.
 func Sprintln(a ...interface{}) string {
-	return defaultPrettyPrinter.Sprintln(a...)
+	return Default.Sprintln(a...)
 }
 
 // Fprint prints given arguments to a given writer.
 func Fprint(w io.Writer, a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Fprint(w, a...)
+	return Default.Fprint(w, a...)
 }
 
 // Fprintf prints format to a given writer.
 func Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Fprintf(w, format, a...)
+	return Default.Fprintf(w, format, a...)
 }
 
 // Fprintln prints given arguments to a given writer with newline.
 func Fprintln(w io.Writer, a ...interface{}) (n int, err error) {
-	return defaultPrettyPrinter.Fprintln(w, a...)
+	return Default.Fprintln(w, a...)
 }
 
 // Errorf formats given arguments and returns it as error type.
 func Errorf(format string, a ...interface{}) error {
-	return defaultPrettyPrinter.Errorf(format, a...)
+	return Default.Errorf(format, a...)
 }
 
 // Fatal prints given arguments and finishes execution with exit status 1.
 func Fatal(a ...interface{}) {
-	defaultPrettyPrinter.Fatal(a...)
+	Default.Fatal(a...)
 }
 
 // Fatalf prints a given format and finishes execution with exit status 1.
 func Fatalf(format string, a ...interface{}) {
-	defaultPrettyPrinter.Fatalf(format, a...)
+	Default.Fatalf(format, a...)
 }
 
 // Fatalln prints given arguments with newline and finishes execution with exit status 1.
 func Fatalln(a ...interface{}) {
-	defaultPrettyPrinter.Fatalln(a...)
+	Default.Fatalln(a...)
 }
 
 // Change Print* functions' output to a given writer.
@@ -278,30 +279,30 @@ func Fatalln(a ...interface{}) {
 //		}
 //	}
 func SetDefaultOutput(o io.Writer) {
-	defaultPrettyPrinter.SetOutput(o)
+	Default.SetOutput(o)
 }
 
 // GetOutput returns pp's default output.
 func GetDefaultOutput() io.Writer {
-	return defaultPrettyPrinter.GetOutput()
+	return Default.GetOutput()
 }
 
 // Change Print* functions' output to default one.
 func ResetDefaultOutput() {
-	defaultPrettyPrinter.ResetOutput()
+	Default.ResetOutput()
 }
 
 // SetColorScheme takes a colorscheme used by all future Print calls.
 func SetColorScheme(scheme ColorScheme) {
-	defaultPrettyPrinter.SetColorScheme(scheme)
+	Default.SetColorScheme(scheme)
 }
 
 // ResetColorScheme resets colorscheme to default.
 func ResetColorScheme() {
-	defaultPrettyPrinter.ResetColorScheme()
+	Default.ResetColorScheme()
 }
 
 // SetMaxDepth sets the printer's Depth, -1 prints all
 func SetDefaultMaxDepth(v int) {
-	defaultPrettyPrinter.maxDepth = v
+	Default.maxDepth = v
 }
