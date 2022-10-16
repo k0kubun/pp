@@ -1,3 +1,4 @@
+// pp.go: API definitions. The core implementation is delegated to printer.go.
 package pp
 
 import (
@@ -11,6 +12,19 @@ import (
 	"github.com/mattn/go-colorable"
 )
 
+// Global variable API
+var (
+	// If the length of array or slice is larger than this,
+	// the buffer will be shorten as {...}.
+	BufferFoldThreshold = 1024
+	// PrintMapTypes when set to true will have map types will always appended to maps.
+	PrintMapTypes = true
+	// WithLineInfo add file name and line information to output
+	// call this function with care, because getting stack has performance penalty
+	WithLineInfo bool
+)
+
+// Internals
 var (
 	defaultOut           = colorable.NewColorableStdout()
 	defaultWithLineInfo  = false
@@ -290,7 +304,3 @@ func ResetColorScheme() {
 func SetDefaultMaxDepth(v int) {
 	defaultPrettyPrinter.maxDepth = v
 }
-
-// WithLineInfo add file name and line information to output
-// call this function with care, because getting stack has performance penalty
-var WithLineInfo bool

@@ -1,3 +1,4 @@
+// printer.go: The actual pretty print implementation. Everything in this file should be private.
 package pp
 
 import (
@@ -18,14 +19,6 @@ import (
 
 const (
 	indentWidth = 2
-)
-
-var (
-	// If the length of array or slice is larger than this,
-	// the buffer will be shorten as {...}.
-	BufferFoldThreshold = 1024
-	// PrintMapTypes when set to true will have map types will always appended to maps.
-	PrintMapTypes = true
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
@@ -492,7 +485,7 @@ func (p *printer) indent() string {
 // valueIsZero reports whether v is the zero value for its type.
 // It returns false if the argument is invalid.
 // This is a copy paste of reflect#IsZero from go1.15. It is not present before go1.13 (source: https://golang.org/doc/go1.13#library)
-// 	source: https://golang.org/src/reflect/value.go?s=34297:34325#L1090
+// source: https://golang.org/src/reflect/value.go?s=34297:34325#L1090
 // This will need to be updated for new types or the decision should be made to drop support for Go version pre go1.13
 func valueIsZero(v reflect.Value) bool {
 	switch v.Kind() {
