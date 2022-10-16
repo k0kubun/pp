@@ -26,17 +26,29 @@ pp.Print()
 pp.Println()
 pp.Sprint()
 pp.Fprintf()
-// ...
 ```
 
-You can also create own instances that do not interfere with the default printer:
+See [the documentation](https://pkg.go.dev/github.com/k0kubun/pp/v3#section-documentation) for API details.
+
+### Configuration
+
+They can be customized globally with `pp.Default`.
+
+```go
+pp.Default.SetColoringEnabled(false)
+pp.Default.SetExportedOnly(true)
+```
+
+You can also create individual instances that do not interfere with the default printer:
 
 ```go
 mypp := pp.New()
-mypp.SetOutput(os.Stderr)
+mypp.SetColoringEnabled(false)
+mypp.SetExportedOnly(true)
 mypp.Println()
-// ...
 ```
+
+See [PrettyPrinter documentation](https://pkg.go.dev/github.com/k0kubun/pp/v3#PrettyPrinter) for all available configurations.
 
 ### Custom colors
 
@@ -51,7 +63,7 @@ scheme := pp.ColorScheme{
 }
 
 // Register it for usage
-pp.SetColorScheme(scheme)
+pp.Default.SetColorScheme(scheme)
 ```
 
 Look into ColorScheme struct for the field names.
