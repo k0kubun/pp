@@ -1,5 +1,24 @@
 # Changelog
 
+## [v3.2.0](https://github.com/k0kubun/pp/tree/v3.2.0)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.1.0...v3.2.0)
+
+**Closed issues:**
+
+- ignore private fields in a struct in pretty print golang [\#74](https://github.com/k0kubun/pp/issues/74)
+- Bug?: Colorize map field names/keys using "FieldName" color scheme setting [\#72](https://github.com/k0kubun/pp/issues/72)
+- Printf not work correctly [\#70](https://github.com/k0kubun/pp/issues/70)
+- How to use the latest version? [\#69](https://github.com/k0kubun/pp/issues/69)
+- Please provide a simple way to disable color [\#67](https://github.com/k0kubun/pp/issues/67)
+- disable printing of struct metadata [\#66](https://github.com/k0kubun/pp/issues/66)
+
+**Merged pull requests:**
+
+- Expose defaultPrettyPrinter as pp.Default [\#75](https://github.com/k0kubun/pp/pull/75) ([k0kubun](https://github.com/k0kubun))
+- Bump github.com/mattn/go-colorable from 0.1.12 to 0.1.13 [\#73](https://github.com/k0kubun/pp/pull/73) ([dependabot[bot]](https://github.com/apps/dependabot))
+- doc: fix pp.go arguments word typo [\#68](https://github.com/k0kubun/pp/pull/68) ([rasecoiac03](https://github.com/rasecoiac03))
+
 ## [v3.1.0](https://github.com/k0kubun/pp/tree/v3.1.0) (2022-01-06)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.10...v3.1.0)
