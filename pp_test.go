@@ -32,7 +32,7 @@ func TestDefaultOutput(t *testing.T) {
 func TestColorScheme(t *testing.T) {
 	SetColorScheme(ColorScheme{})
 
-	if defaultPrettyPrinter.currentScheme.FieldName == 0 {
+	if Default.currentScheme.FieldName == 0 {
 		t.FailNow()
 	}
 }

@@ -219,7 +219,7 @@ var (
 )
 
 func TestFormat(t *testing.T) {
-	processTestCases(t, defaultPrettyPrinter, testCases)
+	processTestCases(t, Default, testCases)
 }
 
 func TestThousands(t *testing.T) {
