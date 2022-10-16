@@ -1,3 +1,4 @@
+// color.go: Color API and implementation
 package pp
 
 import (

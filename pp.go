@@ -13,6 +13,7 @@ import (
 )
 
 // Global variable API
+// see also: color.go
 var (
 	// If the length of array or slice is larger than this,
 	// the buffer will be shorten as {...}.
