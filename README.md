@@ -36,7 +36,7 @@ They can be customized globally with `pp.Default`.
 
 ```go
 pp.Default.SetColoringEnabled(false)
-pp.Default.SetExportedOnly(true)
+pp.Println() // no color
 ```
 
 You can also create individual instances that do not interfere with the default printer:
