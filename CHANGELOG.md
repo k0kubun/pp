@@ -1,6 +1,6 @@
 # Changelog
 
-## [v3.3.0](https://github.com/k0kubun/pp/tree/HEAD)
+## [v3.3.0](https://github.com/k0kubun/pp/tree/v3.3.0) (2024-10-25)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.2.0...v3.3.0)
 
