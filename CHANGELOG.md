@@ -1,17 +1,16 @@
 # Changelog
 
+## [v3.3.0](https://github.com/k0kubun/pp/tree/HEAD)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.2.0...v3.3.0)
+
+**Merged pull requests:**
+
+- Bump golang.org/x/text from 0.3.7 to 0.8.0 [\#82](https://github.com/k0kubun/pp/pull/82) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.2.0](https://github.com/k0kubun/pp/tree/v3.2.0) (2022-10-16)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.1.0...v3.2.0)
-
-**Closed issues:**
-
-- ignore private fields in a struct in pretty print golang [\#74](https://github.com/k0kubun/pp/issues/74)
-- Bug?: Colorize map field names/keys using "FieldName" color scheme setting [\#72](https://github.com/k0kubun/pp/issues/72)
-- Printf not work correctly [\#70](https://github.com/k0kubun/pp/issues/70)
-- How to use the latest version? [\#69](https://github.com/k0kubun/pp/issues/69)
-- Please provide a simple way to disable color [\#67](https://github.com/k0kubun/pp/issues/67)
-- disable printing of struct metadata [\#66](https://github.com/k0kubun/pp/issues/66)
 
 **Merged pull requests:**
 
@@ -47,18 +46,6 @@
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.7...v3.0.8)
 
-**Closed issues:**
-
-- Add option to skip unexported fields [\#59](https://github.com/k0kubun/pp/issues/59)
-- Verb '%T' is working incorrectly in formatted print [\#58](https://github.com/k0kubun/pp/issues/58)
-- Option to print byte as decimal [\#54](https://github.com/k0kubun/pp/issues/54)
-- Option for thousands separator [\#53](https://github.com/k0kubun/pp/issues/53)
-- The color part of vim is messy [\#52](https://github.com/k0kubun/pp/issues/52)
-- Bug: `printTime` assumes the standard library time [\#47](https://github.com/k0kubun/pp/issues/47)
-- Feature request: Add `pp:"noprint"` tag [\#42](https://github.com/k0kubun/pp/issues/42)
-- Feature request: omitempty [\#22](https://github.com/k0kubun/pp/issues/22)
-- Unable to print invalid address [\#21](https://github.com/k0kubun/pp/issues/21)
-
 **Merged pull requests:**
 
 - build: upgrade `go` directive in `go.mod` to 1.17 [\#62](https://github.com/k0kubun/pp/pull/62) ([Juneezee](https://github.com/Juneezee))
@@ -73,10 +60,6 @@
 ## [v3.0.7](https://github.com/k0kubun/pp/tree/v3.0.7) (2020-11-18)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.6...v3.0.7)
-
-**Closed issues:**
-
-- Sort map by key before printing [\#23](https://github.com/k0kubun/pp/issues/23)
 
 **Merged pull requests:**
 
@@ -98,10 +81,6 @@
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.3...v3.0.4)
 
-**Closed issues:**
-
-- Feature request: Pretty print big.Int and big.Float? [\#41](https://github.com/k0kubun/pp/issues/41)
-
 **Merged pull requests:**
 
 - chore: optimize CI [\#44](https://github.com/k0kubun/pp/pull/44) ([deliangyang](https://github.com/deliangyang))
@@ -111,20 +90,9 @@
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.2...v3.0.3)
 
-**Closed issues:**
-
-- go mod doesn't install 3.0.2 [\#40](https://github.com/k0kubun/pp/issues/40)
-
 ## [v3.0.2](https://github.com/k0kubun/pp/tree/v3.0.2) (2020-05-05)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.0.1...v3.0.2)
-
-**Closed issues:**
-
-- WithLineInfo print the wrong line  [\#39](https://github.com/k0kubun/pp/issues/39)
-- Display of nil slice as same as an empty slice [\#36](https://github.com/k0kubun/pp/issues/36)
-- Unsure why number coming out in base 16 [\#27](https://github.com/k0kubun/pp/issues/27)
-- disable colors when not output is not a tty [\#26](https://github.com/k0kubun/pp/issues/26)
 
 **Merged pull requests:**
 
@@ -164,10 +132,6 @@
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v2.1.0...v2.2.0)
 
-**Closed issues:**
-
-- please do not use unsafe package [\#20](https://github.com/k0kubun/pp/issues/20)
-
 **Merged pull requests:**
 
 - check whether reflect.Value can call `Interface()` [\#19](https://github.com/k0kubun/pp/pull/19) ([skatsuta](https://github.com/skatsuta))
@@ -195,10 +159,6 @@
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v1.3.0...v2.0.0)
 
-**Closed issues:**
-
-- Fold large buffers [\#8](https://github.com/k0kubun/pp/issues/8)
-
 **Merged pull requests:**
 
 - Fold a large buffer [\#12](https://github.com/k0kubun/pp/pull/12) ([k0kubun](https://github.com/k0kubun))
@@ -206,10 +166,6 @@
 ## [v1.3.0](https://github.com/k0kubun/pp/tree/v1.3.0) (2015-02-14)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v1.2.0...v1.3.0)
-
-**Closed issues:**
-
-- time.Time formatter [\#2](https://github.com/k0kubun/pp/issues/2)
 
 **Merged pull requests:**
 
@@ -234,10 +190,6 @@
 ## [v1.0.0](https://github.com/k0kubun/pp/tree/v1.0.0) (2015-01-09)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v0.0.1...v1.0.0)
-
-**Closed issues:**
-
-- test failed if Golang over 1.4 [\#5](https://github.com/k0kubun/pp/issues/5)
 
 **Merged pull requests:**
 
