@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/mattn/go-colorable v0.1.13
-	golang.org/x/text v0.8.0
+	golang.org/x/text v0.19.0
 )
 
 require (
