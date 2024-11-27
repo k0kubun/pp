@@ -162,7 +162,11 @@ func TestStructPrintingWithTags(t *testing.T) {
 }
 
 func TestStructPrintingWithOmitEmpty(t *testing.T) {
-	type Bar struct{ StringField string }
+	type Bar struct {
+		StringField string
+		IntField    int
+	}
+
 	type Foo struct {
 		StringField string
 		StringPtr   *string
@@ -182,7 +186,7 @@ func TestStructPrintingWithOmitEmpty(t *testing.T) {
 		want               string
 	}{
 		{
-			name: "all set",
+			name: "set",
 			foo: Foo{
 				StringField: "foo",
 				StringPtr:   &stringVal,
