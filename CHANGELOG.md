@@ -1,6 +1,14 @@
 # Changelog
 
-## [v3.4.0](https://github.com/k0kubun/pp/tree/v3.4.0)
+## [v3.4.1](https://github.com/k0kubun/pp/tree/v3.4.1) (2024-11-27)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.4.0...v3.4.1)
+
+**Merged pull requests:**
+
+- Fix omitEmpty is not propagated [\#90](https://github.com/k0kubun/pp/pull/90) ([apstndb](https://github.com/apstndb))
+
+## [v3.4.0](https://github.com/k0kubun/pp/tree/v3.4.0) (2024-11-27)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.3.0...v3.4.0)
 
