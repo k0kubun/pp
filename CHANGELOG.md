@@ -1,5 +1,14 @@
 # Changelog
 
+## [v3.4.0](https://github.com/k0kubun/pp/tree/v3.4.0)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.3.0...v3.4.0)
+
+**Merged pull requests:**
+
+- Implement SetOmitEmpty\(\) [\#89](https://github.com/k0kubun/pp/pull/89) ([apstndb](https://github.com/apstndb))
+- Bump golang.org/x/text from 0.8.0 to 0.19.0 [\#88](https://github.com/k0kubun/pp/pull/88) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.3.0](https://github.com/k0kubun/pp/tree/v3.3.0) (2024-10-25)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.2.0...v3.3.0)
