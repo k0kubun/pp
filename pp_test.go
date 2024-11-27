@@ -160,3 +160,66 @@ func TestStructPrintingWithTags(t *testing.T) {
 	}
 
 }
+
+func TestStructPrintingWithOmitEmpty(t *testing.T) {
+	type Bar struct{ StringField string }
+	type Foo struct {
+		StringField string
+		StringPtr   *string
+
+		StructField    Bar
+		StructPtr      *Bar
+		InterfactField interface{}
+	}
+
+	stringVal := "foo"
+
+	testCases := []struct {
+		name               string
+		foo                Foo
+		omitIfEmptyOmitted bool
+		fullOmitted        bool
+		want               string
+	}{
+		{
+			name: "all set",
+			foo: Foo{
+				StringField: "foo",
+				StringPtr:   &stringVal,
+				StructField: Bar{
+					StringField: "baz",
+				},
+				StructPtr: &Bar{
+					StringField: "foobar",
+				},
+				InterfactField: &Bar{StringField: "fizzbuzz"},
+			},
+			want: "pp.Foo{\n  StringField: \"foo\",\n  StringPtr:   &\"foo\",\n  StructField: pp.Bar{\n    StringField: \"baz\",\n  },\n  StructPtr: &pp.Bar{\n    StringField: \"foobar\",\n  },\n  InterfactField: &pp.Bar{\n    StringField: \"fizzbuzz\",\n  },\n}",
+		},
+		{
+			name: "zero",
+			foo:  Foo{},
+			want: "pp.Foo{}",
+		},
+	}
+
+	for _, tc := range testCases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			output := new(bytes.Buffer)
+			pp := New()
+			pp.SetOutput(output)
+			pp.SetColoringEnabled(false)
+			pp.SetOmitEmpty(true)
+
+			pp.Print(tc.foo)
+
+			result := output.String()
+
+			if result != tc.want {
+				t.Errorf("result differ, want: %q, got: %q", tc.want, result)
+			}
+		})
+	}
+
+}

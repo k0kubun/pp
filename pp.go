@@ -49,6 +49,9 @@ type PrettyPrinter struct {
 	thousandsSeparator bool
 	// This skips unexported fields of structs.
 	exportedOnly bool
+
+	// This skips empty fields of structs.
+	omitEmpty bool
 }
 
 // New creates a new PrettyPrinter that can be used to pretty print values
@@ -66,6 +69,7 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 		coloringEnabled: true,
 		decimalUint:     true,
 		exportedOnly:    false,
+		omitEmpty:       false,
 	}
 }
 
@@ -147,6 +151,11 @@ func (pp *PrettyPrinter) SetDecimalUint(enabled bool) {
 
 func (pp *PrettyPrinter) SetExportedOnly(enabled bool) {
 	pp.exportedOnly = enabled
+}
+
+// SetOmitEmpty makes empty fields in struct not be printed.
+func (pp *PrettyPrinter) SetOmitEmpty(enabled bool) {
+	pp.omitEmpty = enabled
 }
 
 func (pp *PrettyPrinter) SetThousandsSeparator(enabled bool) {

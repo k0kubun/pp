@@ -22,10 +22,10 @@ const (
 )
 
 func (pp *PrettyPrinter) format(object interface{}) string {
-	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly, pp.thousandsSeparator).String()
+	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly, pp.thousandsSeparator, pp.omitEmpty).String()
 }
 
-func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool, thousandsSeparator bool) *printer {
+func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, coloringEnabled bool, decimalUint bool, exportedOnly bool, thousandsSeparator bool, omitEmpty bool) *printer {
 	buffer := bytes.NewBufferString("")
 	tw := new(tabwriter.Writer)
 	tw.Init(buffer, indentWidth, 0, 1, ' ', 0)
@@ -42,6 +42,7 @@ func newPrinter(object interface{}, currentScheme *ColorScheme, maxDepth int, co
 		decimalUint:        decimalUint,
 		exportedOnly:       exportedOnly,
 		thousandsSeparator: thousandsSeparator,
+		omitEmpty:          omitEmpty,
 	}
 
 	if thousandsSeparator {
@@ -63,6 +64,7 @@ type printer struct {
 	decimalUint        bool
 	exportedOnly       bool
 	thousandsSeparator bool
+	omitEmpty          bool
 	localizedPrinter   *message.Printer
 }
 
@@ -212,7 +214,13 @@ func (p *printer) printStruct() {
 		if p.exportedOnly && field.PkgPath != "" {
 			continue
 		}
-		// ignore fields if zero value, or explicitly set
+
+		// ignore empty fields if needed
+		if p.omitEmpty && valueIsZero(value) {
+			continue
+		}
+
+		// ignore fields with struct tags if zero value, or explicitly set
 		if tag := field.Tag.Get("pp"); tag != "" {
 			parts := strings.Split(tag, ",")
 			if len(parts) == 2 && parts[1] == "omitempty" && valueIsZero(value) {
@@ -469,7 +477,7 @@ func (p *printer) colorize(text string, color uint16) string {
 }
 
 func (p *printer) format(object interface{}) string {
-	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly, p.thousandsSeparator)
+	pp := newPrinter(object, p.currentScheme, p.maxDepth, p.coloringEnabled, p.decimalUint, p.exportedOnly, p.thousandsSeparator, false)
 	pp.depth = p.depth
 	pp.visited = p.visited
 	if value, ok := object.(reflect.Value); ok {
