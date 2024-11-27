@@ -45,6 +45,7 @@ You can also create individual instances that do not interfere with the default 
 mypp := pp.New()
 mypp.SetColoringEnabled(false)
 mypp.SetExportedOnly(true)
+mypp.SetOmitEmpty(true)
 mypp.Println()
 ```
 
