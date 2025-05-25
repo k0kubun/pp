@@ -183,6 +183,7 @@ func TestStructPrintingWithOmitEmpty(t *testing.T) {
 		foo                Foo
 		omitIfEmptyOmitted bool
 		fullOmitted        bool
+		depth              int
 		want               string
 	}{
 		{
@@ -205,6 +206,22 @@ func TestStructPrintingWithOmitEmpty(t *testing.T) {
 			foo:  Foo{},
 			want: "pp.Foo{}",
 		},
+		{
+			name: "depth",
+			foo: Foo{
+				StringField: "foo",
+				StringPtr:   &stringVal,
+				StructField: Bar{
+					StringField: "baz",
+				},
+				StructPtr: &Bar{
+					StringField: "foobar",
+				},
+				InterfactField: &Bar{StringField: "fizzbuzz"},
+			},
+			depth: 1,
+			want:  "pp.Foo{\n  StringField: \"foo\",\n  StringPtr:   &\"foo\",\n  StructField: pp.Bar{\n  },\n  StructPtr: &pp.Bar{\n  },\n  InterfactField: &pp.Bar{\n  },\n}",
+		},
 	}
 
 	for _, tc := range testCases {
@@ -215,6 +232,9 @@ func TestStructPrintingWithOmitEmpty(t *testing.T) {
 			pp.SetOutput(output)
 			pp.SetColoringEnabled(false)
 			pp.SetOmitEmpty(true)
+			if tc.depth != 0 {
+				pp.SetMaxDepth(tc.depth)
+			}
 
 			pp.Print(tc.foo)
 

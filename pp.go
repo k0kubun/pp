@@ -194,6 +194,11 @@ func (pp *PrettyPrinter) ResetColorScheme() {
 	pp.currentScheme = defaultScheme
 }
 
+// SetMaxDepth sets the printer's Depth, -1 prints all
+func (pp *PrettyPrinter) SetMaxDepth(v int) {
+	pp.maxDepth = v
+}
+
 func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 	results := []interface{}{}
 
@@ -313,5 +318,5 @@ func ResetColorScheme() {
 
 // SetMaxDepth sets the printer's Depth, -1 prints all
 func SetDefaultMaxDepth(v int) {
-	Default.maxDepth = v
+	Default.SetMaxDepth(v)
 }
