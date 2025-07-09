@@ -1,5 +1,19 @@
 # Changelog
 
+## [v3.5.0](https://github.com/k0kubun/pp/tree/HEAD)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.4.1...v3.5.0)
+
+**Merged pull requests:**
+
+- Bump golang.org/x/text from 0.24.0 to 0.26.0 [\#99](https://github.com/k0kubun/pp/pull/99) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Add SetMaxDepth\(\) method to PrettyPrinter. [\#97](https://github.com/k0kubun/pp/pull/97) ([schmidtw](https://github.com/schmidtw))
+- Bump golang.org/x/text from 0.22.0 to 0.24.0 [\#96](https://github.com/k0kubun/pp/pull/96) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump golang.org/x/text from 0.21.0 to 0.22.0 [\#94](https://github.com/k0kubun/pp/pull/94) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/mattn/go-colorable from 0.1.13 to 0.1.14 [\#93](https://github.com/k0kubun/pp/pull/93) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump golang.org/x/text from 0.20.0 to 0.21.0 [\#92](https://github.com/k0kubun/pp/pull/92) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump golang.org/x/text from 0.19.0 to 0.20.0 [\#91](https://github.com/k0kubun/pp/pull/91) ([dependabot[bot]](https://github.com/apps/dependabot))
+
 ## [v3.4.1](https://github.com/k0kubun/pp/tree/v3.4.1) (2024-11-27)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.4.0...v3.4.1)
