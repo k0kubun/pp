@@ -73,6 +73,14 @@ func newPrettyPrinter(callerLevel int) *PrettyPrinter {
 	}
 }
 
+// adjustFormat adjust format, if print line.
+func adjustFormat(format string, withLine bool) string {
+	if withLine {
+		format = "%s" + format
+	}
+	return format
+}
+
 // Print prints given arguments.
 func (pp *PrettyPrinter) Print(a ...interface{}) (n int, err error) {
 	return fmt.Fprint(pp.out, pp.formatAll(a)...)
@@ -80,7 +88,8 @@ func (pp *PrettyPrinter) Print(a ...interface{}) (n int, err error) {
 
 // Printf prints a given format.
 func (pp *PrettyPrinter) Printf(format string, a ...interface{}) (n int, err error) {
-	return fmt.Fprintf(pp.out, format, pp.formatAll(a)...)
+	args, withLine := pp.formatAllWithLineFlag(a)
+	return fmt.Fprintf(pp.out, adjustFormat(format, withLine), args...)
 }
 
 // Println prints given arguments with newline.
@@ -95,7 +104,8 @@ func (pp *PrettyPrinter) Sprint(a ...interface{}) string {
 
 // Sprintf formats with pretty print and returns the result as string.
 func (pp *PrettyPrinter) Sprintf(format string, a ...interface{}) string {
-	return fmt.Sprintf(format, pp.formatAll(a)...)
+	args, withLine := pp.formatAllWithLineFlag(a)
+	return fmt.Sprintf(adjustFormat(format, withLine), args...)
 }
 
 // Sprintln formats given arguments with newline and returns the result as string.
@@ -110,7 +120,8 @@ func (pp *PrettyPrinter) Fprint(w io.Writer, a ...interface{}) (n int, err error
 
 // Fprintf prints format to a given writer.
 func (pp *PrettyPrinter) Fprintf(w io.Writer, format string, a ...interface{}) (n int, err error) {
-	return fmt.Fprintf(w, format, pp.formatAll(a)...)
+	args, withLine := pp.formatAllWithLineFlag(a)
+	return fmt.Fprintf(w, adjustFormat(format, withLine), args...)
 }
 
 // Fprintln prints given arguments to a given writer with newline.
@@ -120,7 +131,8 @@ func (pp *PrettyPrinter) Fprintln(w io.Writer, a ...interface{}) (n int, err err
 
 // Errorf formats given arguments and returns it as error type.
 func (pp *PrettyPrinter) Errorf(format string, a ...interface{}) error {
-	return errors.New(pp.Sprintf(format, a...))
+	args, withLine := pp.formatAllWithLineFlag(a)
+	return errors.New(pp.Sprintf(adjustFormat(format, withLine), args...))
 }
 
 // Fatal prints given arguments and finishes execution with exit status 1.
@@ -131,7 +143,8 @@ func (pp *PrettyPrinter) Fatal(a ...interface{}) {
 
 // Fatalf prints a given format and finishes execution with exit status 1.
 func (pp *PrettyPrinter) Fatalf(format string, a ...interface{}) {
-	fmt.Fprintf(pp.out, format, pp.formatAll(a)...)
+	args, withLine := pp.formatAllWithLineFlag(a)
+	fmt.Fprintf(pp.out, adjustFormat(format, withLine), args...)
 	os.Exit(1)
 }
 
@@ -200,6 +213,11 @@ func (pp *PrettyPrinter) SetMaxDepth(v int) {
 }
 
 func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
+	args, _ := pp.formatAllWithLineFlag(objects)
+	return args
+}
+
+func (pp *PrettyPrinter) formatAllWithLineFlag(objects []interface{}) ([]interface{}, bool) {
 	results := []interface{}{}
 
 	// fix for backwards capability
@@ -216,7 +234,7 @@ func (pp *PrettyPrinter) formatAll(objects []interface{}) []interface{} {
 	for _, object := range objects {
 		results = append(results, pp.format(object))
 	}
-	return results
+	return results, withLineInfo
 }
 
 // Print prints given arguments.

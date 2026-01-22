@@ -1,0 +1,12 @@
+*.swp
+*~
+
+# jetbrains 
+.idea
+*.iml
+
+# vscode
+.vscode/
+
+# mac
+.DS_Store
