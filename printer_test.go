@@ -232,25 +232,53 @@ func TestNestedRenderingPreservesAlignmentAndEscapesTabs(t *testing.T) {
 		Tail  string
 	}
 
-	printer := New()
-	printer.SetColoringEnabled(false)
-	got := printer.Sprint(outer{
+	value := outer{
 		Value: inner{
 			Short:  "x",
 			Longer: "contains\ttab",
 		},
 		Tail: "done",
-	})
-	want := "pp.outer{\n" +
+	}
+	withoutColor := "pp.outer{\n" +
 		"  Value: pp.inner{\n" +
 		"    Short:  \"x\",\n" +
 		"    Longer: \"contains\\ttab\",\n" +
 		"  },\n" +
 		"  Tail: \"done\",\n" +
 		"}"
+	tests := []struct {
+		name            string
+		coloringEnabled bool
+		want            string
+	}{
+		{
+			name:            "without_color",
+			coloringEnabled: false,
+			want:            withoutColor,
+		},
+		{
+			name:            "with_color",
+			coloringEnabled: true,
+			want: colorString("pp.[green]outer[reset]{\n" +
+				"  [yellow]Value[reset]: pp.[green]inner[reset]{\n" +
+				"    [yellow]Short[reset]:  [red][bold]\"[reset][red]x[reset][red][bold]\"[reset],\n" +
+				"    [yellow]Longer[reset]: [red][bold]\"[reset][red]contains[reset][magenta][bold]\\t[reset][red]tab[reset][red][bold]\"[reset],\n" +
+				"  },\n" +
+				"  [yellow]Tail[reset]: [red][bold]\"[reset][red]done[reset][red][bold]\"[reset],\n" +
+				"}"),
+		},
+	}
 
-	if got != want {
-		t.Errorf("Sprint() = %q, want %q", got, want)
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			printer := New()
+			printer.SetColoringEnabled(test.coloringEnabled)
+			got := printer.Sprint(value)
+
+			if got != test.want {
+				t.Errorf("Sprint() = %q, want %q", got, test.want)
+			}
+		})
 	}
 }
 
