@@ -69,6 +69,12 @@ type printer struct {
 }
 
 func (p *printer) String() string {
+	p.render()
+	p.tw.Flush()
+	return p.Buffer.String()
+}
+
+func (p *printer) render() {
 	switch p.value.Kind() {
 	case reflect.Bool:
 		p.colorPrint(p.raw(), p.currentScheme.Bool)
@@ -101,9 +107,20 @@ func (p *printer) String() string {
 	default:
 		p.print(p.raw())
 	}
+}
 
-	p.tw.Flush()
-	return p.Buffer.String()
+func (p *printer) renderValue(value reflect.Value) {
+	previousValue := p.value
+	parentWriter := p.tw
+	childWriter := new(tabwriter.Writer)
+	childWriter.Init(parentWriter, indentWidth, 0, 1, ' ', 0)
+
+	p.value = value
+	p.tw = childWriter
+	p.render()
+	childWriter.Flush()
+	p.tw = parentWriter
+	p.value = previousValue
 }
 
 func (p *printer) print(text string) {
@@ -184,7 +201,11 @@ func (p *printer) printMap() {
 	p.indented(func() {
 		value := sortMap(p.value)
 		for i := 0; i < value.Len(); i++ {
-			p.indentPrintf("%s:\t%s,\n", p.format(value.keys[i]), p.format(value.values[i]))
+			p.print(p.indent())
+			p.renderValue(value.keys[i])
+			p.print(":\t")
+			p.renderValue(value.values[i])
+			p.print(",\n")
 		}
 	})
 	p.indentPrint("}")
@@ -253,7 +274,9 @@ func (p *printer) printStruct() {
 			}
 
 			colorizedFieldName := p.colorize(fieldName, p.currentScheme.FieldName)
-			p.indentPrintf("%s:\t%s,\n", colorizedFieldName, p.format(value))
+			p.indentPrintf("%s:\t", colorizedFieldName)
+			p.renderValue(value)
+			p.print(",\n")
 		}
 	})
 	p.indentPrint("}")
@@ -319,7 +342,8 @@ func (p *printer) printSlice() {
 					p.print(p.indent())
 				}
 				// slice element
-				p.printf("%s,", p.format(p.value.Index(i)))
+				p.renderValue(p.value.Index(i))
+				p.print(",")
 				// space or newline
 				if (i+1)%groupsize == 0 || i+1 == p.value.Len() {
 					p.print("\n")
@@ -329,7 +353,9 @@ func (p *printer) printSlice() {
 			}
 		} else {
 			for i := 0; i < p.value.Len(); i++ {
-				p.indentPrintf("%s,\n", p.format(p.value.Index(i)))
+				p.print(p.indent())
+				p.renderValue(p.value.Index(i))
+				p.print(",\n")
 			}
 		}
 	})
@@ -341,7 +367,7 @@ func (p *printer) printInterface() {
 	if e.Kind() == reflect.Invalid {
 		p.print(p.nil())
 	} else if e.IsValid() {
-		p.print(p.format(e))
+		p.renderValue(e)
 	} else {
 		p.printf("%s(%s)", p.typeString(), p.nil())
 	}
@@ -357,7 +383,8 @@ func (p *printer) printPtr() {
 	}
 
 	if p.value.Elem().IsValid() {
-		p.printf("&%s", p.format(p.value.Elem()))
+		p.print("&")
+		p.renderValue(p.value.Elem())
 	} else {
 		p.printf("(%s)(%s)", p.typeString(), p.nil())
 	}

@@ -222,6 +222,38 @@ func TestFormat(t *testing.T) {
 	processTestCases(t, Default, testCases)
 }
 
+func TestNestedRenderingPreservesAlignmentAndEscapesTabs(t *testing.T) {
+	type inner struct {
+		Short  string
+		Longer string
+	}
+	type outer struct {
+		Value inner
+		Tail  string
+	}
+
+	printer := New()
+	printer.SetColoringEnabled(false)
+	got := printer.Sprint(outer{
+		Value: inner{
+			Short:  "x",
+			Longer: "contains\ttab",
+		},
+		Tail: "done",
+	})
+	want := "pp.outer{\n" +
+		"  Value: pp.inner{\n" +
+		"    Short:  \"x\",\n" +
+		"    Longer: \"contains\\ttab\",\n" +
+		"  },\n" +
+		"  Tail: \"done\",\n" +
+		"}"
+
+	if got != want {
+		t.Errorf("Sprint() = %q, want %q", got, want)
+	}
+}
+
 func TestThousands(t *testing.T) {
 	thousandsTestCases := []testCase{
 		{int(4), "[blue][bold]4"},
