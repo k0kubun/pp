@@ -21,6 +21,13 @@ const (
 	indentWidth = 2
 )
 
+var (
+	sliceTypeRegexp     = regexp.MustCompile(`^\[\].+$`)
+	arrayTypeRegexp     = regexp.MustCompile(`^\[\d+\].+$`)
+	arrayLengthRegexp   = regexp.MustCompile(`\d+`)
+	qualifiedTypeRegexp = regexp.MustCompile(`^[^\.]+\.[^\.]+$`)
+)
+
 func (pp *PrettyPrinter) format(object interface{}) string {
 	return newPrinter(object, &pp.currentScheme, pp.maxDepth, pp.coloringEnabled, pp.decimalUint, pp.exportedOnly, pp.thousandsSeparator, pp.omitEmpty).String()
 }
@@ -405,28 +412,24 @@ func (p *printer) elemTypeString() string {
 func (p *printer) colorizeType(t string) string {
 	prefix := ""
 
-	if p.matchRegexp(t, `^\[\].+$`) {
+	if sliceTypeRegexp.MatchString(t) {
 		prefix = "[]"
 		t = t[2:]
 	}
 
-	if p.matchRegexp(t, `^\[\d+\].+$`) {
-		num := regexp.MustCompile(`\d+`).FindString(t)
+	if arrayTypeRegexp.MatchString(t) {
+		num := arrayLengthRegexp.FindString(t)
 		prefix = fmt.Sprintf("[%s]", p.colorize(num, p.currentScheme.ObjectLength))
 		t = t[2+len(num):]
 	}
 
-	if p.matchRegexp(t, `^[^\.]+\.[^\.]+$`) {
+	if qualifiedTypeRegexp.MatchString(t) {
 		ts := strings.Split(t, ".")
 		t = fmt.Sprintf("%s.%s", ts[0], p.colorize(ts[1], p.currentScheme.StructName))
 	} else {
 		t = p.colorize(t, p.currentScheme.StructName)
 	}
 	return prefix + t
-}
-
-func (p *printer) matchRegexp(text, exp string) bool {
-	return regexp.MustCompile(exp).MatchString(text)
 }
 
 func (p *printer) indented(proc func()) {
