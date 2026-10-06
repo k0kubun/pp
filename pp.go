@@ -132,7 +132,7 @@ func (pp *PrettyPrinter) Fprintln(w io.Writer, a ...interface{}) (n int, err err
 // Errorf formats given arguments and returns it as error type.
 func (pp *PrettyPrinter) Errorf(format string, a ...interface{}) error {
 	args, withLine := pp.formatAllWithLineFlag(a)
-	return errors.New(pp.Sprintf(adjustFormat(format, withLine), args...))
+	return errors.New(fmt.Sprintf(adjustFormat(format, withLine), args...))
 }
 
 // Fatal prints given arguments and finishes execution with exit status 1.
