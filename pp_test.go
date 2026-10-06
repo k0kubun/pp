@@ -37,6 +37,19 @@ func TestColorScheme(t *testing.T) {
 	}
 }
 
+func TestErrorf(t *testing.T) {
+	pp := New()
+	pp.SetColoringEnabled(false)
+	if got, want := pp.Errorf("value: %v", 42).Error(), "value: 42"; got != want {
+		t.Errorf("Errorf() = %q, want %q", got, want)
+	}
+
+	pp.SetColoringEnabled(true)
+	if got, want := pp.Errorf("value: %v", 42).Error(), pp.Sprintf("value: %v", 42); got != want {
+		t.Errorf("Errorf() = %q, want %q", got, want)
+	}
+}
+
 func TestWithLineInfo(t *testing.T) {
 	outputWithoutLineInfo := new(bytes.Buffer)
 	SetDefaultOutput(outputWithoutLineInfo)
