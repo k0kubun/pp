@@ -1,8 +1,19 @@
 # Changelog
 
-## [v3.5.2](https://github.com/k0kubun/pp/tree/HEAD)
+## [v3.5.3](https://github.com/k0kubun/pp/tree/v3.5.3)
 
-[Full Changelog](https://github.com/k0kubun/pp/compare/v3.5.1...HEAD)
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.5.2...v3.5.3)
+
+**Merged pull requests:**
+
+- Format Errorf arguments only once [\#118](https://github.com/k0kubun/pp/pull/118) ([abo3losh1](https://github.com/abo3losh1))
+- Bump golang.org/x/text from 0.41.0 to 0.42.0 [\#117](https://github.com/k0kubun/pp/pull/117) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump golang.org/x/text from 0.40.0 to 0.41.0 [\#116](https://github.com/k0kubun/pp/pull/116) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump golang.org/x/text from 0.38.0 to 0.40.0 [\#115](https://github.com/k0kubun/pp/pull/115) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v3.5.2](https://github.com/k0kubun/pp/tree/v3.5.2) (2026-07-15)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.5.1...v3.5.2)
 
 **Merged pull requests:**
 
@@ -178,6 +189,7 @@
 
 - Fix newline of map type [\#29](https://github.com/k0kubun/pp/pull/29) ([itchyny](https://github.com/itchyny))
 - add MIT license file [\#28](https://github.com/k0kubun/pp/pull/28) ([alteholz](https://github.com/alteholz))
+- Update the map printer to properly print maps. [\#25](https://github.com/k0kubun/pp/pull/25) ([denniszl](https://github.com/denniszl))
 
 ## [v2.3.0](https://github.com/k0kubun/pp/tree/v2.3.0) (2017-01-23)
 
