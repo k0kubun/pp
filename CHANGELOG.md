@@ -1,6 +1,14 @@
 # Changelog
 
-## [v3.5.3](https://github.com/k0kubun/pp/tree/v3.5.3)
+## [v3.5.4](https://github.com/k0kubun/pp/tree/v3.5.4)
+
+[Full Changelog](https://github.com/k0kubun/pp/compare/v3.5.3...v3.5.4)
+
+**Merged pull requests:**
+
+- Preserve values for map keys containing NaN [\#119](https://github.com/k0kubun/pp/pull/119) ([yuefdev](https://github.com/yuefdev))
+
+## [v3.5.3](https://github.com/k0kubun/pp/tree/v3.5.3) (2026-10-09)
 
 [Full Changelog](https://github.com/k0kubun/pp/compare/v3.5.2...v3.5.3)
 
