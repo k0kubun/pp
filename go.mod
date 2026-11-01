@@ -3,7 +3,7 @@ module github.com/k0kubun/pp/v3
 go 1.26.0
 
 require (
-	github.com/mattn/go-colorable v0.1.15
+	github.com/mattn/go-colorable v0.1.16
 	golang.org/x/text v0.43.0
 )
 
